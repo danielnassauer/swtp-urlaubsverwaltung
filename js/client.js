@@ -48,3 +48,80 @@ function POST(path, content) {
 	}).responseText;
 	return $.parseJSON(response);
 }
+
+/**
+ * Liefert die Person zu einer ID.
+ * @param id ID
+ * @returns {Person} Person als Person-Objekt
+ */
+function getPerson(id) {
+	var data = GET("Person/" + id);
+	return new Person(data["id"], data["forename"], data["surname"],
+			data["department"], data["field_service"],
+			data["remaining_holiday"], data["role"]);
+}
+
+/**
+ * Liefert alle Personen als Liste.
+ * @returns {Array} Liste von Personen als Person-Objekt
+ */
+function getPersons() {
+	var recv = GET("Person");
+	var persons = [];
+	recv.forEach(function(data) {
+		persons.push(new Person(data["id"], data["forename"], data["surname"],
+				data["department"], data["field_service"],
+				data["remaining_holiday"], data["role"]));
+	});
+	return persons;
+}
+
+/**
+ * Liefert die Abteilung zu einer ID.
+ * @param id ID
+ * @returns {Department} Abteilung als Department-Objekt
+ */
+function getDepartment(id) {
+	var data = GET("Department/" + id);
+	return new Department(data["id"], data["name"]);
+}
+
+/**
+ * Liefert alle Abteilungen als Liste.
+ * @returns {Array} Liste von Abteilungen als Department-Objekt
+ */
+function getDepartments() {
+	var recv = GET("Department");
+	var departments = [];
+	recv.forEach(function(data) {
+		departments.push(new Department(data["id"], data["name"]));
+	});
+	return departments;
+}
+
+/**
+ * Liefert einen UrlaubsAntrag zu einer ID.
+ * @param id ID
+ * @returns {HolidayRequest} Urlaubsantrag als HolidayRequest-Objekt
+ */
+function getHolidayRequest(id) {
+	var data = GET("HolidayRequest/" + id);
+	return new HolidayRequest(data["id"], data["start"], data["end"],
+			data["person"], data["substitutes"], data["type"], data["status"],
+			data["comment"]);
+}
+
+/**
+ * Liefert alle Urlaubsanträge als Liste.
+ * @returns {Array} Liste von Urlaubsanträgen als HolidayRequest-Objekt
+ */
+function getHolidayRequests() {
+	var recv = GET("HolidayRequest");
+	var requests = [];
+	recv.forEach(function(data) {
+		requests.push(new HolidayRequest(data["id"], data["start"],
+				data["end"], data["person"], data["substitutes"], data["type"],
+				data["status"], data["comment"]));
+	});
+	return requests;
+}

@@ -8,6 +8,16 @@ class Person {
 	private $remaining_holiday;
 	private $role;
 
+	/**
+	 * Repräsentiert eine Person
+	 * @param id ID
+	 * @param forename Vorname
+	 * @param surname Nachname
+	 * @param department Abteilungs-ID
+	 * @param field_service Außendienst (als boolean)
+	 * @param remaining_holiday verbleibende Urlaubstage;
+	 * @param role Mitarbeiter-Typ 1: Mitarbeiter, 2: Abteilungsleiter, 3: Geschäftsleitung
+	 */
 	public function __construct($id, $forename, $surname, $department_id, $field_service, $remaining_holiday, $role) {
 		$this->id = $id;
 		$this->forename = $forename;

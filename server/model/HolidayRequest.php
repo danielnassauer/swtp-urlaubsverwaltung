@@ -9,6 +9,17 @@ class HolidayRequest {
 	private $status;
 	private $comment;
 
+	/**
+	 * Repräsentiert einen Urlaubsantrag
+	 * @param id ID
+	 * @param start Start-Datum
+	 * @param end End-Datum
+	 * @param person Antragsteller
+	 * @param substitutes Liste von Personen-IDs der Vertretungen
+	 * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+	 * @param status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
+	 * @param comment Kommentar bei Ablehnung
+	 */
 	public function __construct($id, $start, $end, $person, $substitutes, $type, $status, $comment) {
 		$this->id = $id;
 		$this->start = $start;

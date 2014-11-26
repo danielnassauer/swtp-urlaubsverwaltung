@@ -43,7 +43,7 @@ Folgende Requests sind möglich:
 
 /Person
    GET
-      Antwort:  Liste mit IDs aller Personen: [id1, ...]
+      Antwort:  Liste aller Personen: [Person, ...]
 
 
 /Person/[id]
@@ -53,7 +53,7 @@ Folgende Requests sind möglich:
 
 /Department
    GET
-      Antwort:  Liste mit IDs aller Abteilungen: [id1, ...]
+      Antwort:  Liste aller Abteilungen: [Department, ...]
 
 
 /Department/[id]
@@ -63,10 +63,10 @@ Folgende Requests sind möglich:
 
 /HolidayRequest
    GET
-      Antwort:  Liste mit IDs aller Urlaubsanträge: [id1, ...]
+      Antwort:  Liste aller Urlaubsanträge: [HolidayRequest, ...]
    POST
       Body:     HolidayRequest (ohne id)
-      Antwort:  ID des neu erzeugten HolidayRequests
+      Antwort:  neu erzeugter HolidayRequest (mit id)
       Effekt:   neuer HolidayRequest mit automatischer ID wird erstellt
 
 

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel='stylesheet' href='cupertino/jquery-ui.min.css' />
 <link href='../fullcalendar/fullcalendar.css' rel='stylesheet' />
 <link href='../fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
 <script src='../lib/jquery.min.js'></script>
@@ -10,21 +9,23 @@
 <script>
 
 	$(document).ready(function() {
-	
+
 		var date = new Date();
 		var d = date.getDate();
 		var m = date.getMonth();
 		var y = date.getFullYear();
-		
+
 		$('#calendar').fullCalendar({
-			theme: true,
-			header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'year,month,agendaWeek,agendaDay'
-			},
-			yearColumns : 2,
 			editable: true,
+			selectable: true,
+			header: {
+				left: 'prev,next',
+				center: 'title',
+				right: 'year,month,agendaWeek'
+			},
+			defaultView: 'year',
+			//weekends: false,
+			firstDay: 0,
 			events: [
 				{
 					title: 'All Day Event',
@@ -72,24 +73,21 @@
 				}
 			]
 		});
-		
 	});
 
 </script>
-<style>
+<style type="text/css">
+body {
+	margin-top: 40px;
+	text-align: center;
+	font-size: 14px;
+	font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+}
 
-	body {
-		margin-top: 40px;
-		text-align: center;
-		font-size: 13px;
-		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-		}
-
-	#calendar {
-		width: 900px;
-		margin: 0 auto;
-		}
-
+#calendar {
+	width: 950px;
+	margin: 0 auto;
+}
 </style>
 </head>
 <body>

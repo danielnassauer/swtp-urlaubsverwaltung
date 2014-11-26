@@ -1,10 +1,10 @@
 <?php
-include 'model/Person.php';
-
+include 'DBConn.php';
 class RequestHandler {
+	private $dbconn;
 
 	public function __construct($request) {
-		//$this->createExampleData ();
+		// URL auswerten
 		$url = $request->url;
 		$ressource;
 		$id;
@@ -15,54 +15,44 @@ class RequestHandler {
 			$ressource = $url [count ( $url ) - 1];
 		}
 		
+		// DB-Verbindung herstellen
+		$dbconn = new DBConn ();
+		
+		// Request auswerten
 		if ($ressource == "Person") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					$this->sendPerson ( $id );
+					echo $dbconn->getPerson ( $id );
 				} else {
-					$this->sendPersons ();
+					echo $dbconn->getPersons ();
 				}
 			}
 		} elseif ($ressource == "Department") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					$this->sendDepartment ( $id );
+					echo $dbconn->getDepartment ( $id );
 				} else {
-					$this->sendDepartment ();
+					echo $dbconn->getDepartments ();
 				}
 			}
 		} elseif ($ressource == "HolidayRequest") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					$this->sendHolidayRequest ( $id );
+					echo $dbconn->getHolidayRequest ( $id );
 				} else {
-					$this->sendHolidayRequests ();
+					echo $dbconn->getHolidayRequests ();
+				}
+			} elseif ($request->method == "POST") {
+				if (! isset ( $id )) {
+					echo $dbconn->createHolidayRequest ( $holidayRequest );
+				}
+			} elseif ($request->method == "PUT") {
+				if (isset ( $id )) {
+					$r = $request->content;
+					$dbconn->createHolidayRequest ( $r->getStart (), $r->getEnd (), $r->getPerson (), $r->getSubstitutes (), $r->getType (), $r->getStatus (), $r->getComment () );
 				}
 			}
 		}
-	}
-
-	private function sendPersons() {
-	}
-
-	private function sendPerson($id) {
-		$person = new Person ( 42, "a", "b", 2, true, 25, 1 );
-		echo $person->toJSON ();
-	}
-
-	private function sendDepartments() {
-	}
-
-	private function sendDepartment($id) {
-	}
-
-	private function sendHolidayRequests() {
-	}
-
-	private function sendHolidayRequest($id) {
-	}
-
-	private function createExampleData() {
 	}
 }
 ?>

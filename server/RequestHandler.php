@@ -38,18 +38,19 @@ class RequestHandler {
 		} elseif ($ressource == "HolidayRequest") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					echo $dbconn->getHolidayRequest ( $id );
+					echo $dbconn->getHolidayRequest ( $id )->toJSON();
 				} else {
 					echo $dbconn->getHolidayRequests ();
 				}
 			} elseif ($request->method == "POST") {
 				if (! isset ( $id )) {
-					echo $dbconn->createHolidayRequest ( $holidayRequest );
+					$holReq = $request->content;
+					echo $dbconn->createHolidayRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"] );
 				}
 			} elseif ($request->method == "PUT") {
 				if (isset ( $id )) {
-					$r = $request->content;
-					$dbconn->createHolidayRequest ( $r->getStart (), $r->getEnd (), $r->getPerson (), $r->getSubstitutes (), $r->getType (), $r->getStatus (), $r->getComment () );
+					$holReq = $request->content;
+					$dbconn->editHolidayRequest ( new HolidayRequest($holReq ["id"],$holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"]));
 				}
 			}
 		}

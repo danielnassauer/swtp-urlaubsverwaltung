@@ -6,8 +6,7 @@ class DBConn {
 
 	public function __construct() {
 		// create example data
-		// return
-		$persons = "[";
+		return $persons = "[";
 		for($i = 0; $i < 10; $i ++) {
 			$p = new Person ( $i, "vorname" . $i, "nachname" . $i, $i, False, 25, 1 );
 			$persons .= $p->toJSON () . ",";
@@ -75,31 +74,40 @@ class DBConn {
 
 	public function getHolidayRequest($id) {
 		$requests = json_decode ( file_get_contents ( "exampleRequests.json" ), $assoc = true );
-		foreach ( $requests as $r ) {
-			if ($r ["id"] == $id) {
-				echo json_encode ( $r );
-				return;
+		foreach ( $requests as $holReq ) {
+			if ($holReq ["id"] == $id) {
+				return new HolidayRequest($holReq ["id"],$holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"]);
 			}
 		}
 	}
 
 	public function editHolidayRequest($holidayRequest) {
+		$r = $this->getHolidayRequest ( $holidayRequest->getID () );
+		$r->edit ( $holidayRequest );
+		
 		$requests = json_decode ( file_get_contents ( "exampleRequests.json" ), $assoc = true );
 		for($i = 0; $i < count ( $requests ); $i ++) {
-			if ($requests [$i] ["id"] == $holidayRequest->getID ()) {
-				$requests [$i]->edit ( $holidayRequest );
+			if ($requests [$i] ["id"] == $r->getID ()) {
+				$requests [$i] ["start"] = $r->getStart ();
+				$requests [$i] ["end"] = $r->getEnd ();
+				$requests [$i] ["person"] = $r->getPerson ();
+				$requests [$i] ["substitutes"] = $r->getSubstitutes ();
+				$requests [$i] ["type"] = $r->getType ();
+				$requests [$i] ["status"] = $r->getStatus ();
+				$requests [$i] ["comment"] = $r->getComment ();
 				break;
 			}
 		}
-		file_put_contents ( "exampleRequests.json", $requests );
+		file_put_contents ( "exampleRequests.json", json_encode ( $requests ) );
 	}
 
 	public function createHolidayRequest($start, $end, $person, $substitutes, $type, $status, $comment) {
 		$requests = json_decode ( file_get_contents ( "exampleRequests.json" ), $assoc = true );
 		$id = count ( $requests );
-		$requests [$id] = new HolidayRequest ( $id, $start, $end, $person, $substitutes, $type, $status, $comment );
-		file_put_contents ( "exampleRequests.json", $requests );
-		return $id;
+		$holReq = new HolidayRequest ( $id, $start, $end, $person, $substitutes, $type, $status, $comment );
+		$requests [$id] = json_decode ( $holReq->toJSON (), $assoc = true );
+		file_put_contents ( "exampleRequests.json", json_encode ( $requests ) );
+		return $holReq->toJSON ();
 	}
 }
 ?>

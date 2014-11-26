@@ -13,6 +13,10 @@
 	console.log(getDepartments());
 	console.log(getHolidayRequest(1));
 	console.log(getHolidayRequests());
+	var r = createNewHolidayRequest("start", "end", 1, [2,3,4], 1, 1,"");
+	console.log(r);
+	r.start = "x";
+	editHolidayRequest(r);	
 	</script>
 
 </body>

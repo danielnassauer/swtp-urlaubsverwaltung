@@ -20,7 +20,7 @@ function GET(path) {
  * @param path
  *            Pfad
  * @param content
- *            der HTTP-Body, der gesendet wird
+ *            Java-Wert. Wird automatisch in JSON umgewandelt
  */
 function PUT(path, content) {
 	$.ajax({
@@ -37,6 +37,8 @@ function PUT(path, content) {
  * 
  * @param path
  *            Pfad
+ * @param content
+ *            Java-Wert. Wird automatisch in JSON umgewandelt
  * @returns JavaScript-Wert des JSON-Strings
  */
 function POST(path, content) {
@@ -51,7 +53,9 @@ function POST(path, content) {
 
 /**
  * Liefert die Person zu einer ID.
- * @param id ID
+ * 
+ * @param id
+ *            ID
  * @returns {Person} Person als Person-Objekt
  */
 function getPerson(id) {
@@ -63,6 +67,7 @@ function getPerson(id) {
 
 /**
  * Liefert alle Personen als Liste.
+ * 
  * @returns {Array} Liste von Personen als Person-Objekt
  */
 function getPersons() {
@@ -78,7 +83,9 @@ function getPersons() {
 
 /**
  * Liefert die Abteilung zu einer ID.
- * @param id ID
+ * 
+ * @param id
+ *            ID
  * @returns {Department} Abteilung als Department-Objekt
  */
 function getDepartment(id) {
@@ -88,6 +95,7 @@ function getDepartment(id) {
 
 /**
  * Liefert alle Abteilungen als Liste.
+ * 
  * @returns {Array} Liste von Abteilungen als Department-Objekt
  */
 function getDepartments() {
@@ -101,7 +109,9 @@ function getDepartments() {
 
 /**
  * Liefert einen UrlaubsAntrag zu einer ID.
- * @param id ID
+ * 
+ * @param id
+ *            ID
  * @returns {HolidayRequest} Urlaubsantrag als HolidayRequest-Objekt
  */
 function getHolidayRequest(id) {
@@ -113,6 +123,7 @@ function getHolidayRequest(id) {
 
 /**
  * Liefert alle Urlaubsanträge als Liste.
+ * 
  * @returns {Array} Liste von Urlaubsanträgen als HolidayRequest-Objekt
  */
 function getHolidayRequests() {
@@ -124,4 +135,25 @@ function getHolidayRequests() {
 				data["status"], data["comment"]));
 	});
 	return requests;
+}
+
+function createNewHolidayRequest(start, end, person, substitutes, type, status,
+		comment) {
+	var r = {
+		start : start,
+		end : end,
+		person : person,
+		substitutes : substitutes,
+		type : type,
+		status : status,
+		comment : comment
+	}
+	var data = POST("HolidayRequest", r);
+	return new HolidayRequest(data["id"], data["start"], data["end"],
+			data["person"], data["substitutes"], data["type"], data["status"],
+			data["comment"]);
+}
+
+function editHolidayRequest(holidayRequest) {
+	PUT("HolidayRequest/" + holidayRequest.id, holidayRequest);
 }

@@ -1,5 +1,6 @@
 <?php
-include 'DBConn.php';
+include 'db/DBConn.php';
+require_once 'db/Persons.php';
 class RequestHandler {
 	private $dbconn;
 
@@ -22,23 +23,20 @@ class RequestHandler {
 		if ($ressource == "Person") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					echo $dbconn->getPerson ( $id );
+					$person = Persons::getPerson ( $id );
+					echo json_encode ( $person->toArray () );
 				} else {
-					echo $dbconn->getPersons ();
-				}
-			}
-		} elseif ($ressource == "Department") {
-			if ($request->method == "GET") {
-				if (isset ( $id )) {
-					echo $dbconn->getDepartment ( $id );
-				} else {
-					echo $dbconn->getDepartments ();
+					$persons = array();
+					foreach(Persons::getPersons() as $person){
+						array_push($persons, $person->toArray());	
+					}					
+					echo json_encode($persons);
 				}
 			}
 		} elseif ($ressource == "HolidayRequest") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					echo $dbconn->getHolidayRequest ( $id )->toJSON();
+					echo $dbconn->getHolidayRequest ( $id )->toJSON ();
 				} else {
 					echo $dbconn->getHolidayRequests ();
 				}
@@ -50,7 +48,7 @@ class RequestHandler {
 			} elseif ($request->method == "PUT") {
 				if (isset ( $id )) {
 					$holReq = $request->content;
-					$dbconn->editHolidayRequest ( new HolidayRequest($holReq ["id"],$holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"]));
+					$dbconn->editHolidayRequest ( new HolidayRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"] ) );
 				}
 			}
 		}

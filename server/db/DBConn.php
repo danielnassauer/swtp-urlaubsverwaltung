@@ -7,24 +7,7 @@ class DBConn {
 
 	public function __construct() {
 		// create example data
-		return $persons = "[";
-		for($i = 0; $i < 10; $i ++) {
-			$p = new Person ( $i, "vorname" . $i, "nachname" . $i, $i, False, 25, 1 );
-			$persons .= $p->toJSON () . ",";
-		}
-		$p = new Person ( 10, "vorname10", "nachname10", 10, False, 25, 1 );
-		$persons .= $p->toJSON () . "]";
-		file_put_contents ( "examplePersons.json", $persons );
-		
-		$departments = "[";
-		for($i = 0; $i < 3; $i ++) {
-			$d = new Department ( $i, "Abteilung" . $i );
-			$departments .= $d->toJSON () . ",";
-		}
-		$d = new Department ( 3, "Abteilung3" );
-		$departments .= $d->toJSON () . "]";
-		file_put_contents ( "exampleDepartments.json", $departments );
-		
+		return 		
 		$requests = "[";
 		for($i = 0; $i < 3; $i ++) {
 			$r = new HolidayRequest ( $i, "$i", "$i", $i, array (
@@ -42,7 +25,7 @@ class DBConn {
 	}
 
 	public function getPersons() {
-		return file_get_contents ( "examplePersons.json" );
+		return file_get_contents ( "db/examplePersons.json" );
 	}
 
 	public function getPerson($id) {
@@ -55,26 +38,12 @@ class DBConn {
 		}
 	}
 
-	public function getDepartments() {
-		return file_get_contents ( "exampleDepartments.json" );
-	}
-
-	public function getDepartment($id) {
-		$departments = json_decode ( file_get_contents ( "exampleDepartments.json" ), $assoc = true );
-		foreach ( $departments as $d ) {
-			if ($d ["id"] == $id) {
-				echo json_encode ( $d );
-				return;
-			}
-		}
-	}
-
 	public function getHolidayRequests() {
 		return file_get_contents ( "exampleRequests.json" );
 	}
 
 	public function getHolidayRequest($id) {
-		$requests = json_decode ( file_get_contents ( "exampleRequests.json" ), $assoc = true );
+		$requests = json_decode ( file_get_contents ( "db/exampleRequests.json" ), $assoc = true );
 		foreach ( $requests as $holReq ) {
 			if ($holReq ["id"] == $id) {
 				return new HolidayRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"] );

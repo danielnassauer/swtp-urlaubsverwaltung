@@ -27,8 +27,12 @@ class Person {
 		$this->remaining_holiday = $remaining_holiday;
 		$this->role = $role;
 	}
+	
+	public function getID(){
+		return $this->id;
+	}
 
-	public function toJSON() {
+	public function toArray() {
 		$data = array();
 		$data["id"]=$this->id;
 		$data["forename"]=$this->forename;
@@ -37,7 +41,7 @@ class Person {
 		$data["field_service"]=$this->field_service;
 		$data["remaining_holiday"]=$this->remaining_holiday;
 		$data["role"]=$this->role;
-		return json_encode($data);
+		return $data;
 	}
 }
 ?>

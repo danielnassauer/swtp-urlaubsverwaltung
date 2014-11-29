@@ -82,32 +82,6 @@ function getPersons() {
 }
 
 /**
- * Liefert die Abteilung zu einer ID.
- * 
- * @param id
- *            ID
- * @returns {Department} Abteilung als Department-Objekt
- */
-function getDepartment(id) {
-	var data = GET("Department/" + id);
-	return new Department(data["id"], data["name"]);
-}
-
-/**
- * Liefert alle Abteilungen als Liste.
- * 
- * @returns {Array} Liste von Abteilungen als Department-Objekt
- */
-function getDepartments() {
-	var recv = GET("Department");
-	var departments = [];
-	recv.forEach(function(data) {
-		departments.push(new Department(data["id"], data["name"]));
-	});
-	return departments;
-}
-
-/**
  * Liefert einen UrlaubsAntrag zu einer ID.
  * 
  * @param id

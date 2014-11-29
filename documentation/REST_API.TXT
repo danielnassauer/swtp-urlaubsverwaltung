@@ -8,16 +8,10 @@ Es existieren folgende Ressourcen:
       id:                  int,
       forename:            string,
       surname:             string,
-      department:          int,        // ID der Abteilung
+      department:          string,       
       field_service:       boolean,
       remaining_holiday:   int,
       role:                int         // 1: Mitarbeiter, 2: Abteilungsleiter, 3: Geschäftsleitung
-   }
-
-* Department:
-   {
-      id:                  int,
-      name:                string
    }
 
 * HolidayRequest:
@@ -36,7 +30,7 @@ Es existieren folgende Ressourcen:
 REQUESTS
 ========
 
-Personen und Abteilungen können mit GET-Requests abgefragt werden. 
+Personen können mit GET-Requests abgefragt werden. 
 Urlaubsanträge können mit GET abgefragt, mit POST hinzugefügt, und
 mit PUT geändert werden.
 Folgende Requests sind möglich:
@@ -49,16 +43,6 @@ Folgende Requests sind möglich:
 /Person/[id]
    GET
       Antwort:  Person
-
-
-/Department
-   GET
-      Antwort:  Liste aller Abteilungen: [Department, ...]
-
-
-/Department/[id]
-   GET
-      Antwort:  Department
 
 
 /HolidayRequest

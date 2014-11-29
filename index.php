@@ -9,8 +9,6 @@
 	<script type="text/javascript">
 	console.log(getPerson(1));
 	console.log(getPersons());
-	console.log(getDepartment(1));
-	console.log(getDepartments());
 	console.log(getHolidayRequest(1));
 	console.log(getHolidayRequests());
 	var r = createNewHolidayRequest("start", "end", 1, [2,3,4], 1, 1,"");

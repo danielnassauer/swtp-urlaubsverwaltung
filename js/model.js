@@ -21,17 +21,6 @@ var Person = function(id, forename, surname, department, field_service,
 };
 
 /**
- * Repräsentiert eine Abteilung
- * @param id ID
- * @param name Name der Abteilung
- */
-var Department = function(id, name) {
-
-	this.id = id;
-	this.name = name;
-};
-
-/**
  * Repräsentiert einen Urlaubsantrag
  * @param id ID
  * @param start Start-Datum

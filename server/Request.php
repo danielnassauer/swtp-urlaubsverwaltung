@@ -1,4 +1,5 @@
 <?php
+require_once 'jsonCompatibility.php';
 class Request {
 	public $url;
 	public $method;

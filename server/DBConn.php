@@ -2,6 +2,7 @@
 include 'model/Person.php';
 include 'model/Department.php';
 include 'model/HolidayRequest.php';
+require_once 'jsonCompatibility.php';
 class DBConn {
 
 	public function __construct() {
@@ -26,16 +27,16 @@ class DBConn {
 		
 		$requests = "[";
 		for($i = 0; $i < 3; $i ++) {
-			$r = new HolidayRequest ( $i, "$i", "$i", $i, [ 
+			$r = new HolidayRequest ( $i, "$i", "$i", $i, array (
 					$i + 2,
 					$i + 1 
-			], 1, 1, "kommentar" );
+			), 1, 1, "kommentar" );
 			$requests .= $r->toJSON () . ",";
 		}
-		$r = new HolidayRequest ( 3, "3", "3", 3, [ 
+		$r = new HolidayRequest ( 3, "3", "3", 3, array (
 				5,
 				4 
-		], 1, 1, "kommentar" );
+		), 1, 1, "kommentar" );
 		$requests .= $r->toJSON () . "]";
 		file_put_contents ( "exampleRequests.json", $requests );
 	}
@@ -76,7 +77,7 @@ class DBConn {
 		$requests = json_decode ( file_get_contents ( "exampleRequests.json" ), $assoc = true );
 		foreach ( $requests as $holReq ) {
 			if ($holReq ["id"] == $id) {
-				return new HolidayRequest($holReq ["id"],$holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"]);
+				return new HolidayRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"] );
 			}
 		}
 	}

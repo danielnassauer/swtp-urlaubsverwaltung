@@ -7,7 +7,8 @@
 <body>
 
 	<script type="text/javascript">
-	console.log(getPerson(1));
+	console.log("TEST");
+	console.log(getPerson(63));
 	console.log(getPersons());
 	console.log(getHolidayRequest(1));
 	console.log(getHolidayRequests());

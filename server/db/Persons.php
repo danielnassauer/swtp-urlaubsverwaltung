@@ -50,6 +50,4 @@ class Persons {
 	}
 }
 
-Persons::getPersons ();
-
 ?>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<head>
+<title>Urlaubsverwaltung</title>
+
+<link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
+<link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+
+<script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/fullcalendar/lib/moment.min.js"></script>
+<script src="lib/fullcalendar/fullcalendar.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#my_calendar').fullCalendar({});
+	});
+</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<span class="navbar-brand">Urlaubsverwaltung</span>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#"><span class="ion-home">
+								Übersicht</a></li>
+					<li><a href="#"><span class="ion-person"></span> Mein
+							Kalender</a></li>
+					<li><a href="#"><span class="ion-clipboard">
+								Anfragen</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-7">
+				<div class="panel panel-default">
+					<div class="panel-heading">Kalender</div>
+					<div class="panel-body">
+						<div id='my_calendar'></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-5">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">Angenommen</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>von</th>
+									<th>bis</th>
+									<th>Vertretungen</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="success">
+									<td>Urlaub</td>
+									<td>01.01.2015</td>
+									<td>01.01.2016</td>
+									<td>Max Mustermann</td>
+								</tr>
+								<tr class="success">
+									<td>Urlaub</td>
+									<td>01.01.2015</td>
+									<td>01.01.2016</td>
+									<td>Max Mustermann</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">Ausstehend</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>von</th>
+									<th>bis</th>
+									<th>Vertretungen</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="warning">
+									<td>Urlaub</td>
+									<td>01.01.2015</td>
+									<td>01.01.2016</td>
+									<td>Max Mustermann</td>
+								</tr>
+								<tr class="warning">
+									<td>Urlaub</td>
+									<td>01.01.2015</td>
+									<td>01.01.2016</td>
+									<td>Max Mustermann</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">Abgelehnt</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>von</th>
+									<th>bis</th>
+									<th>Vertretungen</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="danger">
+									<td>Urlaub</td>
+									<td>01.01.2015</td>
+									<td>01.01.2016</td>
+									<td>Max Mustermann</td>
+								</tr>
+								<tr class="danger">
+									<td>Urlaub</td>
+									<td>01.01.2015</td>
+									<td>01.01.2016</td>
+									<td>Max Mustermann</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>

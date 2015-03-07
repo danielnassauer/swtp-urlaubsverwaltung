@@ -35,6 +35,26 @@ class Person {
 	public function getForename(){
 		return $this->forename;
 	}
+	
+	public function getLastname(){
+		return $this->lastname;
+	}
+	
+	public function getDepartment(){
+		return $this->department;
+	}
+	
+	public function getFieldservice(){
+		return $this->field_service;
+	}
+	
+	public function getRemainingHoliday(){
+		return $this->remaining_holiday;
+	}
+	
+	public function getRole(){
+		return $this->role;
+	}
 
 	public function toArray() {
 		$data = array();

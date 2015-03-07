@@ -7,7 +7,7 @@ class PDFCreator {
 	 * @param $path Pfad, an den das PDF-Dokument geschrieben wird
 	 */
 	public static function writePDF($holiday_request, $path) {
-
+		echo $holiday_request->getPerson()->getForename();
 	}
 	
 	

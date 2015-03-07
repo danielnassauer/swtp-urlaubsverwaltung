@@ -31,6 +31,10 @@ class Person {
 	public function getID(){
 		return $this->id;
 	}
+	
+	public function getForename(){
+		return $this->forename;
+	}
 
 	public function toArray() {
 		$data = array();

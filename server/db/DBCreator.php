@@ -6,9 +6,16 @@ class DBCreator {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
 		
 		$sql = "CREATE TABLE HolidayRequests (
-				id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-				start VARCHAR(30) NOT NULL,
-				end VARCHAR(30) NOT NULL
+				id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+				start INT(11) NOT NULL,
+				end INT(11) NOT NULL,
+				person INT(11),
+				substitute1 INT(11),
+				substitute2 INT(11),
+				substitute3 INT(11),
+				type INT(1),
+				status INT(1),
+				comment VARCHAR(1000)
 				)";
 		
 		self::createHolidayDB ();

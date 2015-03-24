@@ -1,4 +1,5 @@
 <?php
+include dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
 class HolidayRequest {
 	private $id;
 	private $start;

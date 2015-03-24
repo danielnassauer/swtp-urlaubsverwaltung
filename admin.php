@@ -1,5 +1,6 @@
 <?php
 include 'server/db/DBCreator.php';
+include 'server/db/HolidayRequests.php';
 
 if (isset ( $_POST ['create_holidayrequests_table'] )) {
 	try {
@@ -40,6 +41,19 @@ if (isset ( $_POST ['create_holidayrequests_table'] )) {
 					<button type="submit" class="btn btn-default"
 						name="create_holidayrequests_table">Tabelle erstellen</button>
 				</form>
+				
+				<table>
+				<tr><th>ID</th><th>Person</th></tr>
+				<?php 
+				HolidayRequests::createRequest(1, 1, 1, array(), 1, 1, "test");
+				
+					foreach (HolidayRequests::getRequests() as $request){
+						echo "<tr>";
+						echo "<td>".$request->toJSON()."</td>";
+						echo "</tr>";
+					}
+				?>
+				</table>
 			</div>
 		</div>
 

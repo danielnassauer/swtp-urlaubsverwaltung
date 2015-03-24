@@ -2,7 +2,7 @@
 include 'model/Person.php';
 include 'model/Department.php';
 include 'model/HolidayRequest.php';
-require_once 'jsonCompatibility.php';
+include dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
 class DBConn {
 
 	public function __construct() {

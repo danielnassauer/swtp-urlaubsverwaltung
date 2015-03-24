@@ -1,5 +1,5 @@
 <?php
-require_once 'jsonCompatibility.php';
+include dirname(__FILE__).'/../lib/json/jsonCompatibility.php';
 class Request {
 	public $url;
 	public $method;

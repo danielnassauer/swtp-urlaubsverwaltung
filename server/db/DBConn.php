@@ -1,8 +1,8 @@
 <?php
-include 'model/Person.php';
-include 'model/Department.php';
-include 'model/HolidayRequest.php';
-include dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
+require_once 'model/Person.php';
+require_once 'model/Department.php';
+require_once 'model/HolidayRequest.php';
+require_once dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
 class DBConn {
 
 	public function __construct() {

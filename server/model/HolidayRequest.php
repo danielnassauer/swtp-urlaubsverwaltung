@@ -1,5 +1,5 @@
 <?php
-include dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
+require_once dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
 class HolidayRequest {
 	private $id;
 	private $start;
@@ -53,6 +53,19 @@ class HolidayRequest {
 		$this->type = $holidayRequest->type;
 		$this->status = $holidayRequest->status;
 		$this->comment = $holidayRequest->comment;
+	}
+	
+	public function toArray() {
+		$data = array();
+		$data["id"]=$this->id;
+		$data["start"]=$this->start;
+		$data["end"]=$this->end;
+		$data["person"]=$this->person;
+		$data["substitutes"]=$this->substitutes;
+		$data["type"]=$this->type;
+		$data["status"]=$this->status;
+		$data["comment"]=$this->comment;
+		return $data;
 	}
 
 	public function getID() {

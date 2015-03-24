@@ -1,6 +1,7 @@
 <?php
-include 'db/DBConn.php';
-require_once 'db/Persons.php';
+require_once dirname(__FILE__).'/db/DBConn.php';
+require_once dirname(__FILE__).'/db/HolidayRequests.php';
+require_once dirname(__FILE__).'/db/Persons.php';
 class RequestHandler {
 	private $dbconn;
 
@@ -38,7 +39,11 @@ class RequestHandler {
 				if (isset ( $id )) {
 					echo $dbconn->getHolidayRequest ( $id )->toJSON ();
 				} else {
-					echo $dbconn->getHolidayRequests ();
+					$requests = array();
+					foreach(HolidayRequests::getRequests() as $request){
+						array_push($requests, $request->toArray());
+					}
+					echo json_encode($requests);
 				}
 			} elseif ($request->method == "POST") {
 				if (! isset ( $id )) {

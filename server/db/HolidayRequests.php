@@ -1,6 +1,6 @@
 <?php
-include 'conf.php';
-include dirname(__FILE__).'/../model/HolidayRequest.php';
+require_once 'conf.php';
+require_once dirname(__FILE__).'/../model/HolidayRequest.php';
 class HolidayRequests {
 	private static $persons;
 

@@ -1,5 +1,5 @@
 <?php
-include dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
+require_once dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
 class Person {
 	private $id;
 	private $forename;

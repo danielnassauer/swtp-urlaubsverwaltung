@@ -1,6 +1,6 @@
 <?php
-include 'server/db/DBCreator.php';
-include 'server/db/HolidayRequests.php';
+require_once 'server/db/DBCreator.php';
+require_once 'server/db/HolidayRequests.php';
 
 if (isset ( $_POST ['create_holidayrequests_table'] )) {
 	try {

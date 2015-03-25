@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__).'/conf.php';
+require_once dirname(__FILE__).'/../model/Person.php';
 // TODO Außendienst, Resturlaub, Mitarbeiter-Position
 class Persons {
 	private static $persons;

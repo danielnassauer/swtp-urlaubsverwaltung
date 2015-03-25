@@ -60,7 +60,7 @@ function POST(path, content) {
  */
 function getPerson(id) {
 	var data = GET("Person/" + id);
-	return new Person(data["id"], data["forename"], data["surname"],
+	return new Person(data["id"], data["forename"], data["lastname"],
 			data["department"], data["field_service"],
 			data["remaining_holiday"], data["role"]);
 }
@@ -74,7 +74,7 @@ function getPersons() {
 	var recv = GET("Person");
 	var persons = [];
 	recv.forEach(function(data) {
-		persons.push(new Person(data["id"], data["forename"], data["surname"],
+		persons.push(new Person(data["id"], data["forename"], data["lastname"],
 				data["department"], data["field_service"],
 				data["remaining_holiday"], data["role"]));
 	});

@@ -7,7 +7,7 @@ Es existieren folgende Ressourcen:
    {
       id:                  int,
       forename:            string,
-      surname:             string,
+      lastname:             string,
       department:          string,       
       field_service:       boolean,
       remaining_holiday:   int,

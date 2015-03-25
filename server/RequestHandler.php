@@ -37,7 +37,8 @@ class RequestHandler {
 		} elseif ($ressource == "HolidayRequest") {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
-					echo $dbconn->getHolidayRequest ( $id )->toJSON ();
+					$request = HolidayRequests::getRequest( $id );
+					echo json_encode ( $request->toArray () );
 				} else {
 					$requests = array();
 					foreach(HolidayRequests::getRequests() as $request){

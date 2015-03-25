@@ -43,10 +43,8 @@ if (isset ( $_POST ['create_holidayrequests_table'] )) {
 				</form>
 				
 				<table>
-				<tr><th>ID</th><th>Person</th></tr>
-				<?php 
-				HolidayRequests::createRequest(1, 1, 1, array(), 1, 1, "test");
-				
+				<tr><th>HolidayRequests</th></tr>
+				<?php 				
 					foreach (HolidayRequests::getRequests() as $request){
 						echo "<tr>";
 						echo "<td>".$request->toJSON()."</td>";

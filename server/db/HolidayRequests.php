@@ -1,10 +1,10 @@
 <?php
-require_once dirname(__FILE__).'/conf.php';
-require_once dirname(__FILE__).'/../model/HolidayRequest.php';
+require_once dirname ( __FILE__ ) . '/conf.php';
+require_once dirname ( __FILE__ ) . '/../model/HolidayRequest.php';
 class HolidayRequests {
 	private static $persons;
 
-	public static function getRequests() {		
+	public static function getRequests() {
 		$conn = self::getDBConnection ();
 		$sql = "SELECT id, start, end, person, substitute1, substitute2, substitute3, type, status, comment FROM HolidayRequests";
 		$result = $conn->query ( $sql );
@@ -39,7 +39,7 @@ class HolidayRequests {
 		return $request;
 	}
 
-	public static function createRequest($start, $end, $person, $substitutes, $type, $status, $comment) {
+	public static function createRequest($start, $end, $person, $substitutes, $type) {
 		$conn = self::getDBConnection ();
 		$subs1 = 42;
 		$subs2 = 42;
@@ -47,23 +47,16 @@ class HolidayRequests {
 		$sql = "INSERT INTO HolidayRequests 
 				(start, end, person, substitute1, substitute2, substitute3, type, status, comment) 
 				VALUES 
-				(".$start.",".$end.",".$person.",".$subs1.",".$subs2.",".$subs3.",".$type.",".$status.",\"".$comment."\");";
-				
+				(" . $start . "," . $end . "," . $person . "," . $subs1 . "," . $subs2 . "," . $subs3 . "," . $type . ",2,\"\");";
+		
 		$result = $conn->query ( $sql );
 		if (! $result) {
 			throw new Exception ( $conn->error );
 		}
-		echo $result->insert_id;
 		
-		$result = $conn->query ( "SELECT LAST_INSERT_ID();" );
-		if (! $result) {
-			throw new Exception ( $conn->error );
-		}
-
-		return;
-		$r = new HolidayRequest ( $id, $start, $end, $person, $substitutes, $type, $status, $comment );
-
-		return $holReq->toJSON ();
+		$id = mysqli_insert_id ( $conn );
+		$request = new HolidayRequest ( $id, $start, $end, $person, $substitutes, $type, 2, "" );
+		return $request;
 	}
 
 	private static function getDBConnection() {

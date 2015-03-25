@@ -7,7 +7,7 @@ Es existieren folgende Ressourcen:
    {
       id:                  int,
       forename:            string,
-      lastname:             string,
+      lastname:            string,
       department:          string,       
       field_service:       boolean,
       remaining_holiday:   int,
@@ -17,8 +17,8 @@ Es existieren folgende Ressourcen:
 * HolidayRequest:
    {
       id:                  int,
-      start:               string,
-      end:                 string,
+      start:               int,        // Beginn-Datum als Unix-Timestamp
+      end:                 int,        // End-Datum als Unix-Timestamp
       person:              int,        // ID der beantragenden Person
       substitutes:         [int, ...], // Liste mit IDs der Vertretungen 
       type:                int,        // 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
@@ -49,8 +49,8 @@ Folgende Requests sind möglich:
    GET
       Antwort:  Liste aller Urlaubsanträge: [HolidayRequest, ...]
    POST
-      Body:     HolidayRequest (ohne id)
-      Antwort:  neu erzeugter HolidayRequest (mit id)
+      Body:     HolidayRequest (ohne id, status und comment)
+      Antwort:  neu erzeugter HolidayRequest (mit neuer id)
       Effekt:   neuer HolidayRequest mit automatischer ID wird erstellt
 
 

@@ -23,10 +23,10 @@ var Person = function(id, forename, lastname, department, field_service,
 /**
  * Repräsentiert einen Urlaubsantrag
  * @param id ID
- * @param start Start-Datum
- * @param end End-Datum
- * @param person Antragsteller
- * @param substitutes Liste von Personen-IDs der Vertretungen
+ * @param start Start-Datum (Unix-Timestamp)
+ * @param end End-Datum (Unix-Timestamp)
+ * @param person ID des Antragstellers
+ * @param substitutes Array von Personen-IDs der Vertretungen
  * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
  * @param status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
  * @param comment Kommentar bei Ablehnung

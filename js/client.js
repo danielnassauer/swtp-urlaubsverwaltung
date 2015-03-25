@@ -11,6 +11,7 @@ function GET(path) {
 		url : path,
 		async : false
 	}).responseText;
+	console.log(response);
 	return $.parseJSON(response);
 }
 
@@ -48,6 +49,7 @@ function POST(path, content) {
 		data : JSON.stringify(content),
 		async : false
 	}).responseText;
+	console.log(response);
 	return $.parseJSON(response);
 }
 
@@ -111,16 +113,23 @@ function getHolidayRequests() {
 	return requests;
 }
 
-function createNewHolidayRequest(start, end, person, substitutes, type, status,
-		comment) {
+/**
+ * Erzeugt einen neuen HolidayRequest.
+ * @param start Start-Datum (Unix-Timestamp)
+ * @param end End-Datum (Unix-Timestamp)
+ * @param person ID des Antragstellers
+ * @param substitutes Array von Personen-IDs der Vertretungen
+ * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+ * @param status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
+ * @returns {HolidayRequest} neu erzeugter HolidayRequest mit neuer ID
+ */
+function createHolidayRequest(start, end, person, substitutes, type) {
 	var r = {
 		start : start,
 		end : end,
 		person : person,
 		substitutes : substitutes,
-		type : type,
-		status : status,
-		comment : comment
+		type : type
 	}
 	var data = POST("HolidayRequest", r);
 	return new HolidayRequest(data["id"], data["start"], data["end"],

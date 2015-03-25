@@ -13,8 +13,8 @@ class HolidayRequest {
 	/**
 	 * Repräsentiert einen Urlaubsantrag
 	 * @param id ID
-	 * @param start Start-Datum
-	 * @param end End-Datum
+	 * @param start Start-Datum (Unix-Timestamp)
+	 * @param end End-Datum (Unix-Timestamp)
 	 * @param person Antragsteller
 	 * @param substitutes Liste von Personen-IDs der Vertretungen
 	 * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub

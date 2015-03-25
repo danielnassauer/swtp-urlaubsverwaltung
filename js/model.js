@@ -2,18 +2,18 @@
  * Repräsentiert eine Person
  * @param id ID
  * @param forename Vorname
- * @param surname Nachname
+ * @param lastname Nachname
  * @param department Abteilungs-ID
  * @param field_service Außendienst (als boolean)
  * @param remaining_holiday verbleibende Urlaubstage;
  * @param role Mitarbeiter-Typ 1: Mitarbeiter, 2: Abteilungsleiter, 3: Geschäftsleitung
  */
-var Person = function(id, forename, surname, department, field_service,
+var Person = function(id, forename, lastname, department, field_service,
 		remaining_holiday, role) {
 
 	this.id = id;
 	this.forename = forename;
-	this.surname = surname;
+	this.lastname = lastname;
 	this.department = department;
 	this.field_service = field_service;
 	this.remaining_holiday = remaining_holiday;

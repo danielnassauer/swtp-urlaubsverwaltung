@@ -38,7 +38,7 @@ class Persons {
 			die ( "Connection failed: " . $conn->connect_error );
 		}
 		
-		$sql = "SELECT id, name, vorname, abteilung FROM vacation";
+		$sql = "SELECT id, name, vorname, abteilung FROM vacation WHERE zugehoerig='intern'";
 		$result = $conn->query ( $sql );
 		
 		while ( $row = $result->fetch_assoc () ) {

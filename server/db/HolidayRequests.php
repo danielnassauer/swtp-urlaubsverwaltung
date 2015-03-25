@@ -25,9 +25,13 @@ class HolidayRequests {
 
 	public static function getRequest($id) {
 		$conn = self::getDBConnection ();
-		$sql = "SELECT id, name, vorname, abteilung FROM vacation WHERE id=" . $id;
+		$sql = "SELECT id, start, end, person, substitute1, substitute2, substitute3, type, status, comment FROM  HolidayRequests WHERE id=" . $id . ";";
 		$result = $conn->query ( $sql );
+		if (! $result) {
+			throw new Exception ( "Could not query holiday requests table: " . $conn->error );
+		}
 		
+		$row = $result->fetch_assoc ();
 		$substitutes = array ();
 		$request = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 		

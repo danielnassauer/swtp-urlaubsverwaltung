@@ -15,6 +15,15 @@ class HolidayRequests {
 		$requests = array ();
 		while ( $row = $result->fetch_assoc () ) {
 			$substitutes = array ();
+			if ($row ["substitute1"] != "") {
+				array_push ( $substitutes, $row ["substitute1"] );
+			}
+			if ($row ["substitute2"] != "") {
+				array_push ( $substitutes, $row ["substitute2"] );
+			}
+			if ($row ["substitute3"] != "") {
+				array_push ( $substitutes, $row ["substitute3"] );
+			}
 			$r = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 			array_push ( $requests, $r );
 		}
@@ -33,6 +42,15 @@ class HolidayRequests {
 		
 		$row = $result->fetch_assoc ();
 		$substitutes = array ();
+		if ($row ["substitute1"] != "") {
+			array_push ( $substitutes, $row ["substitute1"] );
+		}
+		if ($row ["substitute2"] != "") {
+			array_push ( $substitutes, $row ["substitute2"] );
+		}
+		if ($row ["substitute3"] != "") {
+			array_push ( $substitutes, $row ["substitute3"] );
+		}
 		$request = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 		
 		$conn->close ();
@@ -41,13 +59,24 @@ class HolidayRequests {
 
 	public static function createRequest($start, $end, $person, $substitutes, $type) {
 		$conn = self::getDBConnection ();
-		$subs1 = 42;
-		$subs2 = 42;
-		$subs3 = 42;
+		
+		$sql_substitutes = "";
+		$sql_substitutes_ids = "";
+		if (sizeof ( $substitutes ) == 1) {
+			$sql_substitutes = "substitute1,";
+			$sql_substitutes_ids = $substitutes [0] . ",";
+		} elseif (sizeof ( $substitutes ) == 2) {
+			$sql_substitutes = "substitute1, substitute2,";
+			$sql_substitutes_ids = $substitutes [0] . "," . $substitutes [1] . ",";
+		} elseif (sizeof ( $substitutes ) == 3) {
+			$sql_substitutes = "substitute1, substitute2, substitute3,";
+			$sql_substitutes_ids = $substitutes [0] . "," . $substitutes [1] . "," . $substitutes [2] . ",";
+		}
+		
 		$sql = "INSERT INTO HolidayRequests 
-				(start, end, person, substitute1, substitute2, substitute3, type, status, comment) 
+				(start, end, person, " . $sql_substitutes . " type, status, comment) 
 				VALUES 
-				(" . $start . "," . $end . "," . $person . "," . $subs1 . "," . $subs2 . "," . $subs3 . "," . $type . ",2,\"\");";
+				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . $type . ",2,\"\");";
 		
 		$result = $conn->query ( $sql );
 		if (! $result) {

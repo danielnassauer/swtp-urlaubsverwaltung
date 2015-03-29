@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
 	function createNewHolidayRequest(){
-		createHolidayRequest(42, 4711, 80, [], 2);
+		createHolidayRequest(42, 4711, 80, [1,2], 2);
 
 		showHolidayRequests();
 	}
@@ -31,7 +31,7 @@
 			var request = requests[i];
 			rows += "<tr><td>" + request.id + "</td><td>" + request.person
 					+ "</td><td>" + request.start + "</td><td>" + request.end
-					+ "</td><td>" + request.substitudes + "</td><td>"
+					+ "</td><td>" + request.substitutes + "</td><td>"
 					+ request.type + "</td><td>" + request.status + "</td><td>"
 					+ request.comment + "</td></tr>";
 		}
@@ -43,7 +43,7 @@
 		var request = getHolidayRequest(id);
 		var row = "<tr><td>" + request.id + "</td><td>" + request.person
 				+ "</td><td>" + request.start + "</td><td>" + request.end
-				+ "</td><td>" + request.substitudes + "</td><td>"
+				+ "</td><td>" + request.substitutes + "</td><td>"
 				+ request.type + "</td><td>" + request.status + "</td><td>"
 				+ request.comment + "</td></tr>";
 		$("#table_holidayrequest").html(row);

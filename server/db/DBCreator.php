@@ -1,5 +1,5 @@
 <?php
-include 'conf.php';
+require_once dirname(__FILE__).'/conf.php';
 class DBCreator {
 
 	public static function createHolidayRequestsTable() {

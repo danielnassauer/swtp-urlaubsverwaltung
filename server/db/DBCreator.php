@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__).'/conf.php';
+require_once dirname ( __FILE__ ) . '/conf.php';
 class DBCreator {
 
 	public static function createHolidayRequestsTable() {
@@ -29,6 +29,14 @@ class DBCreator {
 		}
 		
 		$conn->close ();
+	}
+
+	public static function deleteHolidayRequestsTable() {
+		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
+		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
+		if (! $conn->query ( "DROP TABLE IF EXISTS HolidayRequests" )) {
+			throw new Exception ( "Table creation failed: (" . $mysqli->errno . ") " . $mysqli->error );
+		}
 	}
 
 	private static function createHolidayDB() {

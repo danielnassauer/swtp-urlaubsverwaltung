@@ -11,6 +11,15 @@ if (isset ( $_POST ['create_holidayrequests_table'] )) {
 	}
 }
 
+if (isset ( $_POST ['delete_holidayrequests_table'] )) {
+	try {
+		DBCreator::deleteHolidayRequestsTable ();
+		echo '<div class="alert alert-success" role="alert">Urlaubsverwaltung DB erfolgreich gelöscht!</div>';
+	} catch ( Exception $e ) {
+		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+	}
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,6 +49,8 @@ if (isset ( $_POST ['create_holidayrequests_table'] )) {
 				<form action="admin.php" method="POST">
 					<button type="submit" class="btn btn-default"
 						name="create_holidayrequests_table">Tabelle erstellen</button>
+						<button type="submit" class="btn btn-default"
+						name="delete_holidayrequests_table">Tabelle löschen</button>
 				</form>
 				
 				<table>

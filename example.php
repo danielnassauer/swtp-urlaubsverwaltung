@@ -1,5 +1,6 @@
 <?php
 require_once dirname ( __FILE__ ) . '/server/session/session.php';
+require_once dirname ( __FILE__ ) . '/server/session/login.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -88,6 +89,10 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 
 <body>
 	<div class="container">
+		<h1 class="page-header">Login</h1>
+		<form action="" method="POST">
+		<p>User: <input type="text" name="user"><input type="submit" value="sign in"></p>
+		</form>
 
 		<h1 class="page-header">Persons</h1>
 

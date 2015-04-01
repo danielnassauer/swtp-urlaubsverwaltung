@@ -1,5 +1,7 @@
 <?php
-session_start();
-//TEST DATA
-$_SESSION['user'] = 42;
+session_start ();
+// TEST DATA
+if (! isset ( $_SESSION ['user'] )) {
+	$_SESSION ['user'] = 42;
+}
 ?>

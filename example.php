@@ -1,3 +1,6 @@
+<?php
+require_once dirname ( __FILE__ ) . '/server/session/session.php';
+?>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -17,9 +20,11 @@
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
 
+<?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
+
 <script type="text/javascript">
-	function createNewHolidayRequest(){
-		createHolidayRequest(42, 4711, 80, [1,2], 2);
+	function createNewHolidayRequest() {
+		createHolidayRequest(42, 4711, 80, [ 1, 2 ], 2);
 
 		showHolidayRequests();
 	}
@@ -132,7 +137,8 @@
 
 		<h2>Neuen Reuquest erzeugen</h2>
 		<p>
-			<input type="button" value="erzeugen" onClick="createNewHolidayRequest()">
+			<input type="button" value="erzeugen"
+				onClick="createNewHolidayRequest()">
 		</p>
 
 		<h2>Einzelne Requests Abfragen</h2>

@@ -3,8 +3,6 @@ require_once dirname ( __FILE__ ) . '/conf.php';
 class DBCreator {
 
 	public static function createHolidayRequestsTable() {
-		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
-		
 		$sql = "CREATE TABLE HolidayRequests (
 				id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 				start INT(11) NOT NULL,
@@ -17,18 +15,7 @@ class DBCreator {
 				status INT(1),
 				comment VARCHAR(1000)
 				)";
-		
-		self::createHolidayDB ();
-		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
-		if (mysqli_connect_errno ()) {
-			throw new Exception ( "MySQL connection failed: " . mysqli_connect_error () );
-		}
-		
-		if (! $conn->query ( $sql )) {
-			throw new Exception ( "Could not create holiday requests table: " . $conn->error );
-		}
-		
-		$conn->close ();
+		self::createTable ( $sql );
 	}
 
 	public static function deleteHolidayRequestsTable() {
@@ -36,12 +23,31 @@ class DBCreator {
 	}
 
 	public static function createUserRightsTable() {
-		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
-		
 		$sql = "CREATE TABLE UserRights (
 				user INT(11) UNSIGNED PRIMARY KEY,
 				rights INT(11)				
 				)";
+		self::createTable ( $sql );
+	}
+
+	public static function deleteUserRightsTable() {
+		self::deleteTable ( "UserRights" );
+	}
+
+	public static function createRemainingHolidayTable() {
+		$sql = "CREATE TABLE RemainingHoliday (
+				user INT(11) UNSIGNED PRIMARY KEY,
+				remaining_holiday INT(11)
+				)";
+		self::createTable ( $sql );
+	}
+
+	public static function deleteRemainingHolidayTable() {
+		self::deleteTable ( "RemainingHoliday" );
+	}
+
+	private static function createTable($sql_query) {
+		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
 		
 		self::createHolidayDB ();
 		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
@@ -49,15 +55,11 @@ class DBCreator {
 			throw new Exception ( "MySQL connection failed: " . mysqli_connect_error () );
 		}
 		
-		if (! $conn->query ( $sql )) {
-			throw new Exception ( "Could not create user rights table: " . $conn->error );
+		if (! $conn->query ( $sql_query )) {
+			throw new Exception ( "Could not create table: " . $conn->error );
 		}
 		
 		$conn->close ();
-	}
-
-	public static function deleteUserRightsTable() {
-		self::deleteTable ( "UserRights" );
 	}
 
 	private static function deleteTable($table) {

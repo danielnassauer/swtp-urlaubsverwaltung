@@ -1,9 +1,7 @@
 <?php
-require_once dirname ( __FILE__ ) . '/db/DBConn.php';
 require_once dirname ( __FILE__ ) . '/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/db/Persons.php';
 class RequestHandler {
-	private $dbconn;
 
 	public function __construct($request) {
 		// URL auswerten
@@ -16,9 +14,6 @@ class RequestHandler {
 		} else {
 			$ressource = $url [count ( $url ) - 1];
 		}
-		
-		// DB-Verbindung herstellen
-		$dbconn = new DBConn ();
 		
 		// Request auswerten
 		if ($ressource == "Person") {

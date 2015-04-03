@@ -88,6 +88,32 @@ class HolidayRequests {
 		return $request;
 	}
 
+	public static function editRequest($id, $start, $end, $substitutes, $status, $comment) {
+		$conn = self::getDBConnection ();
+		
+		$subs1 = "NULL";
+		$subs2 = "NULL";
+		$subs3 = "NULL";
+		if (sizeof ( $substitutes ) > 0) {
+			$subs1 = "'" . $substitutes [0] . "'";
+			if (sizeof ( $substitutes ) > 1) {
+				$subs2 = "'" . $substitutes [1] . "'";
+				if (sizeof ( $substitutes ) > 2) {
+					$subs3 = "'" . $substitutes [2] . "'";
+				}
+			}
+		}
+		
+		$sql = "UPDATE HolidayRequests
+				SET start=" . $start . ", end=" . $end . ", substitute1=" . $subs1 . ", substitute2=" . $subs2 . ", substitute3=" . $subs3 . ", status=" . $status . ", comment='" . $comment . "' 
+				WHERE id=" . $id;
+		
+		$result = $conn->query ( $sql );
+		if (! $result) {
+			throw new Exception ( $conn->error );
+		}
+	}
+
 	private static function getDBConnection() {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
 		

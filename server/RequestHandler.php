@@ -55,7 +55,7 @@ class RequestHandler {
 			} elseif ($request->method == "PUT") {
 				if (isset ( $id )) {
 					$holReq = $request->content;
-					$dbconn->editHolidayRequest ( new HolidayRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"], $holReq ["status"], $holReq ["comment"] ) );
+					HolidayRequests::editRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["substitutes"], $holReq ["status"], $holReq ["comment"] );
 				}
 			}
 		}

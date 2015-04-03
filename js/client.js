@@ -115,12 +115,19 @@ function getHolidayRequests() {
 
 /**
  * Erzeugt einen neuen HolidayRequest.
- * @param start Start-Datum (Unix-Timestamp)
- * @param end End-Datum (Unix-Timestamp)
- * @param person ID des Antragstellers
- * @param substitutes Array von Personen-IDs der Vertretungen
- * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
- * @param status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
+ * 
+ * @param start
+ *            Start-Datum (Unix-Timestamp)
+ * @param end
+ *            End-Datum (Unix-Timestamp)
+ * @param person
+ *            ID des Antragstellers
+ * @param substitutes
+ *            Array von Personen-IDs der Vertretungen
+ * @param type
+ *            Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+ * @param status
+ *            Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
  * @returns {HolidayRequest} neu erzeugter HolidayRequest mit neuer ID
  */
 function createHolidayRequest(start, end, person, substitutes, type) {
@@ -137,6 +144,14 @@ function createHolidayRequest(start, end, person, substitutes, type) {
 			data["comment"]);
 }
 
-function editHolidayRequest(holidayRequest) {
-	PUT("HolidayRequest/" + holidayRequest.id, holidayRequest);
+function editHolidayRequest(id, start, end, substitutes, status, comment) {
+	var r = {
+		id : id,
+		start : start,
+		end : end,
+		substitutes : substitutes,
+		status : status,
+		comment : comment
+	}
+	PUT("HolidayRequest/" + id, r);
 }

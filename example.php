@@ -55,6 +55,12 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		$("#table_holidayrequest").html(row);
 	}
 
+	function editExistingHolidayRequest() {
+		editHolidayRequest(1, 2, 3, [ 3, 2, 1 ], 2, "Kommentar");
+
+		showHolidayRequests();
+	}
+
 	function showPersons() {
 		var persons = getPersons();
 		var rows = "";
@@ -91,7 +97,10 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 	<div class="container">
 		<h1 class="page-header">Login</h1>
 		<form action="" method="POST">
-		<p>User: <input type="text" name="user"><input type="submit" value="sign in"></p>
+			<p>
+				User: <input type="text" name="user"><input type="submit"
+					value="sign in">
+			</p>
 		</form>
 
 		<h1 class="page-header">Persons</h1>
@@ -140,10 +149,16 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 
 		<h1 class="page-header">HolidayRequests</h1>
 
-		<h2>Neuen Reuquest erzeugen</h2>
+		<h2>Neuen Request erzeugen</h2>
 		<p>
 			<input type="button" value="erzeugen"
 				onClick="createNewHolidayRequest()">
+		</p>
+
+		<h2>Bestehende Requests bearbeiten</h2>
+		<p>
+			<input type="button" value="ändern"
+				onClick="editExistingHolidayRequest()">
 		</p>
 
 		<h2>Einzelne Requests Abfragen</h2>

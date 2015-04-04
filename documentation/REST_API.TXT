@@ -58,7 +58,7 @@ Folgende Requests sind möglich:
    GET
       Antwort:  HolidayRequest
    PUT
-      Body:     HolidayRequest
+      Body:     HolidayRequest (ohne type und person)
       Effekt:   HolidayRequest mit der entsprechenden ID wird abgeändert
 
 

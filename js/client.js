@@ -144,6 +144,23 @@ function createHolidayRequest(start, end, person, substitutes, type) {
 			data["comment"]);
 }
 
+/**
+ * Ändert einen bestehenden HolidayRequest ab.
+ * 
+ * @param id
+ *            ID des HolidayRequests, der abgeändert werden soll
+ * @param start
+ *            neues Start-Datum (Unix-Timestamp)
+ * @param end
+ *            neues End-Datum (Unix-Timestamp)
+ * @param substitutes
+ *            Array von Personen-IDs der neuen Vertretungen
+ * @param status
+ *            neuer Status des Urlaubsantrags 1: angenommen, 2: wartend, 3:
+ *            abgelehnt
+ * @param comment
+ *            neuer Kommentar
+ */
 function editHolidayRequest(id, start, end, substitutes, status, comment) {
 	var r = {
 		id : id,

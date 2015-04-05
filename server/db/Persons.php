@@ -25,15 +25,12 @@ class Persons {
 	}
 
 	private static function connect() {
-		$servername = "localhost";
-		$username = "root";
-		$password = "orion";
-		$db = "provider";
+		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;
 		
 		self::$persons = array ();
 		
 		// Create connection
-		$conn = new mysqli ( $servername, $username, $password, $db );
+		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_provider );
 		
 		// Check connection
 		if ($conn->connect_error) {

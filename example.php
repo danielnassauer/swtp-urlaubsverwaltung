@@ -98,8 +98,8 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		<h1 class="page-header">Login</h1>
 		<form action="" method="POST">
 			<p>
-				User: <input type="text" name="user"><input type="submit"
-					value="sign in">
+				User: <input type="text" name="user"> Password: <input type="password"
+					name="password"><input type="submit" value="sign in">
 			</p>
 		</form>
 
@@ -109,8 +109,8 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		<p>Mit getPerson(id) kann eine einzelne Person anhand ihrer ID
 			abgefragt werden.</p>
 		<p>
-			Person ID: <input type="text" id="person_id"> <input
-				type="button" value="abfragen" onClick="showPerson()">
+			Person ID: <input type="text" id="person_id"> <input type="button"
+				value="abfragen" onClick="showPerson()">
 		</p>
 		<table class="table table-striped table-condensed table-bordered">
 			<thead>
@@ -162,8 +162,8 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		</p>
 
 		<h2>Einzelne Requests Abfragen</h2>
-		<p>Mit getHolidayRequest(id) kann ein einzelner HolidayRequest
-			anhand seiner ID abgefragt werden.</p>
+		<p>Mit getHolidayRequest(id) kann ein einzelner HolidayRequest anhand
+			seiner ID abgefragt werden.</p>
 		<p>
 			HolidayRequest ID: <input type="text" id="request_id"> <input
 				type="button" value="abfragen" onClick="showHolidayRequest()">

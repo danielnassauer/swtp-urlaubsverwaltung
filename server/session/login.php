@@ -1,7 +1,9 @@
 <?php
 session_start ();
-if (isset ( $_POST ["user"] )) {
-	$_SESSION["user"] = $_POST["user"];
+require_once dirname ( __FILE__ ) . '/../db/Authentication.php';
+if (isset ( $_POST ["user"] ) && isset ( $_POST ["password"] )) {
+	// sign in and set user id
+	$_SESSION ["user"] = Authentication::signIn ( $_POST ["user"], $_POST ["password"] );
 }
 
 ?>

@@ -1,12 +1,21 @@
 /**
  * Repräsentiert eine Person
- * @param id ID
- * @param forename Vorname
- * @param lastname Nachname
- * @param department Abteilungs-ID
- * @param field_service Außendienst (als boolean)
- * @param remaining_holiday verbleibende Urlaubstage;
- * @param role Mitarbeiter-Typ 1: Mitarbeiter, 2: Abteilungsleiter, 3: Geschäftsleitung
+ * 
+ * @param id
+ *            ID
+ * @param forename
+ *            Vorname
+ * @param lastname
+ *            Nachname
+ * @param department
+ *            Abteilungs-ID
+ * @param field_service
+ *            Außendienst (als boolean)
+ * @param remaining_holiday
+ *            verbleibende Urlaubstage;
+ * @param role
+ *            Mitarbeiter-Typ 1: Mitarbeiter, 2: Abteilungsleiter, 3:
+ *            Geschäftsleitung
  */
 var Person = function(id, forename, lastname, department, field_service,
 		remaining_holiday, role) {
@@ -22,14 +31,24 @@ var Person = function(id, forename, lastname, department, field_service,
 
 /**
  * Repräsentiert einen Urlaubsantrag
- * @param id ID
- * @param start Start-Datum (Unix-Timestamp)
- * @param end End-Datum (Unix-Timestamp)
- * @param person ID des Antragstellers
- * @param substitutes Array von Personen-IDs der Vertretungen
- * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
- * @param status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
- * @param comment Kommentar bei Ablehnung
+ * 
+ * @param id
+ *            ID
+ * @param start
+ *            Start-Datum (Unix-Timestamp)
+ * @param end
+ *            End-Datum (Unix-Timestamp)
+ * @param person
+ *            ID des Antragstellers
+ * @param substitutes
+ *            Array von Personen-IDs der Vertretungen
+ * @param type
+ *            Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+ * @param status
+ *            Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt,
+ *            4: storniert
+ * @param comment
+ *            Kommentar bei Ablehnung
  */
 var HolidayRequest = function(id, start, end, person, substitutes, type,
 		status, comment) {

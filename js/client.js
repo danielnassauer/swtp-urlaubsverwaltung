@@ -127,7 +127,8 @@ function getHolidayRequests() {
  * @param type
  *            Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
  * @param status
- *            Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
+ *            Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt,
+ *            4: storniert
  * @returns {HolidayRequest} neu erzeugter HolidayRequest mit neuer ID
  */
 function createHolidayRequest(start, end, person, substitutes, type) {
@@ -157,7 +158,7 @@ function createHolidayRequest(start, end, person, substitutes, type) {
  *            Array von Personen-IDs der neuen Vertretungen
  * @param status
  *            neuer Status des Urlaubsantrags 1: angenommen, 2: wartend, 3:
- *            abgelehnt
+ *            abgelehnt, 4: storniert
  * @param comment
  *            neuer Kommentar
  */

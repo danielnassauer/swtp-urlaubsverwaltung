@@ -6,7 +6,7 @@ class HolidayRequests {
 
 	public static function getRequests() {
 		$conn = self::getDBConnection ();
-		$sql = "SELECT id, start, end, person, substitute1, substitute2, substitute3, substitute1_accepted, substitute2_accepted, substitute3_accepted, type, status, comment FROM HolidayRequests";
+		$sql = "SELECT id, start, end, person, substitute1, substitute2, substitute3, type, status, comment FROM HolidayRequests";
 		$result = $conn->query ( $sql );
 		if (! $result) {
 			throw new Exception ( "Could not query holiday requests table: " . $conn->error );
@@ -16,13 +16,13 @@ class HolidayRequests {
 		while ( $row = $result->fetch_assoc () ) {
 			$substitutes = array ();
 			if ($row ["substitute1"] != "") {
-				$substitutes [$row ["substitute1"]] = $row ["substitute1_accepted"] == true;
+				array_push ( $substitutes, $row ["substitute1"] );
 			}
 			if ($row ["substitute2"] != "") {
-				$substitutes [$row ["substitute2"]] = $row ["substitute2_accepted"] == true;
+				array_push ( $substitutes, $row ["substitute2"] );
 			}
 			if ($row ["substitute3"] != "") {
-				$substitutes [$row ["substitute3"]] = $row ["substitute3_accepted"] == true;
+				array_push ( $substitutes, $row ["substitute3"] );
 			}
 			$r = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 			array_push ( $requests, $r );
@@ -34,7 +34,7 @@ class HolidayRequests {
 
 	public static function getRequest($id) {
 		$conn = self::getDBConnection ();
-		$sql = "SELECT id, start, end, person, substitute1, substitute2, substitute3, substitute1_accepted, substitute2_accepted, substitute3_accepted, type, status, comment FROM  HolidayRequests WHERE id=" . $id . ";";
+		$sql = "SELECT id, start, end, person, substitute1, substitute2, substitute3, type, status, comment FROM  HolidayRequests WHERE id=" . $id . ";";
 		$result = $conn->query ( $sql );
 		if (! $result) {
 			throw new Exception ( "Could not query holiday requests table: " . $conn->error );
@@ -43,13 +43,13 @@ class HolidayRequests {
 		$row = $result->fetch_assoc ();
 		$substitutes = array ();
 		if ($row ["substitute1"] != "") {
-			$substitutes [$row ["substitute1"]] = $row ["substitute1_accepted"] == true;
+			array_push ( $substitutes, $row ["substitute1"] );
 		}
 		if ($row ["substitute2"] != "") {
-			$substitutes [$row ["substitute2"]] = $row ["substitute2_accepted"] == true;
+			array_push ( $substitutes, $row ["substitute2"] );
 		}
 		if ($row ["substitute3"] != "") {
-			$substitutes [$row ["substitute3"]] = $row ["substitute3_accepted"] == true;
+			array_push ( $substitutes, $row ["substitute3"] );
 		}
 		$request = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 		
@@ -74,9 +74,9 @@ class HolidayRequests {
 		}
 		
 		$sql = "INSERT INTO HolidayRequests 
-				(start, end, person, " . $sql_substitutes . "substitute1_accepted, substitute2_accepted, substitute3_accepted, type, status, comment) 
+				(start, end, person, " . $sql_substitutes . " type, status, comment) 
 				VALUES 
-				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . "FALSE, FALSE, FALSE," . $type . ",2,\"\");";
+				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . $type . ",2,\"\");";
 		
 		$result = $conn->query ( $sql );
 		if (! $result) {

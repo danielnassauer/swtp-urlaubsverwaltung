@@ -37,7 +37,7 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 			var request = requests[i];
 			rows += "<tr><td>" + request.id + "</td><td>" + request.person
 					+ "</td><td>" + request.start + "</td><td>" + request.end
-					+ "</td><td>" + JSON.stringify(request.substitutes) + "</td><td>"
+					+ "</td><td>" + request.substitutes + "</td><td>"
 					+ request.type + "</td><td>" + request.status + "</td><td>"
 					+ request.comment + "</td></tr>";
 		}
@@ -49,7 +49,7 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		var request = getHolidayRequest(id);
 		var row = "<tr><td>" + request.id + "</td><td>" + request.person
 				+ "</td><td>" + request.start + "</td><td>" + request.end
-				+ "</td><td>" + JSON.stringify(request.substitutes) + "</td><td>"
+				+ "</td><td>" + request.substitutes + "</td><td>"
 				+ request.type + "</td><td>" + request.status + "</td><td>"
 				+ request.comment + "</td></tr>";
 		$("#table_holidayrequest").html(row);
@@ -98,9 +98,8 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		<h1 class="page-header">Login</h1>
 		<form action="" method="POST">
 			<p>
-				User: <input type="text" name="user"> Password: <input
-					type="password" name="password"><input type="submit"
-					value="sign in">
+				User: <input type="text" name="user"> Password: <input type="password"
+					name="password"><input type="submit" value="sign in">
 			</p>
 		</form>
 

@@ -17,13 +17,13 @@ Es existieren folgende Ressourcen:
 * HolidayRequest:
    {
       id:                  int,
-      start:               int,                // Beginn-Datum als Unix-Timestamp
-      end:                 int,                // End-Datum als Unix-Timestamp
-      person:              int,                // ID der beantragenden Person
-      substitutes:         {int : bool, ...},  // Dictionary mit IDs der Vertretungen als Key und True als Wert, wenn die Vertretung zugestimmt hat, ansonsten False.  
-      type:                int,                // 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
-      status:              int,                // 1: angenommen, 2: wartend, 3: abgelehnt, 4: storniert
-      comment:             string              // Begründung (nur wenn abgelehnt)
+      start:               int,        // Beginn-Datum als Unix-Timestamp
+      end:                 int,        // End-Datum als Unix-Timestamp
+      person:              int,        // ID der beantragenden Person
+      substitutes:         [int, ...], // Liste mit IDs der Vertretungen 
+      type:                int,        // 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+      status:              int,        // 1: angenommen, 2: wartend, 3: abgelehnt, 4: storniert
+      comment:             string      // Begründung (nur wenn abgelehnt)
    }
 
 

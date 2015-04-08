@@ -72,7 +72,7 @@ class HolidayRequests {
 		$sql = "INSERT INTO HolidayRequests 
 				(start, end, person, " . $sql_substitutes . "substitute1_accepted, substitute2_accepted, substitute3_accepted, type, status, comment) 
 				VALUES 
-				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . "FALSE, FALSE, FALSE," . $type . ",2,\"\");";
+				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . "FALSE, FALSE, FALSE,\"" . $type . "\",2,\"\");";
 		
 		$result = $conn->query ( $sql );
 		if (! $result) {

@@ -25,7 +25,7 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 
 <script type="text/javascript">
 	function createNewHolidayRequest() {
-		createHolidayRequest(42, 4711, 80, { 1:false, 2:false }, 2);
+		createHolidayRequest(42, 4711, 80, { 1:false, 2:false }, "Urlaub");
 
 		showHolidayRequests();
 	}

@@ -24,12 +24,13 @@ function GET(path) {
  *            Java-Wert. Wird automatisch in JSON umgewandelt
  */
 function PUT(path, content) {
-	$.ajax({
+	var response = $.ajax({
 		type : "PUT",
 		url : path,
 		data : JSON.stringify(content),
 		async : false
-	});
+	}).responseText;
+	console.log(response);
 }
 
 /**

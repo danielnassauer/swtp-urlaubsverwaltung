@@ -1,25 +1,34 @@
 <?php
-require_once dirname(__FILE__).'/../../lib/json/jsonCompatibility.php';
+require_once dirname ( __FILE__ ) . '/../../lib/json/jsonCompatibility.php';
 class HolidayRequest {
-	private $id;
-	private $start;
-	private $end;
-	private $person;
-	private $substitutes;
-	private $type;
-	private $status;
-	private $comment;
+	public $id;
+	public $start;
+	public $end;
+	public $person;
+	public $substitutes;
+	public $type;
+	public $status;
+	public $comment;
 
 	/**
 	 * Repräsentiert einen Urlaubsantrag
-	 * @param id ID
-	 * @param start Start-Datum (Unix-Timestamp)
-	 * @param end End-Datum (Unix-Timestamp)
-	 * @param person Antragsteller
-	 * @param substitutes Liste von Personen-IDs der Vertretungen
-	 * @param type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
-	 * @param status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
-	 * @param comment Kommentar bei Ablehnung
+	 * 
+	 * @param
+	 *        	id ID
+	 * @param
+	 *        	start Start-Datum (Unix-Timestamp)
+	 * @param
+	 *        	end End-Datum (Unix-Timestamp)
+	 * @param
+	 *        	person Antragsteller
+	 * @param
+	 *        	substitutes Liste von Personen-IDs der Vertretungen
+	 * @param
+	 *        	type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+	 * @param
+	 *        	status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
+	 * @param
+	 *        	comment Kommentar bei Ablehnung
 	 */
 	public function __construct($id, $start, $end, $person, $substitutes, $type, $status, $comment) {
 		$this->id = $id;
@@ -54,17 +63,17 @@ class HolidayRequest {
 		$this->status = $holidayRequest->status;
 		$this->comment = $holidayRequest->comment;
 	}
-	
+
 	public function toArray() {
-		$data = array();
-		$data["id"]=$this->id;
-		$data["start"]=$this->start;
-		$data["end"]=$this->end;
-		$data["person"]=$this->person;
-		$data["substitutes"]=$this->substitutes;
-		$data["type"]=$this->type;
-		$data["status"]=$this->status;
-		$data["comment"]=$this->comment;
+		$data = array ();
+		$data ["id"] = $this->id;
+		$data ["start"] = $this->start;
+		$data ["end"] = $this->end;
+		$data ["person"] = $this->person;
+		$data ["substitutes"] = $this->substitutes;
+		$data ["type"] = $this->type;
+		$data ["status"] = $this->status;
+		$data ["comment"] = $this->comment;
 		return $data;
 	}
 

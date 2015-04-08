@@ -62,15 +62,11 @@ class HolidayRequests {
 		
 		$sql_substitutes = "";
 		$sql_substitutes_ids = "";
-		if (sizeof ( $substitutes ) == 1) {
-			$sql_substitutes = "substitute1,";
-			$sql_substitutes_ids = $substitutes [0] . ",";
-		} elseif (sizeof ( $substitutes ) == 2) {
-			$sql_substitutes = "substitute1, substitute2,";
-			$sql_substitutes_ids = $substitutes [0] . "," . $substitutes [1] . ",";
-		} elseif (sizeof ( $substitutes ) == 3) {
-			$sql_substitutes = "substitute1, substitute2, substitute3,";
-			$sql_substitutes_ids = $substitutes [0] . "," . $substitutes [1] . "," . $substitutes [2] . ",";
+		$i = 1;
+		foreach ( $substitutes as $subs_id => $subs_accepted ) {
+			$sql_substitutes .= "substitute" . $i . ",";
+			$sql_substitutes_ids .= $subs_id . ",";
+			$i ++;
 		}
 		
 		$sql = "INSERT INTO HolidayRequests 
@@ -91,21 +87,29 @@ class HolidayRequests {
 	public static function editRequest($id, $start, $end, $substitutes, $status, $comment) {
 		$conn = self::getDBConnection ();
 		
-		$subs1 = "NULL";
-		$subs2 = "NULL";
-		$subs3 = "NULL";
-		if (sizeof ( $substitutes ) > 0) {
-			$subs1 = "'" . $substitutes [0] . "'";
-			if (sizeof ( $substitutes ) > 1) {
-				$subs2 = "'" . $substitutes [1] . "'";
-				if (sizeof ( $substitutes ) > 2) {
-					$subs3 = "'" . $substitutes [2] . "'";
+		// Unveränderten HolidayRequest abfragen, um herauszufinden, welche ID zu welcher substitute gehört
+		$sql = "SELECT substitute1, substitute2, substitute3 FROM  HolidayRequests WHERE id=" . $id . ";";
+		$result = $conn->query ( $sql );
+		if (! $result) {
+			throw new Exception ( "Could not query holiday requests table: " . $conn->error );
+		}
+		$row = $result->fetch_assoc ();
+		
+		$sql_subs = "";
+		foreach ( $substitutes as $subs_id => $subs_accepted ) {
+			if ($subs_accepted) {
+				if ($subs_id == $row ["substitute1"]) {
+					$sql_subs .= "substitute1_accepted=TRUE,";
+				} elseif ($subs_id == $row ["substitute2"]) {
+					$sql_subs .= "substitute2_accepted=TRUE,";
+				} elseif ($subs_id == $row ["substitute3"]) {
+					$sql_subs .= "substitute3_accepted=TRUE,";
 				}
 			}
 		}
 		
 		$sql = "UPDATE HolidayRequests
-				SET start=" . $start . ", end=" . $end . ", substitute1=" . $subs1 . ", substitute2=" . $subs2 . ", substitute3=" . $subs3 . ", status=" . $status . ", comment='" . $comment . "' 
+				SET start=" . $start . ", end=" . $end . "," . $sql_subs . "status=" . $status . ", comment='" . $comment . "' 
 				WHERE id=" . $id;
 		
 		$result = $conn->query ( $sql );

@@ -14,13 +14,43 @@
 <script src="lib/fullcalendar/lib/moment.min.js"></script>
 <script src="lib/fullcalendar/fullcalendar.js"></script>
 
+<script src="js/client.js"></script>
+<script src="js/model.js"></script>
+
 <script type="text/javascript">
 	var selected_start;
 	var selected_end;
+	var vertretung;
+	var sonder;
+	var urlaubstyp;
+	
+	function typeget(){
+		if(UA.checked = true){
+			urlaubstyp = 1;
+		}
+		else if(FA.checked = true){
+			urlaubstyp = 2;
+		}
+		else if(SU.checked = true){
+			urlaubstyp = 3;
+		}
+	
+	}
+	
+	function vertretungText() {
+    var vertretung = document.getElementById("sizing-addon2").value;
+	}
+	
+	function sonderurlaubText() {
+    var sonder = document.getElementById("sonder").value;
+	}
 	
 	function abschicken(){
 		$("#popup").hide();
 		console.log(selected_start);
+		
+		createHolidayRequest(selected_start, selected_end, id, vertretung, sonder, urlaubstyp); //Sonderurlaubs Grund fehlt!
+		
 	}
 				
 	$(document).ready(function() {
@@ -77,27 +107,29 @@
 			<div class="panel-heading">Urlaub beantragen</div>
 				<div class="panel-body">
 					<div class="col-lg-6">
-						<div class="checkbox">
+						<form role ="form">
+						<div class="radio">
 						<label>
-						  <input type="checkbox"> Urlaubsantrag
+						  <input type="radio" name="optradio" id="UA"> Urlaubsantrag
 						</label>
 						</div>
 					</div>
 				  <div class="col-lg-6">
-					<div class="checkbox">
+					<div class="radio">
 					<label>
-					  <input type="checkbox"> Freizeitantrag
+					  <input type="radio" name="optradio" id ="FA"> Freizeitantrag
 					</label>
 					</div>
 				  </div>
 				<div class="col-lg-12">
 					<div class="input-group">
-					  <span class="input-group-addon">
-						<input type="checkbox" aria-label="...">
+					  <span class="input-group-addon" id="sonder">
+						<input type="radio" name="optradio" id="SU" aria-label="...">
 					  </span>
 					  <input type="text" placeholder="Antrag für Sonderurlaub wegen" class="form-control" aria-label="...">
 					</div><!-- /input-group -->
 				</div><!-- /.col-lg-6 -->
+				</form>
 			</div>
 				<div class="col-lg-12">
 					<div class="input-group">
@@ -111,8 +143,7 @@
 					<button type="button" class="btn btn-default btn-lg btn-block" onclick="abschicken()" >Abschicken</button>
 				</div>
 		</div>	
-		</div>
-		
+		</div>	
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -140,100 +171,6 @@
 				</div>
 			</div>
 			<div class="col-xs-5">
-
-				<div class="panel panel-default">
-					<div class="panel-heading">Angenommen</div>
-					<div class="panel-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th></th>
-									<th>von</th>
-									<th>bis</th>
-									<th>Vertretungen</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="success">
-									<td>Urlaub</td>
-									<td>01.01.2015</td>
-									<td>01.01.2016</td>
-									<td>Max Mustermann</td>
-								</tr>
-								<tr class="success">
-									<td>Urlaub</td>
-									<td>01.01.2015</td>
-									<td>01.01.2016</td>
-									<td>Max Mustermann</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-
-				<div class="panel panel-default">
-					<div class="panel-heading">Ausstehend</div>
-					<div class="panel-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th></th>
-									<th>von</th>
-									<th>bis</th>
-									<th>Vertretungen</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="warning">
-									<td>Urlaub</td>
-									<td>01.01.2015</td>
-									<td>01.01.2016</td>
-									<td>Max Mustermann</td>
-								</tr>
-								<tr class="warning">
-									<td>Urlaub</td>
-									<td>01.01.2015</td>
-									<td>01.01.2016</td>
-									<td>Max Mustermann</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-
-				<div class="panel panel-default">
-					<div class="panel-heading">Abgelehnt</div>
-					<div class="panel-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th></th>
-									<th>von</th>
-									<th>bis</th>
-									<th>Vertretungen</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="danger">
-									<td>Urlaub</td>
-									<td>01.01.2015</td>
-									<td>01.01.2016</td>
-									<td>Max Mustermann</td>
-								</tr>
-								<tr class="danger">
-									<td>Urlaub</td>
-									<td>01.01.2015</td>
-									<td>01.01.2016</td>
-									<td>Max Mustermann</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-			</div>
 		</div>
 	</div>
 	

@@ -124,7 +124,8 @@ function getHolidayRequests() {
  * @param person
  *            ID des Antragstellers
  * @param substitutes
- *            Array von Personen-IDs der Vertretungen
+ *            Dictionary mit Personen-IDs der Vertretungen als Key und True als
+ *            Wert, wenn die Vertretung zugestimmt hat, ansonsten False
  * @param type
  *            Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
  * @param status
@@ -156,7 +157,8 @@ function createHolidayRequest(start, end, person, substitutes, type) {
  * @param end
  *            neues End-Datum (Unix-Timestamp)
  * @param substitutes
- *            Array von Personen-IDs der neuen Vertretungen
+ *            Dictionary mit Personen-IDs der Vertretungen als Key und True als
+ *            Wert, wenn die Vertretung zugestimmt hat, ansonsten False
  * @param status
  *            neuer Status des Urlaubsantrags 1: angenommen, 2: wartend, 3:
  *            abgelehnt, 4: storniert

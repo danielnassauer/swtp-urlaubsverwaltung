@@ -25,8 +25,9 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 
 <script type="text/javascript">
 	function createNewHolidayRequest() {
-		createHolidayRequest(42, 4711, 80, { 1:false, 2:false }, "Urlaub");
-
+		var start = $("#request_start").val();
+		var end = $("#request_end").val();
+		createHolidayRequest(start, end, 80, { 1:false, 2:false }, "Urlaub");
 		showHolidayRequests();
 	}
 
@@ -152,7 +153,8 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 
 		<h2>Neuen Request erzeugen</h2>
 		<p>
-			<input type="button" value="erzeugen"
+			Start: <input type="text" id="request_start"> End: <input type="text"
+				id="request_end"> <input type="button" value="erzeugen"
 				onClick="createNewHolidayRequest()">
 		</p>
 

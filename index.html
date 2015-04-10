@@ -18,43 +18,64 @@
 <script src="js/model.js"></script>
 
 <script type="text/javascript">
+	var calendar;
+
+	function getFilteredHolidayRequests(filters) {
+		var requests = getHolidayRequests();
+		//TODO filtern
+		return requests;
+	}
+
+	function getActualFilters() {
+		return [];
+	}
+
+	function unixTS2calendarTS(timestamp) {
+		var date = new Date(timestamp * 1000);
+		return date.getFullYear() + "-" + (date.getMonth() + 1) + "-"
+				+ date.getDate();
+	}
+
+	function getCalendarEvents() {
+		var events = [];
+		var requests = getFilteredHolidayRequests(getActualFilters());
+
+		for (var i = 0; i < requests.length; i++) {
+			var request = requests[i];
+			var person = getPerson(request.person);
+			var title = person.forename + " " + person.lastname;
+			var start = unixTS2calendarTS(request.start);
+			var end = unixTS2calendarTS(request.end);
+
+			events.push({
+				title : title,
+				start : start,
+				end : end
+			});
+		}
+
+		return events;
+
+	}
 
 	$(document).ready(function() {
-	
-		var date = new Date();
-		var d = date.getDate();
-		var m = date.getMonth();
-		var y = date.getFullYear();
-			
-		var calendar = $('#calendar').fullCalendar({
-			lang: 'de',			//geht eh nicht(-: alles in der fullcalendar.min.js geändert!
 
-			header: {
-				left: 'prev,next',
-				center: 'title',
-				right: 'year,month,agendaWeek'
+		calendar = $('#calendar').fullCalendar({
+			lang : 'de', //geht eh nicht(-: alles in der fullcalendar.min.js geändert!
+
+			header : {
+				left : 'prev,next',
+				center : 'title',
+				right : 'year,month,agendaWeek'
 			},
-			defaultView: 'year',
+			defaultView : 'year',
 			//weekends: false,
-			firstDay: 0,
-			
-			events: function showHolidayRequests() {
-				var requests = getHolidayRequests();
-					for (i = 0; i < requests.length; i++) {
-						var request = requests[i];
-						events: [
-									{
-									title: request.person,
-									start: request.start,
-									end: request.end
-									}
-								]
-					}
-				callback(events);
-			},
-			
+			firstDay : 0,
+
+			events : getCalendarEvents()
+
 		});
-		
+
 	});
 </script>
 </head>
@@ -68,39 +89,45 @@
 			<div>
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#"><span class="ion-home">Übersicht</a></li>
-					<li><a href="my.html"><span class="ion-person"></span> Mein Kalender</a></li>
+					<li><a href="my.html"><span class="ion-person"></span>
+							Mein Kalender</a></li>
 					<li><a href="#"><span class="ion-clipboard">Anfragen</a></li>
 					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
 				</ul>
+			</div>
 		</div>
-	</div>
-</nav>
-	
+	</nav>
+
 	<div class="container">
 		<div class="row">
-		<div class="dropdown">
-		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-			Abteilungen
-			<span class="caret"></span>
-		</button>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Abt1</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Abt2</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Abt3</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Abt4</a></li>
-		  </ul>
+			<div class="dropdown">
+				<button class="btn btn-default dropdown-toggle" type="button"
+					id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+					Abteilungen <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu"
+					aria-labelledby="dropdownMenu1">
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt1</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt2</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt3</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt4</a></li>
+				</ul>
+			</div>
 		</div>
-	</div>
 	</div>
 	<div class="container">
 		<div class="row">
 
-				<div class="panel panel-default">
-					<div class="panel-heading">Kalender</div>
-					<div class="panel-body">
-						<div id='calendar'></div>
-					</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">Kalender</div>
+				<div class="panel-body">
+					<div id='calendar'></div>
 				</div>
+			</div>
 		</div>
 	</div>
 

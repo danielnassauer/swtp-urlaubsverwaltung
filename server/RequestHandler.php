@@ -20,7 +20,7 @@ class RequestHandler {
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
 					$person = Persons::getPerson ( $id );
-					echo $person->toJSON ();
+					echo json_encode ( $person->toArray () );
 				} else {
 					$persons = array ();
 					foreach ( Persons::getPersons () as $person ) {

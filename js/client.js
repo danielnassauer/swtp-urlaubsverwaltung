@@ -129,9 +129,6 @@ function getHolidayRequests() {
  * @param type
  *            Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine
  *            Beschreibung für einen Sonderurlaub
- * @param status
- *            Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt,
- *            4: storniert
  * @returns {HolidayRequest} neu erzeugter HolidayRequest mit neuer ID
  */
 function createHolidayRequest(start, end, person, substitutes, type) {

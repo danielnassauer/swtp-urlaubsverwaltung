@@ -24,6 +24,7 @@ function GET(path) {
  *            Java-Wert. Wird automatisch in JSON umgewandelt
  */
 function PUT(path, content) {
+	console.log("PUT (" + path + "):" + content);
 	var response = $.ajax({
 		type : "PUT",
 		url : path,
@@ -44,6 +45,7 @@ function PUT(path, content) {
  * @returns JavaScript-Wert des JSON-Strings
  */
 function POST(path, content) {
+	console.log("POST (" + path + "):" + content);
 	var response = $.ajax({
 		type : "POST",
 		url : path,

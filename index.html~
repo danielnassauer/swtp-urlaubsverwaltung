@@ -23,16 +23,12 @@
 	function getFilteredHolidayRequests(filters) {
 		var requests = getHolidayRequests();
 		var persons = getPersons();
-		var dep = "";
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
 			console.log(person.department);
 			
-			dep +="<li role="presentation"><a role="menuitem" tabindex="-1"
-						href="#">"+person.department+"</a></li>";
-			}
 			
-		$("#department_menu").html(dep);	
+			}
 		return requests;
 	}
 
@@ -117,8 +113,14 @@
 				</button>
 				<ul class="dropdown-menu" role="menu"
 					aria-labelledby="dropdownMenu1">
-					<li id ="department_menu"role="presentation"><a role="menuitem" tabindex="-1"
+					<li role="presentation"><a role="menuitem" tabindex="-1"
 						href="#">Abt1</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt2</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt3</a></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1"
+						href="#">Abt4</a></li>
 				</ul>
 			</div>
 		</div>

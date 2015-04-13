@@ -1,0 +1,84 @@
+<html>
+<meta charset="utf-8">
+
+<head>
+<title>Urlaubsverwaltung</title>
+
+<link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+
+<script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="js/client.js"></script>
+<script src="js/model.js"></script>
+
+<script type="text/javascript">
+	var user = getPerson(80);
+</script>
+
+<script type="text/javascript" >
+
+function showOwnHolidayRequests() {
+		var requests = getHolidayRequests();
+		var own_requests = [];
+		for (var i = 0; i < requests.length; i++) {
+			var request = requests[i];
+			if (request.person == user.id) {
+				own_requests.push(request);
+			}
+		}
+		var rows = "";
+		for (var i = 0; i < own_requests.length; i++) {
+			var request = own_requests[i];
+			var start = new Date(request.start * 1000);
+			var end = new Date(request.end * 1000);
+			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
+					+ ")'><td>" + request.type + "</td><td>" + start.getDate()
+					+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
+					+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+					+ "." + end.getFullYear() + "</td><td>"
+					+ JSON.stringify(request.substitutes) + "</td><td>"
+					+ request.status + "</td></tr>";
+		}
+}
+		$("#request_list").html(rows);
+		
+$(document).ready(function() {
+	showOwnHolidayRequests();
+		}
+</script>
+
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<span class="navbar-brand">Urlaubsverwaltung</span>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="index.html"><span class="ion-home">Übersicht</a></li>
+					<li><a href="my.html"><span class="ion-person"></span>
+							Mein Kalender</a></li>
+					<li class="active"><a href="#"><span class="ion-clipboard">Anfragen</a></li>
+					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div >
+	<table class="table table-hover">
+		<tr>
+			<th>Art</th>
+			<th>Start</th>
+			<th>Ende</th>
+			<th>Vertretungen</th>
+			<th>Status</th>
+		</tr>
+		<tbody id="request_list">
+
+		</tbody>
+	</table>
+	</div>
+</body>
+</html>

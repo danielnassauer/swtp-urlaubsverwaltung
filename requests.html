@@ -20,6 +20,17 @@
 
 <script type="text/javascript" >
 	
+/*
+Ich lasse nur noch Anfragen anzeigen, in denen der eingeloggte User als Vertretung eingetragen ist.
+Ihr müsst zum ausprobieren also in der example.php in Zeile 30 in createHolidayRequest eine 80 bei den substitutes eintragen. 
+Als Person könnt ihr natürlich jeden aus der Userliste eintragen. 
+(Die 1, die jetzt in substitutes steht ist übrigens nicht in der Tabelle eingetragen. Das hat mich ca. 1 Stunde gekostet, als ich die als Antragsteller eingetragen habe... :D)
+Im Moment habe ich aber noch das Problem, das immer nur ein Eintrag in die Liste eingetragen wird. Gestern Nachmittag hat er noch alle angezeigt. Keine Ahnung was da los ist.
+Ihr könnt ja mal drübergucken.
+Und das Problem mit editHolidayRequest hab ich immer noch. Ich weiss noch nicht genau wie ich das lösen soll.
+*/
+
+	
 function onHolidayRequestEdit(id) {
 	$("#popup").modal("show");
 	console.log(id);
@@ -53,24 +64,68 @@ function showOwnHolidayRequests() {
 		var own_requests = [];
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];
-			if (request.person == user.id) {
+			if (user.id in request.substitutes) {							// Filtert angezeigte Requests danach ob man selber als Vertretung eingetragen ist
 				own_requests.push(request);
+				
 			}
+			
 		}
+
 		
 		var rows = "";
 		for (var i = 0; i < own_requests.length; i++) {
 			var request = own_requests[i];
 			var start = new Date(request.start * 1000);
 			var end = new Date(request.end * 1000);
+			
+			var persons = getPerson(request.person);						// Speichert die Person die Urlaub haben will in persons
+			var colleague = persons.forename + " " + persons.lastname;		// Variable colleague in der Name des Antragstellers und nicht ID in Tabelle eingetragen werden kann
+			
+			var keys = Object.keys(request.substitutes);					//holt IDs der eingetragenen Vertretungen
+
+			var subs = [];													// Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
+			for (var i=0; i < keys.length; i++){							
+				var names = getPerson(keys[i]);								//Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
+				var id = names.id;											
+				if (id == user.id){
+					subs[i] = names.forename.bold() + " " + names.lastname.bold() + ": ";			// eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
+					}else {
+						subs[i] = names.forename + " " + names.lastname + ": ";
+					}
+				}
+				
+			var statusSub = [];											// Ob Vertretung angenommen oder abgelehnt hat als Text anstatt als Boolean
+			for(var i = 0; i < subs.length; i++){
+				var names = getPerson(keys[i]);							// Nochmal Vertretungen in Array speichern
+				var id = names.id;										// und IDs holen
+				var check = []
+				check[i] = request.substitutes[keys[i]];				// checken, ob Vertretung zugesagt oder abgelehnt hat
+				var angenommen = "Vertretung angenommen ";
+				var abgelehnt = "Vertretung abgelehnt ";
+
+				if (check[i] == true){
+					if (id == user.id){
+					statusSub[i] = subs[i] + angenommen.bold();			//in statusSub wird Name der Vertretung und ob angenommen oder abgelehnt wurde gespeichert
+					} else statusSub[i] = subs[i] + angenommen; 
+				}
+				else if(check[i] == false){
+					if (id == user.id){
+					statusSub[i] = subs[i] + abgelehnt.bold();
+					} else statusSub[i] = subs[i] + abgelehnt;
+				}
+
+			}
+
+			
 			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-					+ ")'><td>" + request.type + "</td><td>" + start.getDate()
+					+ ")'><td>" + request.type + "</td><td>" + colleague + "</td><td>" + start.getDate()
 					+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 					+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 					+ "." + end.getFullYear() + "</td><td>"
-					+ JSON.stringify(request.substitutes) + "</td><td>"
+					+ statusSub + "</td><td>"
 					+ request.status + "</td></tr>";
 		}
+		
 
 		$("#request_list").html(rows);
 		
@@ -105,6 +160,7 @@ $(document).ready(function() {
 	<table class="table table-hover">
 		<tr>
 			<th>Art</th>
+			<th>Mitarbeiter der Antrag gestellt hat</th>
 			<th>Start</th>
 			<th>Ende</th>
 			<th>Vertretungen</th>

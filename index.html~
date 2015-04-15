@@ -19,8 +19,12 @@
 
 <script type="text/javascript">
 	var calendar;
+	var dep_new = new Array;
 	
-	function array_unique(arrayName) {					//entfernt doppelte array einträge.
+/*
+*	Entfernt doppelte array Eintraege.
+*/
+	function array_unique(arrayName) {					
 	var newArray = new Array();
 	label:for(var i=0; i<arrayName.length;i++ ) {  
 		for(var j=0; j<newArray.length;j++ ) {
@@ -32,29 +36,77 @@
 		return newArray;
 	}
 
-	function departmentMenu(){							//füllt das Abteilungsmenü mit Abteiulungen.
-	var persons = getPersons();
-	var dep = new Array;
-	var dep_new = new Array;
-	var rows = "";
-		for(var i=0; i<persons.length; i++){
-			var person = persons[i];
-			dep[i] = person.department;	
-		}
-		dep_new = array_unique(dep);
-		console.log(dep_new);
+/*
+*	Füllt das department_menu mit allen Abteilungen.
+*/
+	function departmentMenu(){							
+		var persons = getPersons();
+		var dep = new Array;
+		var rows = "";
 		
-		for (var i=0; i<dep_new.length; i++){
-		rows += "<a role='menuitem' tabindex='-1' href='#'>"+dep_new[i]+"</a></li>";
-		
-		$("#department_menu").html(rows);
-		}
+			for(var i=0; i<persons.length; i++){
+				var person = persons[i];
+				dep[i] = person.department;	
+			}
+			dep_new = array_unique(dep);
+			
+			for (var i=0; i<dep_new.length; i++){
+			rows += "<a id= '"+dep_new[i]+"'role='menuitem' tabindex='-1' onclick='getFilteredHolidayRequests(id)'>"+dep_new[i]+"</a></li>";
+			
+			$("#department_menu").html(rows);
+			}
 	}
 	
-	function getFilteredHolidayRequests(filters) {
-		var requests = getHolidayRequests();
-		//filter
-		return requests;
+/*
+*	Diese Filtermethode geht alle Holidayrequests durch und 
+*	gleicht sie mit allen Personen ab, um so an die Abteilungen 
+*	zu kommen. Es werden dann alle requests die auf eine Abteilung 
+*	passen mit push auf filtersRequests gelegt und dann auf dem Kalender
+*  uebermittelt. die push funktion macht aber nicht das was sie soll, 
+*  wie man dem cosole.log entnehmen kann werden leere Objekte gepusht?! 
+*  weiß einer wieso das so ist?
+*	
+*	@param  Abteilung nach der gefiltert werden soll.
+*	@returns gefiltertes Array mit requestobjekten.
+*/
+	function getFilteredHolidayRequests(filters) {		
+		var requests = getHolidayRequests();				
+		var requestId = new Array;
+		var persons = getPersons();
+		var personId = new Array;
+		var personDep = new Array;
+		var filtersRequests = [];
+			if(filters.length<1){
+				console.log("filter leer");
+				return filtersRequests;
+				}
+		for (var i=0; i<requests.length; i++){
+			var request = requests[i];
+			requestId[i] = request.person;
+			
+			for (var j=0; j<persons.length; j++){
+			var person = persons[j];
+			personId[j] = person.id;
+			personDep[j] = person.department;
+
+				if(requestId[i] == personId[j]){
+					
+					if(personDep[i] == filters){
+						console.log("juhu");
+						console.log(request);
+						filtersRequests.push(request);
+						console.log(filtersRequests);							
+					}
+					else{
+					filtersRequests.push({});
+					console.log(filtersRequests);
+					}
+				}
+			
+			}	
+		}
+		console.log(filtersRequests);
+		return filtersRequests;	
 	}
 
 	function getActualFilters() {
@@ -77,7 +129,7 @@
 			var title = person.forename + " " + person.lastname;
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-			console.log(start);
+			
 			events.push({
 				title : title,
 				start : start,

@@ -69,6 +69,25 @@ if (isset ( $_POST ['delete_remainingholiday_table'] )) {
 
 <script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/client.js"></script>
+<script src="js/model.js"></script>
+
+<script type="text/javascript">
+
+function showUsers(){
+	var persons = getPersons();
+	var html = "";
+	for(var i=0;i<persons.length;i++){
+		html += "<tr><td>"+persons[i].id+"</td><td>"+persons[i].role+"</td><td>"+persons[i].field_service+"</td><td>"+persons[i].is_admin+"</td></tr>";
+	}
+	$("#table_users").html(html);
+	console.log(persons);
+}
+
+$(document).ready(function() {
+	showUsers();	
+});
+</script>
 
 </head>
 
@@ -119,6 +138,19 @@ if (isset ( $_POST ['delete_remainingholiday_table'] )) {
 					<button type="submit" class="btn btn-default"
 						name="delete_users_table">Tabelle löschen</button>
 
+					<table class="table">
+						<thead>
+							<tr>
+								<th>User</th>
+								<th>Rolle</th>
+								<th>Außendienst</th>
+								<th>Admin</th>
+							</tr>
+						</thead>
+						<tbody id="table_users">
+
+						</tbody>
+					</table>
 				</div>
 			</div>
 

@@ -20,19 +20,19 @@ if (isset ( $_POST ['delete_holidayrequests_table'] )) {
 	}
 }
 
-if (isset ( $_POST ['create_userrights_table'] )) {
+if (isset ( $_POST ['create_users_table'] )) {
 	try {
-		DBCreator::createUserRightsTable ();
-		echo '<div class="alert alert-success" role="alert">UserRights-Table erfolgreich erstellt!</div>';
+		DBCreator::createUsersTable ();
+		echo '<div class="alert alert-success" role="alert">Users-Table erfolgreich erstellt!</div>';
 	} catch ( Exception $e ) {
 		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
 	}
 }
 
-if (isset ( $_POST ['delete_userrights_table'] )) {
+if (isset ( $_POST ['delete_users_table'] )) {
 	try {
-		DBCreator::deleteUserRightsTable ();
-		echo '<div class="alert alert-success" role="alert">UserRights-Table erfolgreich gelöscht!</div>';
+		DBCreator::deleteUsersTable ();
+		echo '<div class="alert alert-success" role="alert">Users-Table erfolgreich gelöscht!</div>';
 	} catch ( Exception $e ) {
 		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
 	}
@@ -110,14 +110,14 @@ if (isset ( $_POST ['delete_remainingholiday_table'] )) {
 			<!-- USERRIGHTS TABLE -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Benutzerrechte</h3>
+					<h3 class="panel-title">Benutzer</h3>
 				</div>
 				<div class="panel-body">
 
 					<button type="submit" class="btn btn-default"
-						name="create_userrights_table">Tabelle erstellen</button>
+						name="create_users_table">Tabelle erstellen</button>
 					<button type="submit" class="btn btn-default"
-						name="delete_userrights_table">Tabelle löschen</button>
+						name="delete_users_table">Tabelle löschen</button>
 
 				</div>
 			</div>

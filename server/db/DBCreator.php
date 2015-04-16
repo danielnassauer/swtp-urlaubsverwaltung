@@ -25,16 +25,17 @@ class DBCreator {
 		self::deleteTable ( "HolidayRequests" );
 	}
 
-	public static function createUserRightsTable() {
-		$sql = "CREATE TABLE UserRights (
+	public static function createUsersTable() {
+		$sql = "CREATE TABLE Users (
 				user INT(11) UNSIGNED PRIMARY KEY,
-				rights INT(11)				
+				role INT(11),
+				fieldservice BOOLEAN				
 				)";
 		self::createTable ( $sql );
 	}
 
-	public static function deleteUserRightsTable() {
-		self::deleteTable ( "UserRights" );
+	public static function deleteUsersTable() {
+		self::deleteTable ( "Users" );
 	}
 
 	public static function createRemainingHolidayTable() {

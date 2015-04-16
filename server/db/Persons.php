@@ -1,6 +1,6 @@
 <?php
-require_once dirname(__FILE__).'/conf.php';
-require_once dirname(__FILE__).'/../model/Person.php';
+require_once dirname ( __FILE__ ) . '/conf.php';
+require_once dirname ( __FILE__ ) . '/../model/Person.php';
 // TODO Außendienst, Resturlaub, Mitarbeiter-Position
 class Persons {
 	private static $persons;
@@ -28,6 +28,7 @@ class Persons {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;
 		
 		self::$persons = array ();
+		$users = self::getUsers ();
 		
 		// Create connection
 		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_provider );
@@ -41,11 +42,40 @@ class Persons {
 		$result = $conn->query ( $sql );
 		
 		while ( $row = $result->fetch_assoc () ) {
-			$p = new Person ( $row ["id"], $row ["vorname"], $row ["name"], $row ["abteilung"], True, 25, 1 );
+			$fieldservice = false;
+			$role = 1;
+			$id = $row ["id"];
+			if (array_key_exists ( $id, $users )) {
+				$fieldservice = $users [$id] ["fieldservice"];
+				$role = $users [$id] ["role"];
+			}
+			$p = new Person ( $id, $row ["vorname"], $row ["name"], $row ["abteilung"], $fieldservice, 25, $role );
 			array_push ( self::$persons, $p );
 		}
 		
 		$conn->close ();
+	}
+
+	private static function getUsers() {
+		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
+		
+		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
+		if ($conn->connect_error) {
+			die ( "Connection failed: " . $conn->connect_error );
+		}
+		$sql = "SELECT user, role, fieldservice FROM Users";
+		$result = $conn->query ( $sql );
+		
+		$users = array ();
+		while ( $row = $result->fetch_assoc () ) {
+			$users [$row ["user"]] = array (
+					"role" => $row ["role"],
+					"fieldservice" => $row ["fieldservice"] == 1 
+			);
+		}
+		
+		$conn->close ();
+		return $users;
 	}
 }
 

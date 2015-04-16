@@ -29,7 +29,8 @@ class DBCreator {
 		$sql = "CREATE TABLE Users (
 				user INT(11) UNSIGNED PRIMARY KEY,
 				role INT(11),
-				fieldservice BOOLEAN				
+				fieldservice BOOLEAN,
+				is_admin BOOLEAN				
 				)";
 		self::createTable ( $sql );
 	}

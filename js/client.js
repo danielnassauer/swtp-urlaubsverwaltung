@@ -67,7 +67,7 @@ function getPerson(id) {
 	var data = GET("Person/" + id);
 	return new Person(data["id"], data["forename"], data["lastname"],
 			data["department"], data["field_service"],
-			data["remaining_holiday"], data["role"]);
+			data["remaining_holiday"], data["role"], data["is_admin"]);
 }
 
 /**
@@ -81,7 +81,7 @@ function getPersons() {
 	recv.forEach(function(data) {
 		persons.push(new Person(data["id"], data["forename"], data["lastname"],
 				data["department"], data["field_service"],
-				data["remaining_holiday"], data["role"]));
+				data["remaining_holiday"], data["role"], data["is_admin"]));
 	});
 	return persons;
 }

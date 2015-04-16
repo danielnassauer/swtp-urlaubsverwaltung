@@ -16,9 +16,11 @@
  * @param role
  *            Mitarbeiter-Typ 1: Mitarbeiter, 2: Abteilungsleiter, 3:
  *            Geschäftsleitung
+ * @param is_admin
+ *            Ist true, wenn die Person ein Admin ist
  */
 var Person = function(id, forename, lastname, department, field_service,
-		remaining_holiday, role) {
+		remaining_holiday, role, is_admin) {
 
 	this.id = id;
 	this.forename = forename;
@@ -27,6 +29,7 @@ var Person = function(id, forename, lastname, department, field_service,
 	this.field_service = field_service;
 	this.remaining_holiday = remaining_holiday;
 	this.role = role;
+	this.is_admin = is_admin;
 };
 
 /**

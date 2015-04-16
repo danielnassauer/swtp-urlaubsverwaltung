@@ -11,7 +11,8 @@ Es existieren folgende Ressourcen:
       department:          string,       
       field_service:       boolean,
       remaining_holiday:   int,
-      role:                int         // 1: Mitarbeiter, 2: Abteilungsleiter, 3: Geschäftsleitung
+      role:                int,         // 1: Mitarbeiter, 2: Abteilungsleiter, 3: Geschäftsleitung
+      is_admin:            boolean
    }
 
 * HolidayRequest:

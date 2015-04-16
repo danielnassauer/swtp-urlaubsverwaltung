@@ -44,12 +44,14 @@ class Persons {
 		while ( $row = $result->fetch_assoc () ) {
 			$fieldservice = false;
 			$role = 1;
+			$is_admin = false;
 			$id = $row ["id"];
 			if (array_key_exists ( $id, $users )) {
 				$fieldservice = $users [$id] ["fieldservice"];
 				$role = $users [$id] ["role"];
+				$is_admin = $users [$id] ["is_admin"];
 			}
-			$p = new Person ( $id, $row ["vorname"], $row ["name"], $row ["abteilung"], $fieldservice, 25, $role );
+			$p = new Person ( $id, $row ["vorname"], $row ["name"], $row ["abteilung"], $fieldservice, 25, $role, $is_admin );
 			array_push ( self::$persons, $p );
 		}
 		
@@ -63,14 +65,15 @@ class Persons {
 		if ($conn->connect_error) {
 			die ( "Connection failed: " . $conn->connect_error );
 		}
-		$sql = "SELECT user, role, fieldservice FROM Users";
+		$sql = "SELECT user, role, fieldservice, is_admin FROM Users";
 		$result = $conn->query ( $sql );
 		
 		$users = array ();
 		while ( $row = $result->fetch_assoc () ) {
 			$users [$row ["user"]] = array (
 					"role" => $row ["role"],
-					"fieldservice" => $row ["fieldservice"] == 1 
+					"fieldservice" => $row ["fieldservice"] == 1,
+					"is_admin" => $row ["is_admin"] == 1 
 			);
 		}
 		

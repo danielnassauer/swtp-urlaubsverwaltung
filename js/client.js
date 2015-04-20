@@ -87,6 +87,31 @@ function getPersons() {
 }
 
 /**
+ * Ändert eine Person.
+ * 
+ * @param id
+ *            ID der Person, die geändert werden soll.
+ * @param field_service
+ *            true, wenn die Person im Außendienst tätig sein soll.
+ * @param remaining_holiday
+ *            neue Anzahl der verbleibenden Urlaubstage.
+ * @param role
+ *            neue Rolle der Person 1: Mitarbeiter, 2: Abteilungsleiter, 3:
+ *            Geschäftsleitung
+ * @param is_admin
+ *            true, wenn die Person ein Admin sein soll
+ */
+function editPerson(id, field_service, remaining_holiday, role, is_admin) {
+	var p = {
+		id : id,
+		field_service : field_service,
+		remaining_holiday : remaining_holiday,
+		is_admin : is_admin
+	}
+	PUT("Person/" + id, p);
+}
+
+/**
  * Liefert einen UrlaubsAntrag zu einer ID.
  * 
  * @param id

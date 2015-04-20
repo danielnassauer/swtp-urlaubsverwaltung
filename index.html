@@ -20,97 +20,98 @@
 <script type="text/javascript">
 	var calendar;
 	var dep_new = new Array;
-	
-/*
-*	Entfernt doppelte array Eintraege.
-*/
-	function array_unique(arrayName) {					
-	var newArray = new Array();
-	label:for(var i=0; i<arrayName.length;i++ ) {  
-		for(var j=0; j<newArray.length;j++ ) {
-		        if(newArray[j] == arrayName[i]) 
-				continue label;
+	// Beim Start werden einmalig alle Personen und Urlaubsanträge abgefragt.
+	// Es ist nicht nötig, eine Person oder einen Urlaubsantrag erneut abzufragen.
+	var persons = getPersons();
+	var requests = getHolidayRequests();
+
+	/*
+	 *	Entfernt doppelte array Eintraege.
+	 */
+	function array_unique(arrayName) {
+		var newArray = new Array();
+		label: for (var i = 0; i < arrayName.length; i++) {
+			for (var j = 0; j < newArray.length; j++) {
+				if (newArray[j] == arrayName[i])
+					continue label;
 			}
-		        newArray[newArray.length] = arrayName[i];
+			newArray[newArray.length] = arrayName[i];
 		}
 		return newArray;
 	}
 
-/*
-*	Füllt das department_menu mit allen Abteilungen.
-*/
-	function departmentMenu(){							
-		var persons = getPersons();
+	/*
+	 *	Füllt das department_menu mit allen Abteilungen.
+	 */
+	function showDepartmentMenu() {
 		var dep = new Array;
-		var rows = "";
-		
-			for(var i=0; i<persons.length; i++){
-				var person = persons[i];
-				dep[i] = person.department;	
-			}
-			dep_new = array_unique(dep);
-			
-			for (var i=0; i<dep_new.length; i++){
-			rows += "<a id= '"+dep_new[i]+"'role='menuitem' tabindex='-1' onclick='getFilteredHolidayRequests(id)'>"+dep_new[i]+"</a></li>";
-			
-			$("#department_menu").html(rows);
-			}
-	}
-	
-/*
-*	Diese Filtermethode geht alle Holidayrequests durch und 
-*	gleicht sie mit allen Personen ab, um so an die Abteilungen 
-*	zu kommen. Es werden dann alle requests die auf eine Abteilung 
-*	passen mit push auf filtersRequests gelegt und dann auf dem Kalender
-*  uebermittelt. die push funktion macht aber nicht das was sie soll, 
-*  wie man dem cosole.log entnehmen kann werden leere Objekte gepusht?! 
-*  weiß einer wieso das so ist?
-*	
-*	@param  Abteilung nach der gefiltert werden soll.
-*	@returns gefiltertes Array mit requestobjekten.
-*/
-	function getFilteredHolidayRequests(filters) {		
-		var requests = getHolidayRequests();				
-		var requestId = new Array;
-		var persons = getPersons();
-		var personId = new Array;
-		var personDep = new Array;
-		var filtersRequests = [];
-			if(filters.length<1){
-				console.log("filter leer");
-				return filtersRequests;
-				}
-		for (var i=0; i<requests.length; i++){
-			var request = requests[i];
-			requestId[i] = request.person;
-			
-			for (var j=0; j<persons.length; j++){
-			var person = persons[j];
-			personId[j] = person.id;
-			personDep[j] = person.department;
+		var rows = "<option>Alle</option>";
 
-				if(requestId[i] == personId[j]){
-					
-					if(personDep[i] == filters){
-						console.log("juhu");
-						console.log(request);
-						filtersRequests.push(request);
-						console.log(filtersRequests);							
-					}
-					else{
-					filtersRequests.push({});
-					console.log(filtersRequests);
-					}
-				}
-			
-			}	
+		for (var i = 0; i < persons.length; i++) {
+			var person = persons[i];
+			dep[i] = person.department;
 		}
-		console.log(filtersRequests);
-		return filtersRequests;	
+		var dep_new = array_unique(dep);
+
+		for (var i = 0; i < dep_new.length; i++) {
+			rows += "<option>" + dep_new[i] + "</option>";
+		}
+		$("#filter_department").html(rows);
 	}
 
+	/* Filtert HolidayRequests anhand von Filterfunktionen.
+	 * @param filters Array von Filterfunktionen. Eine Filterfunktion bekommt 
+	 *        einen HolidayRequest übergeben und gibt true zurück, wenn dieser 
+	 *        übernommen werden soll. Bei einem leeren Array werden alle 
+	 *        HolidayRequests übernommen.
+	 * @return Array mit gefilterten HolidayRequests.
+	 */
+	function getFilteredHolidayRequests(filters) {
+		var requ = [];
+		for (var i = 0; i < requests.length; i++) {
+			var accept = true;
+			for (var j = 0; j < filters.length; j++) {
+				if (!filters[j](requests[i])) {
+					accept = false;
+					break;
+				}
+			}
+			if (accept) {
+				requ.push(requests[i]);
+			}
+		}
+		return requ;
+	}
+
+	/* Erzeugt ein Array mit Filterfunktionen für die aktuell ausgewählten
+	 * Filter.
+	 * @return Array mit Filterfunktionen.
+	 */
 	function getActualFilters() {
-		return [];
+		var filters = [];
+
+		// Department Filter
+		var department = $("#filter_department").val();
+		if (department != "Alle") {
+			//Filterfunktion für Departments
+			filters.push(function(request) {
+				return getDepartment(request.person) == department;
+			});
+		}
+
+		return filters;
+	}
+
+	/*
+	 * Gibt das Department zu einer Personen-ID zurück.
+	 * @return Department zu Personen-ID.
+	 */
+	function getDepartment(person_id) {
+		for (var i = 0; i < persons.length; i++) {
+			if (persons[i].id == person_id) {
+				return persons[i].department;
+			}
+		}
 	}
 
 	function unixTS2calendarTS(timestamp) {
@@ -119,17 +120,28 @@
 				+ date.getDate();
 	}
 
+	/*
+	 * Erzeugt ein Array mit Fullcalendar-Events für alle HolidayRequest nach
+	 * Anwendung der ausgewählten Filter.
+	 * @return Array von Fullcalendar-Events für HolidayRequests.
+	 */
 	function getCalendarEvents() {
 		var events = [];
 		var requests = getFilteredHolidayRequests(getActualFilters());
 
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];
-			var person = getPerson(request.person);
+			var person;
+			for (var j = 0; j < persons.length; j++) {
+				if (persons[j].id == request.person) {
+					person = persons[j];
+					break;
+				}
+			}
 			var title = person.forename + " " + person.lastname;
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-			
+			console.log(start);
 			events.push({
 				title : title,
 				start : start,
@@ -138,16 +150,22 @@
 		}
 
 		return events;
-
 	}
 
-	$(document).ready(function() {
+	/*
+	 * Alle HolidayRequests (gefiltert) werden in den Kalendar eingetragen.
+	 */
+	function updateCalendar() {
+		$("#calendar").fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
+	}
 
-		departmentMenu();
-		
+	/*
+	 * Initialisiert den Kalendar.
+	 */
+	function initCalendar() {
 		calendar = $('#calendar').fullCalendar({
-			lang : 'de', 
-
+			lang : 'de',
 			header : {
 				left : 'prev,next',
 				center : 'title',
@@ -155,12 +173,14 @@
 			},
 			defaultView : 'year',
 			//weekends: false,
-			firstDay : 0,
-
-			events : getCalendarEvents()
-
+			firstDay : 0
 		});
+	}
 
+	$(document).ready(function() {
+		showDepartmentMenu();
+		initCalendar();
+		updateCalendar();
 	});
 </script>
 </head>
@@ -185,16 +205,18 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="dropdown">
-				<button class="btn btn-default dropdown-toggle" type="button"
-					id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-					Abteilungen <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" role="menu"
-					aria-labelledby="dropdownMenu1">
-					<li id ="department_menu"role="presentation"><a role="menuitem" tabindex="-1"
-						href="#">Abt1</a></li>
-				</ul>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form class="form-inline">
+						<div class="form-group">
+							<label for="filter_department">Abteilung</label> <select
+								id="filter_department" class="form-control">
+								<option>Alle</option>
+							</select> <span class='btn btn-default' onclick="updateCalendar()">Filter
+								anwenden</span>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

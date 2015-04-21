@@ -74,14 +74,51 @@ if (isset ( $_POST ['delete_remainingholiday_table'] )) {
 
 <script type="text/javascript">
 
-function showUsers(){
+function editSelectedPerson(id){
+	var person = getPerson(id);
+	var role = $("#edit_role_" + id).val();
+	var fieldservice = $("#edit_fieldservice_" + id).val() == "Ja";
+	var admin = $("#edit_admin_" + id).val() == "Ja";
+	editPerson(id, fieldservice, person.remaining_holiday, role, admin);
+	showUsers();
+}
+
+function showUsers(){	
 	var persons = getPersons();
 	var html = "";
-	for(var i=0;i<persons.length;i++){
-		html += "<tr><td>"+persons[i].id+"</td><td>"+persons[i].role+"</td><td>"+persons[i].field_service+"</td><td>"+persons[i].is_admin+"</td></tr>";
+	for(var i=0;i<persons.length;i++){		
+		html += "<tr id='user"+persons[i].id+"'>"+getUserRow(persons[i])+"</tr>";
 	}
 	$("#table_users").html(html);
 	console.log(persons);
+}
+
+function getUserRow(person){
+	var button_ok = "<span class='btn btn-default' onclick='editSelectedPerson("+person.id+")'><span class='ion-checkmark-round'></span></span>";
+	var button_cancel = "<span class='btn btn-default' onclick='showUsers()'><span class='ion-close-round'></span></span>";
+	var role = "<select class='form-control' id='edit_role_"+person.id+"'>";
+	if(person.role == 1){
+		role += "<option value='1' selected>Mitarbeiter</option><option value='2'>Abteilungsleiter</option><option value='3'>Geschäftsleitung</option></select>";
+	}
+	else if(person.role == 2){
+		role += "<option value='1'>Mitarbeiter</option><option value='2' selected>Abteilungsleiter</option><option value='3'>Geschäftsleitung</option></select>";
+	}
+	else if(person.role == 3){
+		role += "<option value='1'>Mitarbeiter</option><option value='2'>Abteilungsleiter</option><option value='3' selected>Geschäftsleitung</option></select>";
+	}
+	var fieldservice = "<select class='form-control' id='edit_fieldservice_"+person.id+"'>";
+	if(person.field_service){
+		fieldservice += "<option selected>Ja</option><option>Nein</option></select>";
+	}else{
+		fieldservice += "<option>Ja</option><option selected>Nein</option></select>";
+	}
+	var admin = "<select class='form-control' id='edit_admin_"+person.id+"'>";
+	if (person.is_admin){
+		admin += "<option selected>Ja</option><option>Nein</option></select>";
+	}else{
+		admin += "<option>Ja</option><option selected>Nein</option></select>";
+	}
+	return "<td>"+person.id+"</td><td>"+role+"</td><td>"+fieldservice+"</td><td>"+admin+"</td><td>"+button_ok+" "+button_cancel+"</td>";
 }
 
 $(document).ready(function() {
@@ -138,7 +175,7 @@ $(document).ready(function() {
 					<button type="submit" class="btn btn-default"
 						name="delete_users_table">Tabelle löschen</button>
 
-					<table class="table">
+					<table class="table table-condensed table-striped">
 						<thead>
 							<tr>
 								<th>User</th>

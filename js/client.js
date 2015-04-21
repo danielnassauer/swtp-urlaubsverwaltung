@@ -106,6 +106,7 @@ function editPerson(id, field_service, remaining_holiday, role, is_admin) {
 		id : id,
 		field_service : field_service,
 		remaining_holiday : remaining_holiday,
+		role : role,
 		is_admin : is_admin
 	}
 	PUT("Person/" + id, p);

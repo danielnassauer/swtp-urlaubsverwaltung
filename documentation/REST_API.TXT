@@ -31,7 +31,7 @@ Es existieren folgende Ressourcen:
 REQUESTS
 ========
 
-Personen können mit GET-Requests abgefragt werden. 
+Personen können mit GET-Requests abgefragt und mit PUT geändert werden. 
 Urlaubsanträge können mit GET abgefragt, mit POST hinzugefügt, und
 mit PUT geändert werden.
 Folgende Requests sind möglich:

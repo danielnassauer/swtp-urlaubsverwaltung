@@ -44,6 +44,9 @@ Folgende Requests sind möglich:
 /Person/[id]
    GET
       Antwort:  Person
+   PUT
+      Body:     Person (ohne forename, lastname und department)
+      Effekt:   Person mit der entsprechenden ID wird abgeändert
 
 
 /HolidayRequest

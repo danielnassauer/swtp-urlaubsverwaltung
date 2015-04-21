@@ -28,6 +28,11 @@ class RequestHandler {
 					}
 					echo json_encode ( $persons );
 				}
+			} elseif ($request->method == "PUT") {
+				if (isset ( $id )) {
+					$person = $request->content;
+					Persons::editPerson ( $id, $person ["field_service"], $person ["remaining_holiday"], $person ["role"], $person ["is_admin"] );
+				}
 			}
 		} elseif ($ressource == "HolidayRequest") {
 			if ($request->method == "GET") {

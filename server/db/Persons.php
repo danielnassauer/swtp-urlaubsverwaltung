@@ -1,7 +1,6 @@
 <?php
 require_once dirname ( __FILE__ ) . '/conf.php';
 require_once dirname ( __FILE__ ) . '/../model/Person.php';
-// TODO Außendienst, Resturlaub, Mitarbeiter-Position
 class Persons {
 	private static $persons;
 
@@ -22,6 +21,25 @@ class Persons {
 			}
 		}
 		return null;
+	}
+
+	public static function editPerson($id, $field_service, $remaining_holiday, $role, $is_admin) {
+		$conn = self::getUserDBConnection ();
+		if ($is_admin) {
+			$is_admin = "TRUE";
+		} else {
+			$is_admin = "FALSE";
+		}
+		if ($field_service) {
+			$field_service = "TRUE";
+		} else {
+			$field_service = "FALSE";
+		}
+		$sql = "UPDATE Users
+				SET fieldservice=" . $field_service . ", role='" . $role . "', is_admin=" . $is_admin . "
+				WHERE user=" . $id;
+		$conn->query ( $sql );
+		$conn->close ();
 	}
 
 	private static function connect() {
@@ -59,12 +77,7 @@ class Persons {
 	}
 
 	private static function getUsers() {
-		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
-		
-		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
-		if ($conn->connect_error) {
-			die ( "Connection failed: " . $conn->connect_error );
-		}
+		$conn = self::getUserDBConnection ();
 		$sql = "SELECT user, role, fieldservice, is_admin FROM Users";
 		$result = $conn->query ( $sql );
 		
@@ -79,6 +92,16 @@ class Persons {
 		
 		$conn->close ();
 		return $users;
+	}
+
+	private static function getUserDBConnection() {
+		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
+		
+		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
+		if ($conn->connect_error) {
+			die ( "Connection failed: " . $conn->connect_error );
+		}
+		return $conn;
 	}
 }
 

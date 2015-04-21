@@ -87,6 +87,10 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		$("#table_person").html(row);
 	}
 
+	function editExistingPerson(){
+		editPerson(80, true, 42, 2, true);
+	}
+
 	$(document).ready(function() {
 		showPersons();
 		showHolidayRequests();
@@ -106,6 +110,11 @@ require_once dirname ( __FILE__ ) . '/server/session/login.php';
 		</form>
 
 		<h1 class="page-header">Persons</h1>
+
+		<h2>Personen ändern</h2>
+		<p>
+			<input type="button" value="ändern" onClick="editExistingPerson()">
+		</p>
 
 		<h2>Einzelne Personen Abfragen</h2>
 		<p>Mit getPerson(id) kann eine einzelne Person anhand ihrer ID

@@ -35,6 +35,11 @@ class Persons {
 		} else {
 			$field_service = "FALSE";
 		}
+		// Erst versuchen, neuen Eintrag zu erstellen
+		$sql = "INSERT INTO Users (user, role, fieldservice, is_admin) 
+				VALUES ('" . $id . "', '1', FALSE, FALSE)";
+		$conn->query ( $sql );
+		// Dann bestehenden Eintrag abändern
 		$sql = "UPDATE Users
 				SET fieldservice=" . $field_service . ", role='" . $role . "', is_admin=" . $is_admin . "
 				WHERE user=" . $id;

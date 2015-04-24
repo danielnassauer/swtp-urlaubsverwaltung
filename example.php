@@ -1,6 +1,5 @@
 <?php
 require_once dirname ( __FILE__ ) . '/server/session/session.php';
-require_once dirname ( __FILE__ ) . '/server/session/login.php';
 ?>
 <!DOCTYPE html>
 <html>

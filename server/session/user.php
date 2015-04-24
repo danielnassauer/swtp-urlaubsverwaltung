@@ -1,5 +1,7 @@
 <?php
-echo '<script type="text/javascript">
-var user_id = ' . $_SESSION ["user"] . ';		
+if (isset ( $_SESSION ['user'] )) {
+	echo '<script type="text/javascript">
+	var user = getPerson(' . $_SESSION ["user"] . ');		
 </script>';
+}
 ?>

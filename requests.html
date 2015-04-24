@@ -18,127 +18,88 @@
 	var user = getPerson(80);
 </script>
 
-<script type="text/javascript" >
-	
-/*
-Ich lasse nur noch Anfragen anzeigen, in denen der eingeloggte User als Vertretung eingetragen ist.
-Ihr müsst zum ausprobieren also in der example.php in Zeile 30 in createHolidayRequest eine 80 bei den substitutes eintragen. 
-Als Person könnt ihr natürlich jeden aus der Userliste eintragen. 
-(Die 1, die jetzt in substitutes steht ist übrigens nicht in der Tabelle eingetragen. Das hat mich ca. 1 Stunde gekostet, als ich die als Antragsteller eingetragen habe... :D)
-Im Moment habe ich aber noch das Problem, das immer nur ein Eintrag in die Liste eingetragen wird. Gestern Nachmittag hat er noch alle angezeigt. Keine Ahnung was da los ist.
-Ihr könnt ja mal drübergucken.
-Und das Problem mit editHolidayRequest hab ich immer noch. Ich weiss noch nicht genau wie ich das lösen soll.
-*/
+<script type="text/javascript">
+	/*
+	 Ich lasse nur noch Anfragen anzeigen, in denen der eingeloggte User als Vertretung eingetragen ist.
+	 Ihr müsst zum ausprobieren also in der example.php in Zeile 30 in createHolidayRequest eine 80 bei den substitutes eintragen. 
+	 Als Person könnt ihr natürlich jeden aus der Userliste eintragen. 
+	 (Die 1, die jetzt in substitutes steht ist übrigens nicht in der Tabelle eingetragen. Das hat mich ca. 1 Stunde gekostet, als ich die als Antragsteller eingetragen habe... :D)
+	 Im Moment habe ich aber noch das Problem, das immer nur ein Eintrag in die Liste eingetragen wird. Gestern Nachmittag hat er noch alle angezeigt. Keine Ahnung was da los ist.
+	 Ihr könnt ja mal drübergucken.
+	 Und das Problem mit editHolidayRequest hab ich immer noch. Ich weiss noch nicht genau wie ich das lösen soll.
+	 */
 
-	
-function onHolidayRequestEdit(id) {
-	$("#popup").modal("show");
-	console.log(id);
-	
-	
-}
+	function onHolidayRequestEdit(id) {
+		$("#btn_accept_substitute").attr("onclick",
+				"onSubstituteFinished(" + id + ")")
+		$("#popup").modal("show");
+		console.log(id);
 
-function onSubstituteFinished(){
-	$("#popup").modal("hide");
-	var checkSub;
-	if ($("#radio_yes").prop("checked")) {
-		var checkSub = [user.id, true];	
-		} else if ($("#radio_no").prop("checked")) {
-			var checkSub = [user.id, false];	
-		} 
-			
-		$("#radio_yes").prop('checked', false);
-		$("#radio_no").prop('checked', false);
-		
-		console.log(checkSub);
-		
-	//editHolidayRequest(id, start, end, checkSub, status, comment);  WIE KOMME ICH AN DIE DATEN? Geht das auch ohne globale Variablen?
-	
-	
 	}
-	
 
+	function onSubstituteFinished(id) {
+		$("#popup").modal("hide");
+		var accepted = $("#radio_yes").prop("checked");
+		var request = getHolidayRequest(id);
+		var subs = request.substitutes;
+		subs[user.id] = accepted;
+		editHolidayRequest(id, request.start, request.end, subs,
+				request.status, request.comment);
+	}
 
-function showOwnHolidayRequests() {
+	function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
 		var own_requests = [];
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];
-			if (user.id in request.substitutes) {							// Filtert angezeigte Requests danach ob man selber als Vertretung eingetragen ist
+			if (user.id in request.substitutes) { // Filtert angezeigte Requests danach ob man selber als Vertretung eingetragen ist
 				own_requests.push(request);
-				
+
 			}
-			
+
 		}
 
-		
 		var rows = "";
 		for (var i = 0; i < own_requests.length; i++) {
 			var request = own_requests[i];
 			var start = new Date(request.start * 1000);
 			var end = new Date(request.end * 1000);
-			
-			var persons = getPerson(request.person);						// Speichert die Person die Urlaub haben will in persons
-			var colleague = persons.forename + " " + persons.lastname;		// Variable colleague in der Name des Antragstellers und nicht ID in Tabelle eingetragen werden kann
-			
-			var keys = Object.keys(request.substitutes);					//holt IDs der eingetragenen Vertretungen
 
-			var subs = [];													// Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
-			for (var i=0; i < keys.length; i++){							
-				var names = getPerson(keys[i]);								//Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
-				var id = names.id;											
-				if (id == user.id){
-					subs[i] = names.forename.bold() + " " + names.lastname.bold() + ": ";			// eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
-					}else {
-						subs[i] = names.forename + " " + names.lastname + ": ";
-					}
-				}
-				
-			var statusSub = [];											// Ob Vertretung angenommen oder abgelehnt hat als Text anstatt als Boolean
-			for(var i = 0; i < subs.length; i++){
-				var names = getPerson(keys[i]);							// Nochmal Vertretungen in Array speichern
-				var id = names.id;										// und IDs holen
+			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
+			var colleague = persons.forename + " " + persons.lastname; // Variable colleague in der Name des Antragstellers und nicht ID in Tabelle eingetragen werden kann
+
+			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
+
+			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
+			for (var j = 0; j < keys.length; j++) {
+				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
+				var id = names.id;
 				var check = []
-				check[i] = request.substitutes[keys[i]];				// checken, ob Vertretung zugesagt oder abgelehnt hat
-				var angenommen = "Vertretung angenommen ";
-				var abgelehnt = "Vertretung abgelehnt ";
-
-				if (check[i] == true){
-					if (id == user.id){
-					statusSub[i] = subs[i] + angenommen.bold();			//in statusSub wird Name der Vertretung und ob angenommen oder abgelehnt wurde gespeichert
-					} else statusSub[i] = subs[i] + angenommen; 
+				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
+				subs[j] = names.forename + " " + names.lastname + ": "
+						+ (check[j] ? "Vertretung angenommen " : "Vertretung abgelehnt ");
+				if (id == user.id) {
+					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
-				else if(check[i] == false){
-					if (id == user.id){
-					statusSub[i] = subs[i] + abgelehnt.bold();
-					} else statusSub[i] = subs[i] + abgelehnt;
-				}
+			}			
 
-			}
-
-			
 			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-					+ ")'><td>" + request.type + "</td><td>" + colleague + "</td><td>" + start.getDate()
-					+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
+					+ ")'><td>" + request.type + "</td><td>" + colleague
+					+ "</td><td>" + start.getDate() + "."
+					+ (start.getMonth() + 1) + "." + start.getFullYear()
 					+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-					+ "." + end.getFullYear() + "</td><td>"
-					+ statusSub + "</td><td>"
-					+ request.status + "</td></tr>";
+					+ "." + end.getFullYear() + "</td><td>" + subs
+					+ "</td><td>" + request.status + "</td></tr>";
 		}
-		
 
 		$("#request_list").html(rows);
-		
-}
 
+	}
 
-		
-$(document).ready(function() {
-	showOwnHolidayRequests();
-})
-		
+	$(document).ready(function() {
+		showOwnHolidayRequests();
+	})
 </script>
-
 <body>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
@@ -156,22 +117,22 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</nav>
-	<div >
-	<table class="table table-hover">
-		<tr>
-			<th>Art</th>
-			<th>Mitarbeiter der Antrag gestellt hat</th>
-			<th>Start</th>
-			<th>Ende</th>
-			<th>Vertretungen</th>
-			<th>Status</th>
-		</tr>
-		<tbody id="request_list">
+	<div>
+		<table class="table table-hover">
+			<tr>
+				<th>Art</th>
+				<th>Mitarbeiter der Antrag gestellt hat</th>
+				<th>Start</th>
+				<th>Ende</th>
+				<th>Vertretungen</th>
+				<th>Status</th>
+			</tr>
+			<tbody id="request_list">
 
-		</tbody>
-	</table>
+			</tbody>
+		</table>
 	</div>
-	
+
 	<div id="popup" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -199,17 +160,17 @@ $(document).ready(function() {
 						</div>
 					</div>
 					</form>
-					
+
 					<br></br> <br></br>
 					<div class="col-lg-12">
 						<button type="button" class="btn btn-default btn-lg btn-block"
-							onclick="onSubstituteFinished()">Abschicken</button>
+							id="btn_accept_substitute">Abschicken</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 
 </body>
 </html>

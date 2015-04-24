@@ -1,3 +1,6 @@
+<?php
+require_once dirname ( __FILE__ ) . '/server/session/session.php';
+?>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -16,6 +19,8 @@
 
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
+
+<?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
 <script type="text/javascript">
 	var calendar;

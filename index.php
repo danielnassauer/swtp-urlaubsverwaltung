@@ -199,9 +199,9 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 			<div>
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#"><span class="ion-home">Übersicht</a></li>
-					<li><a href="my.html"><span class="ion-person"></span>
+					<li><a href="my.php"><span class="ion-person"></span>
 							Mein Kalender</a></li>
-					<li><a href="requests.html"><span class="ion-clipboard">Anfragen</a></li>
+					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
 					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
 				</ul>
 			</div>

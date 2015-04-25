@@ -92,7 +92,7 @@ class PDFCreator {
 
          //Berechnung des Tages
          $differenz = $holiday_request->getEnd() - $holiday_request->getStart();
-         $tag = floor($differenz / (3600 * 24));
+         $tag = floor($differenz / (3600 * 24)) + 1;
 
          $pdf->Write(5," ".$tag);
          $pdf->SetFont("Helvetica","I",12);

@@ -1,0 +1,38 @@
+
+-Mitarbeiter stellt einen Urlaubsantrag ------> Vertreter bekommen Email
+
+Inhat:  Sher Geehrter X,
+ich möchte Urlaub von xxxx bis xxxxx nehmen und wollte wissen, ob Sie mich in dieser Zeitpunkt vertreten können.
+Mit freundlichen Grüßen
+ YZ
+
+-Vetreter nimmt an/lehnt ab             ------> Abteilungsleiter bekommt ein Email
+
+Inhalt, wenn angenomen :
+
+Sehr Geehrter YZ
+gerne kann ich Ihnen am xxxx bis xxxx vetreten.
+Mit freundlichen Grüßen
+X
+
+Inhalt, wenn abgelehnt :
+
+Sehr Geehrter YZ
+leider könnte ich Ihnen am xxxx bis xxxx nicht vetreten.
+Mit freundlichen Grüßen
+X
+
+-Abteilungsleiter nimmt an/lehnt ab     ------> der beauftragter Mitarbeiter bekommt ein Email
+Inhalt angenomen:
+
+Sehr Geehrter YZ,
+hiermit genehmige ich Ihren Urlaubsantrag von xxx bis xxxx.
+Mit freundlichen Grüßen
+GF
+
+
+Abteilungsleiter stellt einen Urlaubsantrag ------> Geschäftführer bekommt Email
+Geschäftführer nimmt an/lehnt ab            ------> der beauftragter Abteilungsleiter bekommt ein Email
+
+Administrator bekommt eine Email , wenn der Urlaubsantrag nach einer gewissen Zeit von Vetreter oder Abteilungsleiter
+nicht vearbeitet wurde

@@ -11,11 +11,15 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
 <link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet/less" type="text/css" href="lib/datepicker/less/datepicker.less" />
 
 <script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 <script src="lib/fullcalendar/lib/moment.min.js"></script>
 <script src="lib/fullcalendar/fullcalendar.js"></script>
+
+<script src="lib/datepicker/js/bootstrap-datepicker.js"></script>
+<script src="datepicker.css"></script>
 
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
@@ -29,7 +33,8 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 
 	function onHolidayRequestCreation() {
 		$("#popup").modal("hide");
-		var start = new Date(calendar.selected_start).getTime() / 1000;
+		var start = new Date(calendar.selected_start).getTime() / 1000;$('#sandbox-container .input-daterange').datepicker({
+});
 		var end = new Date(calendar.selected_end).getTime() / 1000;
 		var substitutes = $.parseJSON($("#text_substitutes").val());
 
@@ -63,11 +68,12 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 		console.log(id);
 		var radio = $("#UA_storno").prop("checked");
 		if(radio){
-			//$('#deleteHoliday').modal("show");
+			$('#deleteHoliday').modal("show");
 			console.log("löschen");
 			}
 		else{
-			//$('#editHoliday').modal("show");
+			$('#editHoliday').modal("show");
+			
 			console.log("ändern");
 			}
 		$("#UA_storno").attr('checked' , false);
@@ -139,15 +145,15 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 					<h4>Urlaub beantragen</h4>
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
-					<div class="col-lg-6">
-						<form role="form">
-							
+					
+					<form role="form">
+		
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
 									id="radio_ua"> Urlaubsantrag
 								</label>
 							</div>
-					</div> <!-- /col-lg-6 -->
+
 					
 						<div class="radio">
 							<label> <input type="radio" name="optradio" id="radio_fa">
@@ -228,7 +234,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</div> <!-- /navbar -->
 		
 		
 	<div id="changeHoliday"class="modal fade">
@@ -244,18 +250,18 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 				<div class="modal-body">
 
 						<form role="form">
+							
+							<div class="radio">
+								<label> <input type="radio" name="optradio" id="UA_change">
+								Urlaubsantrag ändern
+								</label>
+							</div>
+							
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
 									id="UA_storno"> Urlaubsantrag stornieren
 								</label>
 							</div>
-
-
-						<div class="radio">
-							<label> <input type="radio" name="optradio" id="UA_change">
-								Urlaubsantrag ändern
-							</label>
-						</div>
 
 					</form>
 
@@ -267,8 +273,56 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 				
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
-	</div><!-- /popup -->
+	</div><!-- /changeHoliday -->
 		
+		
+		<div id="deleteHoliday"class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Urlaubsanträge löschen</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+
+					<p>Möchten Sie ihren Urlaubsantrag wirklich stornieren?</p>
+
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Nein, doch nicht</button>
+						<button type="button" class="btn btn-primary" >Urlaubsantrag stornieren</button>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /deleteHoliday -->
+	
+		<div id="editHoliday"class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Urlaubsanträge bearbeiten</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+						<p>Hier sollen die Mitarbeiter ihren Urlaub verschieben können</p>
+						<p>HHier kann evtl ein Datepicker hin oder sowas</p>
+						<p>Die Mitarbeiter sollen auf jeden Fall nicht per Hand ihren neuen Urlaub eintragen</p>
+
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" >Urlaubsantrag ändern</button>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /changeHoliday -->
 		
 </body>
 

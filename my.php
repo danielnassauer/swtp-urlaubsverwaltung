@@ -39,8 +39,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 	}
 	function onHolidayRequestCreation() {
 		$("#popup").modal("hide");
-		var start = new Date(calendar.selected_start).getTime() / 1000;$('#sandbox-container .input-daterange').datepicker({
-});
+		var start = new Date(calendar.selected_start).getTime() / 1000;
 		var end = new Date(calendar.selected_end).getTime() / 1000;
 		var substitutes = $.parseJSON($("#text_substitutes").val());
 
@@ -75,12 +74,12 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 		var radio = $("#UA_storno").prop("checked");
 		if(radio){
 			$('#deleteHoliday').modal("show");
-			console.log("löschen");
+		
 			}
 		else{
 			$('#editHoliday').modal("show");
 			
-			console.log("ändern");
+			
 			}
 		$("#UA_storno").attr('checked' , false);
 		$("#UA_change").attr('checked' , false);
@@ -323,7 +322,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
 						<p>Hier sollen die Mitarbeiter ihren Urlaub verschieben können</p>
-						<p>HHier kann evtl ein Datepicker hin oder sowas</p>
+						<p>Hier kann evtl ein Datepicker hin oder sowas</p>
 						<p>Die Mitarbeiter sollen auf jeden Fall nicht per Hand ihren neuen Urlaub eintragen</p>
 
 				</div> <!-- /modal-body -->

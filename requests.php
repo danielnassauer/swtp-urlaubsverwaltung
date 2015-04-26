@@ -48,6 +48,8 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 		subs[user.id] = accepted;
 		editHolidayRequest(id, request.start, request.end, subs,
 				request.status, request.comment);
+		$("#radio_yes").attr('checked' , false);
+		$("#radio_no").attr('checked' , false);
 	}
 
 	function showOwnHolidayRequests() {

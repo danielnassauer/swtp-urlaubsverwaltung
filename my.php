@@ -52,8 +52,27 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 	}
 
 	function onHolidayRequestEdit(id) {
-	console.log(id);
+		$('#changeHoliday').modal("show");
+		req = getHolidayRequest(id);
+		console.log(id);
+		
 	}
+	
+	function changeHoliday(id){
+		$('#changeHoliday').modal("hide");
+		console.log(id);
+		var radio = $("#UA_storno").prop("checked");
+		if(radio){
+			//$('#deleteHoliday').modal("show");
+			console.log("löschen");
+			}
+		else{
+			//$('#editHoliday').modal("show");
+			console.log("ändern");
+			}
+		$("#UA_storno").attr('checked' , false);
+		$("#UA_change").attr('checked' , false);
+		}
 
 	function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
@@ -210,6 +229,47 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 				</table>
 			</div>
 		</div>
+		
+		
+	<div id="changeHoliday"class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Urlaubsanträge bearbeiten</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+
+						<form role="form">
+							<div class="radio">
+								<label> <input type="radio" name="optradio"
+									id="UA_storno"> Urlaubsantrag stornieren
+								</label>
+							</div>
+
+
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="UA_change">
+								Urlaubsantrag ändern
+							</label>
+						</div>
+
+					</form>
+
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-lg btn-block"
+							id="btn_edt_holiday" onclick="changeHoliday(req.id)">Weiter</button>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /popup -->
+		
+		
 </body>
 
 </html>

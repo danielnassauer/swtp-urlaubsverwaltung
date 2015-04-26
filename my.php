@@ -55,11 +55,16 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 	}
 
 	function onHolidayRequestSelection(start, end, allDay) {
+		var liveDate = new Date();
+		if(liveDate > start){
+			$('#wrongDate').modal("show");
+			} else{
 		$('#popup').modal("show");
 		calendar.fullCalendar('unselect');
 		calendar.selected_start = start;
 		calendar.selected_end = end;
 	}
+}
 
 	function onHolidayRequestEdit(id) {
 		$('#changeHoliday').modal("show");
@@ -74,12 +79,12 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 		var radio = $("#UA_storno").prop("checked");
 		if(radio){
 			$('#deleteHoliday').modal("show");
-		
+			console.log("löschen");
 			}
 		else{
 			$('#editHoliday').modal("show");
 			
-			
+			console.log("ändern");
 			}
 		$("#UA_storno").attr('checked' , false);
 		$("#UA_change").attr('checked' , false);
@@ -322,13 +327,35 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
 						<p>Hier sollen die Mitarbeiter ihren Urlaub verschieben können</p>
-						<p>Hier kann evtl ein Datepicker hin oder sowas</p>
+						<p>HHier kann evtl ein Datepicker hin oder sowas</p>
 						<p>Die Mitarbeiter sollen auf jeden Fall nicht per Hand ihren neuen Urlaub eintragen</p>
 
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" >Urlaubsantrag ändern</button>
 					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /changeHoliday -->
+	
+	<div id="wrongDate"class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Fehler</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+						<p>Sie haben ein Datum gewählt welches bereits vergangen ist</p>
+						
+				</div> <!-- /modal-body -->
+				<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Zurück</button>
+				</div>
 				
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->

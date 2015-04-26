@@ -174,7 +174,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 			header : {
 				left : 'prev,next',
 				center : 'title',
-				right : 'year,month,agendaWeek'
+				right : 'year,month'
 			},
 			defaultView : 'year',
 			//weekends: false,

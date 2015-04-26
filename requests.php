@@ -145,34 +145,34 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4>Urlaubsanträge bearbeiten</h4>
-				</div>
+				</div> <!-- /modal-header -->
 				<div class="modal-body">
-					<div class="col-lg-6">
+
 						<form role="form">
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
 									id="radio_yes"> Vertretung zustimmen
 								</label>
 							</div>
-					</div>
-					<div class="col-lg-6">
+
+
 						<div class="radio">
 							<label> <input type="radio" name="optradio" id="radio_no">
 								Vertretung ablehnen
 							</label>
 						</div>
-					</div>
+
 					</form>
 
-					<br></br> <br></br>
-					<div class="col-lg-12">
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-lg btn-block"
 							id="btn_accept_substitute">Abschicken</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /popup -->
 
 
 </body>

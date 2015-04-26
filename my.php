@@ -118,24 +118,25 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4>Urlaub beantragen</h4>
-				</div>
+				</div> <!-- /modal-header -->
 				<div class="modal-body">
 					<div class="col-lg-6">
 						<form role="form">
+							
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
 									id="radio_ua"> Urlaubsantrag
 								</label>
 							</div>
-					</div>
-					<div class="col-lg-6">
+					</div> <!-- /col-lg-6 -->
+					
 						<div class="radio">
 							<label> <input type="radio" name="optradio" id="radio_fa">
 								Freizeitantrag
 							</label>
 						</div>
-					</div>
-					<div class="col-lg-12">
+					
+					
 						<div class="input-group">
 							<span class="input-group-addon"> <input type="radio"
 								name="optradio" id="radio_su" aria-label="...">
@@ -143,27 +144,27 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 								class="form-control" aria-label="..." id="text_su">
 						</div>
 						<!-- /input-group -->
-					</div>
-					<!-- /.col-lg-6 -->
+
+					
 					</form>
 
-					<div class="col-lg-12">
+
 						<div class="input-group">
 							<span class="input-group-addon" id="sizing-addon2">Die
 								Vertretung übernimmt</span> <input type="text" class="form-control"
 								placeholder="Vertretung" aria-describedby="sizing-addon2"
 								id="text_substitutes">
 						</div>
-					</div>
-					<br></br> <br></br>
-					<div class="col-lg-12">
+
+			</div> <!-- /modal-body -->
+					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-lg btn-block"
 							onclick="onHolidayRequestCreation()">Abschicken</button>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+				</div> <!-- /modal-content -->
+			</div> <!-- /modal-dialog -->
+		</div> <!-- /popup -->
+
 
 
 

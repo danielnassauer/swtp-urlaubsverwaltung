@@ -31,6 +31,12 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 <script type="text/javascript">
 	var calendar;
 
+	function restUrlaub(){
+		var rows=0;
+		rows = user.remaining_holiday;
+			$("#resttage").html(rows);
+		//	document.getElementById("resttage").innerHTML = rows;
+	}
 	function onHolidayRequestCreation() {
 		$("#popup").modal("hide");
 		var start = new Date(calendar.selected_start).getTime() / 1000;$('#sandbox-container .input-daterange').datepicker({
@@ -109,6 +115,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 
 	$(document).ready(function() {
 		showOwnHolidayRequests();
+		restUrlaub();
 
 		calendar = $('#calendar').fullCalendar({
 			lang : 'de', //geht eh nicht(-: alles in der fullcalendar.min.js geändert!
@@ -206,6 +213,10 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
 					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
 				</ul>
+			</div>
+			<div>
+				<span style="margin-left: 6em" class="navbar-brand">Restliche Urlaubstage:	
+				<span id='resttage' style="margin-left: 1em" class="badge alert-danger"></span></span>
 			</div>
 		</div>
 	</nav>

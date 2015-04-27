@@ -1,6 +1,3 @@
-<?php
-require_once dirname ( __FILE__ ) . '/server/session/session.php';
-?>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -24,18 +21,18 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
 
-<script type="text/javascript">
-	var user = getPerson(80);
-</script>
+<?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
 <script type="text/javascript">
 	var calendar;
 
+	function pdfErzeugen() {
+	
+	}
 	function restUrlaub(){
 		var rows=0;
 		rows = user.remaining_holiday;
 			$("#resttage").html(rows);
-		//	document.getElementById("resttage").innerHTML = rows;
 	}
 	function onHolidayRequestCreation() {
 		$("#popup").modal("hide");
@@ -105,15 +102,48 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 			var request = own_requests[i];
 			var start = new Date(request.start * 1000);
 			var end = new Date(request.end * 1000);
-			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-					+ ")'><td>" + request.type + "</td><td>" + start.getDate()
-					+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
-					+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-					+ "." + end.getFullYear() + "</td><td>"
-					+ JSON.stringify(request.substitutes) + "</td><td>"
-					+ request.status + "</td></tr>";
-		}
-
+				if (request.status == 1){
+					
+				rows += "<tr class='alert alert-warning'><td onclick='onHolidayRequestEdit(" + request.id
+						+ ")'>" + request.type + "</td><td onclick='onHolidayRequestEdit(" + request.id
+						+ ")'>" + start.getDate()
+						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td onclick='onHolidayRequestEdit(" + request.id
+						+ ")'>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td onclick='onHolidayRequestEdit(" + request.id
+						+ ")'>"
+						+ JSON.stringify(request.substitutes) + "</td><td onclick='onHolidayRequestEdit(" + request.id
+						+ ")'>"
+						+ request.status + "</td><td><button type='button' class='btn btn-default'>pdf</button></td></tr>";
+			}else if(request.status == 2){
+				
+				rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
+						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>"
+						+ JSON.stringify(request.substitutes) + "</td><td>"
+						+ request.status + "</td><td>"+'---'+"</td></tr>";
+			}else if(request.status == 3){
+				
+			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
+						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>"
+						+ JSON.stringify(request.substitutes) + "</td><td>"
+						+ request.status + "</td><td>"+'---'+"</td></tr>";
+			}else if(request.status == 4){
+			
+			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
+						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>"
+						+ JSON.stringify(request.substitutes) + "</td><td>"
+						+ request.status + "</td><td>"+'---'+"</td></tr>";
+			}
+	}	
 		$("#holidayrequests_list").html(rows);
 	}
 
@@ -243,6 +273,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 						<th>Ende</th>
 						<th>Vertretungen</th>
 						<th>Status</th>
+						<th>pdf</th>
 					</tr>
 					<tbody id="holidayrequests_list">
 

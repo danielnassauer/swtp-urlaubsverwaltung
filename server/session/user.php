@@ -35,6 +35,10 @@ if ((isset ( $userdata ['session_logged_in'] )) && ($userdata ['session_logged_i
 	echo '<script type="text/javascript">
 	var user = getPerson(' . getID ( $username ) . ');
 </script>';
+} else {
+	echo '<script type="text/javascript">
+	var user = null;
+</script>';
 }
 
 ?>

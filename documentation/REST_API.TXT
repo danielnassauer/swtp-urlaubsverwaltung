@@ -21,7 +21,7 @@ Es existieren folgende Ressourcen:
       start:               int,                // Beginn-Datum als Unix-Timestamp
       end:                 int,                // End-Datum als Unix-Timestamp
       person:              int,                // ID der beantragenden Person
-      substitutes:         {int : bool, ...},  // Dictionary mit IDs der Vertretungen als Key und True als Wert, wenn die Vertretung zugestimmt hat, ansonsten False.  
+      substitutes:         {int : int, ...},   // Dictionary mit IDs der Vertretungen als Key und einem Integer als Wert (1: wartend, 2: angenommen, 3: abgelehnt).  
       type:                int,                // Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine Beschreibung für einen Sonderurlaub
       status:              int,                // 1: angenommen, 2: wartend, 3: abgelehnt, 4: storniert
       comment:             string              // Begründung (nur wenn abgelehnt)

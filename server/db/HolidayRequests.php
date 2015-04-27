@@ -16,13 +16,13 @@ class HolidayRequests {
 		while ( $row = $result->fetch_assoc () ) {
 			$substitutes = array ();
 			if ($row ["substitute1"] != "") {
-				$substitutes [$row ["substitute1"]] = $row ["substitute1_accepted"] == true;
+				$substitutes [$row ["substitute1"]] = $row ["substitute1_accepted"];
 			}
 			if ($row ["substitute2"] != "") {
-				$substitutes [$row ["substitute2"]] = $row ["substitute2_accepted"] == true;
+				$substitutes [$row ["substitute2"]] = $row ["substitute2_accepted"];
 			}
 			if ($row ["substitute3"] != "") {
-				$substitutes [$row ["substitute3"]] = $row ["substitute3_accepted"] == true;
+				$substitutes [$row ["substitute3"]] = $row ["substitute3_accepted"];
 			}
 			$r = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 			array_push ( $requests, $r );
@@ -43,13 +43,13 @@ class HolidayRequests {
 		$row = $result->fetch_assoc ();
 		$substitutes = array ();
 		if ($row ["substitute1"] != "") {
-			$substitutes [$row ["substitute1"]] = $row ["substitute1_accepted"] == true;
+			$substitutes [$row ["substitute1"]] = $row ["substitute1_accepted"];
 		}
 		if ($row ["substitute2"] != "") {
-			$substitutes [$row ["substitute2"]] = $row ["substitute2_accepted"] == true;
+			$substitutes [$row ["substitute2"]] = $row ["substitute2_accepted"];
 		}
 		if ($row ["substitute3"] != "") {
-			$substitutes [$row ["substitute3"]] = $row ["substitute3_accepted"] == true;
+			$substitutes [$row ["substitute3"]] = $row ["substitute3_accepted"];
 		}
 		$request = new HolidayRequest ( $row ["id"], $row ["start"], $row ["end"], $row ["person"], $substitutes, $row ["type"], $row ["status"], $row ["comment"] );
 		
@@ -72,7 +72,7 @@ class HolidayRequests {
 		$sql = "INSERT INTO HolidayRequests 
 				(start, end, person, " . $sql_substitutes . "substitute1_accepted, substitute2_accepted, substitute3_accepted, type, status, comment) 
 				VALUES 
-				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . "FALSE, FALSE, FALSE,\"" . $type . "\",2,\"\");";
+				(" . $start . "," . $end . "," . $person . "," . $sql_substitutes_ids . "'1', '1', '1',\"" . $type . "\",2,\"\");";
 		
 		$result = $conn->query ( $sql );
 		if (! $result) {
@@ -96,14 +96,14 @@ class HolidayRequests {
 		$row = $result->fetch_assoc ();
 		
 		$sql_subs = "";
-		foreach ( $substitutes as $subs_id => $subs_accepted ) {
-			if ($subs_accepted) {
+		foreach ( $substitutes as $subs_id => $subs_status ) {
+			if ($subs_status != 1) {
 				if ($subs_id == $row ["substitute1"]) {
-					$sql_subs .= "substitute1_accepted=TRUE,";
+					$sql_subs .= "substitute1_accepted='" . $subs_status . "',";
 				} elseif ($subs_id == $row ["substitute2"]) {
-					$sql_subs .= "substitute2_accepted=TRUE,";
+					$sql_subs .= "substitute2_accepted='" . $subs_status . "',";
 				} elseif ($subs_id == $row ["substitute3"]) {
-					$sql_subs .= "substitute3_accepted=TRUE,";
+					$sql_subs .= "substitute3_accepted='" . $subs_status . "',";
 				}
 			}
 		}

@@ -11,9 +11,9 @@ class DBCreator {
 				substitute1 INT(11),
 				substitute2 INT(11),
 				substitute3 INT(11),
-				substitute1_accepted BOOLEAN,
-				substitute2_accepted BOOLEAN,
-				substitute3_accepted BOOLEAN,
+				substitute1_accepted INT(11),
+				substitute2_accepted INT(11),
+				substitute3_accepted INT(11),
 				type VARCHAR(100),
 				status INT(1),
 				comment VARCHAR(1000)

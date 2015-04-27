@@ -183,8 +183,8 @@ function createHolidayRequest(start, end, person, substitutes, type) {
  * @param end
  *            neues End-Datum (Unix-Timestamp)
  * @param substitutes
- *            Dictionary mit Personen-IDs der Vertretungen als Key und True als
- *            Wert, wenn die Vertretung zugestimmt hat, ansonsten False
+ *            Dictionary mit IDs der Vertretungen als Key und einem Integer als
+ *            Wert (1: wartend, 2: angenommen, 3: abgelehnt).
  * @param status
  *            neuer Status des Urlaubsantrags 1: angenommen, 2: wartend, 3:
  *            abgelehnt, 4: storniert

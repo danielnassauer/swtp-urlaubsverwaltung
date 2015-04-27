@@ -44,8 +44,8 @@ var Person = function(id, forename, lastname, department, field_service,
  * @param person
  *            ID des Antragstellers
  * @param substitutes
- *            Dictionary mit Personen-IDs der Vertretungen als Key und True als
- *            Wert, wenn die Vertretung zugestimmt hat, ansonsten False
+ *            Dictionary mit IDs der Vertretungen als Key und einem Integer als
+ *            Wert (1: wartend, 2: angenommen, 3: abgelehnt).
  * @param type
  *            Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine
  *            Beschreibung für einen Sonderurlaub

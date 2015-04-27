@@ -138,17 +138,13 @@
 			for (var j = 0; j < persons.length; j++) {
 				if (persons[j].id == request.person) {
 					person = persons[j];
-					
 					break;
-				}
-				if(persons[j].field_service){
-					serv = true;	
 				}
 			}
 			var title = person.forename + " " + person.lastname;
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-			if(serv){
+			if(persons.field_service){
 					title = person.forname + " " + person.lastname + " Außendienst";
 					events.push({
 						title : title,
@@ -156,12 +152,12 @@
 						end : end,
 						color: 'yellow'
 					});
-				}else{
-				events.push({
-						title : title,
-						start : start,
-						end : end,
-					});
+			}else{
+			events.push({
+					title : title,
+					start : start,
+					end : end,
+				});
 				}
 		}
 

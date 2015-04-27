@@ -129,6 +129,22 @@ $(document).ready(function() {
 </head>
 
 <body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<span class="navbar-brand">Urlaubsverwaltung</span>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="index.php"><span class="ion-home">Übersicht</a></li>
+					<li><a href="my.php"><span class="ion-person"></span> Mein Kalender</a></li>
+					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
+					<li class="active"><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
 	<form action="admin.php" method="POST">
 		<div class="container">
 

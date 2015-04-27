@@ -16,9 +16,7 @@
 <script src="js/model.js"></script>
 <script src="js/HolidayRequestsFilter.js"></script>
 
-<script type="text/javascript">
-	var user = getPerson(80);
-</script>
+<?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
 <script type="text/javascript">
 	

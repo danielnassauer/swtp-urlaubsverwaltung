@@ -270,7 +270,7 @@
 						<th>Ende</th>
 						<th>Vertretungen</th>
 						<th>Status</th>
-						<th>pdf</th>
+						<th></th>
 					</tr>
 					<tbody id="holidayrequests_list">
 

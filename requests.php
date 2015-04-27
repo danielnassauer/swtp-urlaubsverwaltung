@@ -29,28 +29,55 @@
 	rows = user.remaining_holiday;
 		$("#resttage").html(rows);
 	}
+	
+	
 	function onHolidayRequestEdit(id) {
 		$("#btn_accept_substitute").attr("onclick",
 				"onSubstituteFinished(" + id + ")")
-		$("#popup").modal("show");
+		$("#sub_popup").modal("show");
 		
 
 	}
+	
+
 
 	function onSubstituteFinished(id) {
-		$("#popup").modal("hide");
-		var accepted = $("#radio_yes").prop("checked");
+		$("#sub_popup").modal("hide");
+		var accepted = $("#sub_accept").prop("checked");
 		var request = getHolidayRequest(id);
 		var subs = request.substitutes;
 		subs[user.id] = accepted;
 		editHolidayRequest(id, request.start, request.end, subs,
 				request.status, request.comment);
-		$("#radio_yes").attr('checked' , false);
-		$("#radio_no").attr('checked' , false);
+		$("#sub_accept").attr('checked' , false);
+		$("#sub_decline").attr('checked' , false);
+	}
+	
+		function onDepartmentHolidayRequestEdit(id){
+		$("#btn_accept_holiday").attr("onclick",
+				"onAllowingFinished(" + id + ")")
+		$("#department_popup").modal("show");
+		
+		
+		}
+
+	function onAllowingFinished(id){
+		
+		$("#department_popup").modal("hide");
+		var request = getHolidayRequest(id);
+		var accepted;
+		if($("#holiday_accept").prop("checked")){
+			var accepted = 1;
+			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, request.comment);
+		} else if($("#holiday_decline").prop("checked")){
+			var accepted = 3;
+			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, request.cmment);
+			}else {}
+
 	}
 	
 	
-	function updateDepartmentRequests(){
+	function updateDepartmentTable(){
 		
 		var requests = getHolidayRequests()
 		var persons = getPersons();
@@ -67,7 +94,7 @@
 			var start = new Date(request.start * 1000);
 			var end = new Date(request.end * 1000);
 			
-			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
+			rows += "<tr onclick='onDepartmentHolidayRequestEdit(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + request.person
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
@@ -82,6 +109,37 @@
 		
 		}
 
+	function updateMySubstituteTable(){
+		
+		var requests = getHolidayRequests();
+		var Persons = getPersons();
+		
+		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id}
+		
+		requests = filterHolidayRequests(requests,[filter_my_subs]);
+		
+		var rows = "";
+		for (var i = 0; i < requests.length; i++){
+			
+			var request;
+			request = requests[i];
+			var start = new Date(request.start * 1000);
+			var end = new Date(request.end * 1000);
+			
+			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + request.person
+						+ "</td><td>" + start.getDate() + "."
+						+ (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>" + request.substitute
+						+ "</td><td>" + request.status + "</td></tr>";
+			
+			}
+			
+			$("#request_list").html(rows);
+			
+		
+		}
 
 
 	function showOwnHolidayRequests() {
@@ -135,9 +193,9 @@
 	}
 
 	$(document).ready(function() {
-		showOwnHolidayRequests();
 		restUrlaub();
-		updateDepartmentRequests();
+		updateMySubstituteTable();
+		updateDepartmentTable();
 	})
 </script>
 <body>
@@ -161,7 +219,8 @@
 			</div>
 		</div>
 	</nav>
-	<div>
+	
+	<div> <!-- Tabelle für Mitarbeiter -->
 		<table class="table table-hover">
 			<tr>
 				<th>Art</th>
@@ -177,7 +236,7 @@
 		</table>
 	</div>
 	
-	<div>
+	<div> <!-- Tabelle für Abteilungsleiter -->
 		<table class="table table-hover">
 			<tr>
 				<th>Art</th>
@@ -192,8 +251,8 @@
 			</tbody>
 		</table>
 	</div>
-
-	<div id="popup" class="modal fade">
+	<!-- Popup um Vertretung zuzustimmen oder abzulehnen -->
+	<div id="sub_popup" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -208,13 +267,13 @@
 						<form role="form">
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
-									id="radio_yes"> Vertretung zustimmen
+									id="sub_accept"> Vertretung zustimmen
 								</label>
 							</div>
 
 
 						<div class="radio">
-							<label> <input type="radio" name="optradio" id="radio_no">
+							<label> <input type="radio" name="optradio" id="sub_decline">
 								Vertretung ablehnen
 							</label>
 						</div>
@@ -229,7 +288,53 @@
 				
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
-	</div><!-- /popup -->
+	</div><!-- /sub_popup -->
+	
+	
+	<!-- Popup für Abteilungsleiter zum bearbeiten der Urlaubsanträge -->
+	<div id="department_popup" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Urlaubsanträge bearbeiten</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+
+						<form role="form">
+							<div class="radio">
+								<label> <input type="radio" name="optradio"
+									id="holiday_accept"> Einverstanden wie beantragt
+								</label>
+							</div>
+
+
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="holiday_decline">
+								Abgelehnt wegen:
+							</label>
+						</div>
+						
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="holiday_change">
+								Geändert wie folgt wegen:
+							</label>
+						</div>
+
+					</form>
+
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-lg btn-block"
+							id="btn_accept_holiday">Abschicken</button>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /department_popup -->
 
 
 </body>

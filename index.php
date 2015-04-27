@@ -130,25 +130,39 @@
 	function getCalendarEvents() {
 		var events = [];
 		var requests = getFilteredHolidayRequests(getActualFilters());
-
+		var serv = false;
 		for (var i = 0; i < requests.length; i++) {
+			serv = false;
 			var request = requests[i];
 			var person;
 			for (var j = 0; j < persons.length; j++) {
 				if (persons[j].id == request.person) {
 					person = persons[j];
+					
 					break;
+				}
+				if(persons[j].field_service){
+					serv = true;	
 				}
 			}
 			var title = person.forename + " " + person.lastname;
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-
-			events.push({
-				title : title,
-				start : start,
-				end : end
-			});
+			if(serv){
+					title = person.forname + " " + person.lastname + " Außendienst";
+					events.push({
+						title : title,
+						start : start,
+						end : end,
+						color: 'yellow'
+					});
+				}else{
+				events.push({
+						title : title,
+						start : start,
+						end : end,
+					});
+				}
 		}
 
 		return events;

@@ -1,6 +1,4 @@
-<?php
-require_once dirname ( __FILE__ ) . '/server/session/session.php';
-?>
+
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -22,21 +20,13 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 </script>
 
 <script type="text/javascript">
-	/*
-	 Ich lasse nur noch Anfragen anzeigen, in denen der eingeloggte User als Vertretung eingetragen ist.
-	 Ihr müsst zum ausprobieren also in der example.php in Zeile 30 in createHolidayRequest eine 80 bei den substitutes eintragen. 
-	 Als Person könnt ihr natürlich jeden aus der Userliste eintragen. 
-	 (Die 1, die jetzt in substitutes steht ist übrigens nicht in der Tabelle eingetragen. Das hat mich ca. 1 Stunde gekostet, als ich die als Antragsteller eingetragen habe... :D)
-	 Im Moment habe ich aber noch das Problem, das immer nur ein Eintrag in die Liste eingetragen wird. Gestern Nachmittag hat er noch alle angezeigt. Keine Ahnung was da los ist.
-	 Ihr könnt ja mal drübergucken.
-	 Und das Problem mit editHolidayRequest hab ich immer noch. Ich weiss noch nicht genau wie ich das lösen soll.
-	 */
+	
 
 	function onHolidayRequestEdit(id) {
 		$("#btn_accept_substitute").attr("onclick",
 				"onSubstituteFinished(" + id + ")")
 		$("#popup").modal("show");
-		console.log(id);
+		
 
 	}
 
@@ -51,6 +41,52 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 		$("#radio_yes").attr('checked' , false);
 		$("#radio_no").attr('checked' , false);
 	}
+	
+	function in_array(arr, val){
+		for(var y = 0; y < arr.length; y++) {
+			if(arr[y] == val)
+			return true;
+		}
+    
+		return false;
+	}
+	
+	
+
+	function showDepartmentRequests(){
+		var requests = getHolidayRequests();
+		var persons = getPersons();
+		
+		/*	Filter um Personen aus der eigenen Abteilung zu bekommen	*/
+		
+		var dep_persons = [];
+		for (var j = 0; j < persons.length; j++){
+			var filtered_persons = persons[j];
+			if (filtered_persons.department == user.department){
+				dep_persons.push(filtered_persons);
+				}
+			}
+		
+		
+		/*  Filter um Requests aus der eigenen Abteilung zu bekommen*/
+		var ids = [];
+		for(x=0; x< dep_persons.length; x++){
+			var abt_person = dep_persons[x];
+			ids[x] = abt_person.id;
+			}	
+		console.log(ids);
+		console.log(user.id);
+		if(in_array(ids, user.id)){"KLAPPT"}
+	
+/*		var dep_requests = [];
+		for (var i = 0; i < requests.length; i++){
+			var request = requests[i];
+			for (z = 0; ids.length; z++){}
+			}
+			
+		*/
+		
+		}  
 
 	function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
@@ -103,6 +139,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 
 	$(document).ready(function() {
 		showOwnHolidayRequests();
+		showDepartmentRequests();
 	})
 </script>
 <body>

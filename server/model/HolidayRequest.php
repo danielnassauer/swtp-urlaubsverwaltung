@@ -12,7 +12,7 @@ class HolidayRequest {
 
 	/**
 	 * Repräsentiert einen Urlaubsantrag
-	 * 
+	 *
 	 * @param
 	 *        	id ID
 	 * @param
@@ -22,7 +22,7 @@ class HolidayRequest {
 	 * @param
 	 *        	person Antragsteller
 	 * @param
-	 *        	substitutes Liste von Personen-IDs der Vertretungen
+	 *        	substitutes Dictionary mit Personen-IDs der Vertretungen als Schlüssel und true als Wert, wenn die Vertretung zugestimmt hat, ansonsten false.
 	 * @param
 	 *        	type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
 	 * @param

@@ -1,6 +1,3 @@
-<?php
-require_once dirname ( __FILE__ ) . '/server/session/session.php';
-?>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -24,9 +21,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
 
-<script type="text/javascript">
-	var user = getPerson(80);
-</script>
+<?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
 <script type="text/javascript">
 	var calendar;
@@ -119,7 +114,7 @@ require_once dirname ( __FILE__ ) . '/server/session/session.php';
 						+ ")'>"
 						+ JSON.stringify(request.substitutes) + "</td><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>"
-						+ request.status + "</td><td style='background-color:red' onclick='pdfErzeugen()'>"+'pdf'+"</td></tr>";
+						+ request.status + "</td><td><button type='button' class='btn btn-default'>pdf</button></td></tr>";
 			}else if(request.status == 2){
 				
 				rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id

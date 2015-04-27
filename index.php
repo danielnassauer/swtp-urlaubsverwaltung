@@ -1,6 +1,3 @@
-<?php
-require_once dirname ( __FILE__ ) . '/server/session/session.php';
-?>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">

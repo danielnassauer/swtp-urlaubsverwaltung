@@ -20,8 +20,11 @@
 </script>
 
 <script type="text/javascript">
-	
-
+	function restUrlaub(){
+	var rows=0;
+	rows = user.remaining_holiday;
+		$("#resttage").html(rows);
+	}
 	function onHolidayRequestEdit(id) {
 		$("#btn_accept_substitute").attr("onclick",
 				"onSubstituteFinished(" + id + ")")
@@ -139,6 +142,7 @@
 
 	$(document).ready(function() {
 		showOwnHolidayRequests();
+		restUrlaub();
 		showDepartmentRequests();
 	})
 </script>
@@ -156,6 +160,10 @@
 					<li class="active"><a href="#"><span class="ion-clipboard">Anfragen</a></li>
 					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
 				</ul>
+			</div>
+			<div>
+				<span style="margin-left: 6em" class="navbar-brand">Restliche Urlaubstage:	
+				<span id='resttage' style="margin-left: 1em" class="badge alert-danger"></span></span>
 			</div>
 		</div>
 	</nav>

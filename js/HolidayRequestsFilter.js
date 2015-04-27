@@ -79,3 +79,16 @@ function waitingStatusFilter(request) {
 function isSubstituteFilter(request, person_id) {
 	return person_id in request.substitutes;
 }
+
+/**
+ * Filtert HolidayRequests anhand des Antragstellers
+ * 
+ * @param request
+ *            HolidayRequest
+ * @param person_id
+ *            ID des Antragstellers
+ * @returns {Boolean} true, wenn die Person der Antragsteller des Requests ist.
+ */
+function isRequesterFilter(request, person_id) {
+	return request.person == person_id;
+}

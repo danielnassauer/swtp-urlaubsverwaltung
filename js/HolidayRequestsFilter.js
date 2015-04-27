@@ -1,9 +1,17 @@
-/* Filtert HolidayRequests anhand von Filterfunktionen.
- * @param requests Array von HolidayRequests, die gefiltert werden sollen.
- * @param filters Array von Dictionaries mit Filterfunktionen und Attachments. Eine Filterfunktion bekommt 
- *        einen HolidayRequest und ein Attachment übergeben und gibt true zurück, wenn dieser 
- *        übernommen werden soll. Bei einem leeren Array werden alle 
- *        HolidayRequests übernommen. In Attachments stehen zusätzliche Informationen für die Filterfunktionen.
+/**
+ * Filtert HolidayRequests anhand von Filterfunktionen.
+ * 
+ * @param requests
+ *            Array von HolidayRequests, die gefiltert werden sollen.
+ * @param filters
+ *            Array von Dictionaries mit Filterfunktionen und Attachments. Eine
+ *            Filterfunktion bekommt einen HolidayRequest und ein Attachment
+ *            übergeben und gibt true zurück, wenn dieser übernommen werden
+ *            soll. Bei einem leeren Array werden alle HolidayRequests
+ *            übernommen. In Attachments stehen zusätzliche Informationen für
+ *            die Filterfunktionen. Jeder Filterfunktion wird zusätzlich zum
+ *            HolidayRequest das Attachment übergeben. Ist das Attachment null,
+ *            wird nur der HolidayRequest übergeben.
  * @return Array mit gefilterten HolidayRequests.
  */
 function filterHolidayRequests(requests, filters) {
@@ -12,9 +20,9 @@ function filterHolidayRequests(requests, filters) {
 		var accept = true;
 		for (filter in filters) {
 			var attachment = filters[filter];
-			if(attachment == null){
+			if (attachment == null) {
 				accept = filter(requests[i]);
-			}else{
+			} else {
 				accept = filter(requests[i], attachment);
 			}
 			if (!accept) {
@@ -29,11 +37,14 @@ function filterHolidayRequests(requests, filters) {
 }
 
 /**
+ * Filtert HolidayRequests anhand des Departments.
  * 
  * @param request
+ *            HolidayRequest
  * @param attachment
- *            Dictionary. Keys: department (Name der Abteilung), persons (Array
- *            von allen Personen)
+ *            Dictionary: "department": Name der Abteilung, "persons": Array von
+ *            allen Personen
+ * @returns true, wenn das Department übereinstimmt.
  */
 function departmentFilter(request, attachment) {
 	department = attachment["department"];
@@ -45,6 +56,25 @@ function departmentFilter(request, attachment) {
 	}
 }
 
-function waitingStatusFilter(request){
+/**
+ * Filtert HolidayRequests, deren Status = waiting ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Satus = waiting ist.
+ */
+function waitingStatusFilter(request) {
 	return request.status == 2;
+}
+
+/**
+ * Filtert HolidayRequests anhand der Vertretungen.
+ * 
+ * @param request
+ *            HolidayRequest
+ * @param person_id
+ *            ID der Vertetung
+ * @returns {Boolean} true, wenn Person als Vertretung vorkommt.
+ */
+function isSubstituteFilter(request, person_id) {
+	return person_id in request.substitutes;
 }

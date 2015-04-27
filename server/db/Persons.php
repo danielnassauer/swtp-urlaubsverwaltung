@@ -47,7 +47,16 @@ class Persons {
 		$conn->close ();
 	}
 
-	private static function connect() {
+	public static function getEMail($id) {
+		$conn = self::getConnection ();
+		$sql = "SELECT email FROM vacation WHERE id='" . $id . "'";
+		$result = $conn->query ( $sql );
+		$row = $result->fetch_assoc ();
+		$conn->close ();
+		return $row ["email"];
+	}
+
+	private static function getConnection() {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;
 		
 		self::$persons = array ();
@@ -60,6 +69,12 @@ class Persons {
 		if ($conn->connect_error) {
 			die ( "Connection failed: " . $conn->connect_error );
 		}
+		
+		return $conn;
+	}
+
+	private static function connect() {
+		$conn = self::getConnection ();
 		
 		$sql = "SELECT id, name, vorname, abteilung FROM vacation WHERE zugehoerig='intern' AND login!=''";
 		$result = $conn->query ( $sql );

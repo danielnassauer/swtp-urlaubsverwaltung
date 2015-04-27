@@ -62,7 +62,7 @@ function departmentFilter(request, attachment) {
  * Filtert HolidayRequests, deren Status = waiting ist.
  * 
  * @param request
- * @returns {Boolean} true, wenn der Satus = waiting ist.
+ * @returns {Boolean} true, wenn der Status = waiting ist.
  */
 function waitingStatusFilter(request) {
 	return request.status == 2;

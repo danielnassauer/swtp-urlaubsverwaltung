@@ -130,9 +130,7 @@
 	function getCalendarEvents() {
 		var events = [];
 		var requests = getFilteredHolidayRequests(getActualFilters());
-		var serv = false;
 		for (var i = 0; i < requests.length; i++) {
-			serv = false;
 			var request = requests[i];
 			var person;
 			for (var j = 0; j < persons.length; j++) {
@@ -144,7 +142,7 @@
 			var title = person.forename + " " + person.lastname;
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-			if(persons.field_service){
+			if(person.field_service){
 					title = person.forname + " " + person.lastname + " Außendienst";
 					events.push({
 						title : title,

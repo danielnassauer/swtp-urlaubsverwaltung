@@ -14,12 +14,16 @@
 
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
+<script src="js/HolidayRequestsFilter.js"></script>
 
 <script type="text/javascript">
 	var user = getPerson(80);
 </script>
 
 <script type="text/javascript">
+	
+	
+	
 	function restUrlaub(){
 	var rows=0;
 	rows = user.remaining_holiday;
@@ -45,51 +49,40 @@
 		$("#radio_no").attr('checked' , false);
 	}
 	
-	function in_array(arr, val){
-		for(var y = 0; y < arr.length; y++) {
-			if(arr[y] == val)
-			return true;
-		}
-    
-		return false;
-	}
 	
-	
-
-	function showDepartmentRequests(){
+	function updateDepartmentRequests(){
+		
 		var requests = getHolidayRequests();
 		var persons = getPersons();
 		
-		/*	Filter um Personen aus der eigenen Abteilung zu bekommen	*/
+		var filter_dep = {departmentFilter: {"department": user.department, "persons" : persons}};
+		var filter_waiting = {waitingStatusFilter:null};
 		
-		var dep_persons = [];
-		for (var j = 0; j < persons.length; j++){
-			var filtered_persons = persons[j];
-			if (filtered_persons.department == user.department){
-				dep_persons.push(filtered_persons);
-				}
-			}
+		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting]);
 		
-		
-		/*  Filter um Requests aus der eigenen Abteilung zu bekommen*/
-		var ids = [];
-		for(x=0; x< dep_persons.length; x++){
-			var abt_person = dep_persons[x];
-			ids[x] = abt_person.id;
-			}	
-		console.log(ids);
-		console.log(user.id);
-		if(in_array(ids, user.id)){"KLAPPT"}
-	
-/*		var dep_requests = [];
-		for (var i = 0; i < requests.length; i++){
-			var request = requests[i];
-			for (z = 0; ids.length; z++){}
-			}
+		var rows = "";
+		for (i = 0; i < requests.length; i++){
 			
-		*/
+			request = requests[i];
+			var start = new Date(request.start * 1000);
+			var end = new Date(request.end * 1000);
+			
+			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + request.person
+						+ "</td><td>" + start.getDate() + "."
+						+ (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>" + request.substitute
+						+ "</td><td>" + request.status + "</td></tr>";
 		
-		}  
+		}	
+		
+		$("#department_request_list").html(rows);
+
+		
+		}
+
+
 
 	function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
@@ -102,7 +95,8 @@
 			}
 
 		}
-
+				
+		
 		var rows = "";
 		for (var i = 0; i < own_requests.length; i++) {
 			var request = own_requests[i];
@@ -143,7 +137,7 @@
 	$(document).ready(function() {
 		showOwnHolidayRequests();
 		restUrlaub();
-		showDepartmentRequests();
+		updateDepartmentRequests();
 	})
 </script>
 <body>
@@ -178,6 +172,22 @@
 				<th>Status</th>
 			</tr>
 			<tbody id="request_list">
+
+			</tbody>
+		</table>
+	</div>
+	
+	<div>
+		<table class="table table-hover">
+			<tr>
+				<th>Art</th>
+				<th>Mitarbeiter der Antrag gestellt hat</th>
+				<th>Start</th>
+				<th>Ende</th>
+				<th>Vertretungen</th>
+				<th>Status</th>
+			</tr>
+			<tbody id="department_request_list">
 
 			</tbody>
 		</table>

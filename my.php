@@ -26,9 +26,6 @@
 <script type="text/javascript">
 	var calendar;
 
-	function pdfErzeugen() {
-	
-	}
 	function restUrlaub(){
 		var rows=0;
 		rows = user.remaining_holiday;
@@ -104,7 +101,7 @@
 			var end = new Date(request.end * 1000);
 				if (request.status == 1){
 					
-				rows += "<tr class='alert alert-warning'><td onclick='onHolidayRequestEdit(" + request.id
+				rows += "<tr class='alert alert-success'><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>" + request.type + "</td><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>" + start.getDate()
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
@@ -117,7 +114,7 @@
 						+ request.status + "</td><td><button type='button' class='btn btn-default'>pdf</button></td></tr>";
 			}else if(request.status == 2){
 				
-				rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
+				rows += "<tr class='alert alert-warning' onclick='onHolidayRequestEdit(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
@@ -273,7 +270,7 @@
 						<th>Ende</th>
 						<th>Vertretungen</th>
 						<th>Status</th>
-						<th>pdf</th>
+						<th></th>
 					</tr>
 					<tbody id="holidayrequests_list">
 

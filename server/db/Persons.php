@@ -57,10 +57,7 @@ class Persons {
 	}
 
 	private static function getConnection() {
-		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;
-		
-		self::$persons = array ();
-		$users = self::getUsers ();
+		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;		
 		
 		// Create connection
 		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_provider );
@@ -75,6 +72,9 @@ class Persons {
 
 	private static function connect() {
 		$conn = self::getConnection ();
+		
+		self::$persons = array ();
+		$users = self::getUsers ();
 		
 		$sql = "SELECT id, name, vorname, abteilung FROM vacation WHERE zugehoerig='intern' AND login!=''";
 		$result = $conn->query ( $sql );

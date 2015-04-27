@@ -18,7 +18,8 @@ function filterHolidayRequests(requests, filters) {
 	var requ = [];
 	for (var i = 0; i < requests.length; i++) {
 		var accept = true;
-		for (filter in filters) {
+		for (dict in filters) {
+			var filter = dict.keys()[0];
 			var attachment = filters[filter];
 			if (attachment == null) {
 				accept = filter(requests[i]);

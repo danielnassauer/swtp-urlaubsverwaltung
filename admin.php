@@ -118,7 +118,7 @@ function getUserRow(person){
 	}else{
 		admin += "<option>Ja</option><option selected>Nein</option></select>";
 	}
-	return "<td>"+person.id+"</td><td>"+role+"</td><td>"+fieldservice+"</td><td>"+admin+"</td><td>"+button_ok+" "+button_cancel+"</td>";
+	return "<td>"+person.id+"</td><td>"+person.forename+" "+person.lastname+"</td><td>"+role+"</td><td>"+fieldservice+"</td><td>"+admin+"</td><td>"+button_ok+" "+button_cancel+"</td>";
 }
 
 $(document).ready(function() {
@@ -194,7 +194,8 @@ $(document).ready(function() {
 					<table class="table table-condensed table-striped">
 						<thead>
 							<tr>
-								<th>User</th>
+								<th>ID</th>
+								<th>Name</th>
 								<th>Rolle</th>
 								<th>Außendienst</th>
 								<th>Admin</th>

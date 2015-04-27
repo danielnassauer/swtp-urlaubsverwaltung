@@ -12,15 +12,16 @@
  *            die Filterfunktionen. Jeder Filterfunktion wird zusätzlich zum
  *            HolidayRequest das Attachment übergeben. Ist das Attachment null,
  *            wird nur der HolidayRequest übergeben.
+ *            Beispiel: [{"filter": isSubstituteFilter, "attachment": 42}, ...]
  * @return Array mit gefilterten HolidayRequests.
  */
 function filterHolidayRequests(requests, filters) {
 	var requ = [];
 	for (var i = 0; i < requests.length; i++) {
 		var accept = true;
-		for (dict in filters) {
-			var filter = dict.keys()[0];
-			var attachment = filters[filter];
+		for (var j in filters) {
+			var filter = filters[j]["filter"];
+			var attachment = filters[j]["attachment"];
 			if (attachment == null) {
 				accept = filter(requests[i]);
 			} else {

@@ -41,14 +41,22 @@
 
 	function onSubstituteFinished(id) {
 		$("#sub_popup").modal("hide");
-		var accepted = $("#sub_accept").prop("checked");
+		var accepted;
+		if ($("#sub_accept").prop("checked")){
+			accepted = 2;
+		} else {
+				accepted = 3;
+			}
 		var request = getHolidayRequest(id);
 		var subs = request.substitutes;
 		subs[user.id] = accepted;
+		console.log(subs);
 		editHolidayRequest(id, request.start, request.end, subs,
 				request.status, request.comment);
 		$("#sub_accept").attr('checked' , false);
 		$("#sub_decline").attr('checked' , false);
+		updateMySubstituteTable();
+		updateDepartmentTable();
 	}
 	
 		function onDepartmentHolidayRequestEdit(id){
@@ -64,14 +72,19 @@
 		$("#department_popup").modal("hide");
 		var request = getHolidayRequest(id);
 		var accepted;
+		var comment = $("#holiday_decline_text").val();
 		if($("#holiday_accept").prop("checked")){
 			var accepted = 1;
 			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, request.comment);
 		} else if($("#holiday_decline").prop("checked")){
 			var accepted = 3;
-			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, request.cmment);
-			}else {}
-
+			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, comment);
+			}else {
+				$("#editHoliday").modal("show");
+				}
+			console.log(comment);
+		updateDepartmentTable();
+		updateMySubstituteTable();
 	}
 	
 	
@@ -92,15 +105,47 @@
 			var start = new Date(request.start * 1000);
 			var end = new Date(request.end * 1000);
 			
+			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
+			var colleague = persons.forename + " " + persons.lastname;
+			
+			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
+			
+			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
+			var subStatus = "";
+			
+			
+			for (var j = 0; j < keys.length; j++) {
+				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
+				var id = names.id;
+				var check = []
+				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
+				if (check[j] == 1){
+					subStatus = "noch keine Antwort ";
+				}
+				if(check[j] == 2){
+					subStatus = "Vertretung angenommen ";
+				} else if (check[j] == 3){
+					subStatus = "Vertretung abgelehnt ";
+				}
+				subs[j] = names.forename + " " + names.lastname + ": "
+						+ subStatus;
+				if (id == user.id) {
+					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
+				}
+			}		
+			
+			console.log(subs);
+			console.log(request.substitutes);
+			
 			rows += "<tr onclick='onDepartmentHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + request.person
+						+ ")'><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>" + request.substitute
+						+ "." + end.getFullYear() + "</td><td>" + subs
 						+ "</td><td>" + request.status + "</td></tr>";
-		
-		}	
+			
+			}
 		
 		$("#department_request_list").html(rows);
 
@@ -110,7 +155,7 @@
 	function updateMySubstituteTable(){
 		
 		var requests = getHolidayRequests();
-		var Persons = getPersons();
+
 		
 		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id}
 		
@@ -124,12 +169,41 @@
 			var start = new Date(request.start * 1000);
 			var end = new Date(request.end * 1000);
 			
+			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
+			var colleague = persons.forename + " " + persons.lastname;
+			
+			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
+			
+			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
+			var subStatus = "";
+			
+			
+			for (var j = 0; j < keys.length; j++) {
+				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
+				var id = names.id;
+				var check = []
+				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
+				if (check[j] == 1){
+					subStatus = "noch keine Antwort ";
+				}
+				if(check[j] == 2){
+					subStatus = "Vertretung angenommen ";
+				} else if (check[j] == 3){
+					subStatus = "Vertretung abgelehnt ";
+				}
+				subs[j] = names.forename + " " + names.lastname + ": "
+						+ subStatus;
+				if (id == user.id) {
+					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
+				}
+			}			
+			
 			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + request.person
+						+ ")'><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>" + request.substitute
+						+ "." + end.getFullYear() + "</td><td>" + subs
 						+ "</td><td>" + request.status + "</td></tr>";
 			
 			}
@@ -140,7 +214,7 @@
 		}
 
 
-	function showOwnHolidayRequests() {
+	/*function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
 		var own_requests = [];
 		for (var i = 0; i < requests.length; i++) {
@@ -188,12 +262,17 @@
 
 		$("#request_list").html(rows);
 
-	}
+	} */
 
 	$(document).ready(function() {
+		if(user.role == 1){
+			$("#departmentTable").addClass('hidden');
+		}
 		restUrlaub();
 		updateMySubstituteTable();
-		updateDepartmentTable();
+		if(user.role != 1){
+			updateDepartmentTable();
+		}
 	})
 </script>
 <body>
@@ -218,7 +297,13 @@
 		</div>
 	</nav>
 	
-	<div> <!-- Tabelle für Mitarbeiter -->
+	<div class="container">   <!-- Tabelle für Mitarbeiter -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Anträge in denen Ich als Vertretung angegeben wurde</h3>
+		</div>
+	<div class="panel-body">	
+	<div> 
 		<table class="table table-hover">
 			<tr>
 				<th>Art</th>
@@ -232,9 +317,19 @@
 
 			</tbody>
 		</table>
-	</div>
+	</div> <!-- /Tabelle -->
+	</div> <!-- /Panel-body -->
+	</div> <!-- /panel -->
+	</div> <!-- /container -->
 	
-	<div> <!-- Tabelle für Abteilungsleiter -->
+	
+	<div class="container" id="departmentTable">     <!-- Tabelle für Abteilungsleiter -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Anträger der Mitarbeiter</h3>
+		</div>
+	<div class="panel-body">	
+	<div> 
 		<table class="table table-hover">
 			<tr>
 				<th>Art</th>
@@ -248,7 +343,14 @@
 
 			</tbody>
 		</table>
-	</div>
+	</div> <!-- /Tabelle -->
+	</div> <!-- /Panel-body -->
+	</div> <!-- /panel -->
+	</div> <!-- /container -->
+	
+	
+	
+	
 	<!-- Popup um Vertretung zuzustimmen oder abzulehnen -->
 	<div id="sub_popup" class="modal fade">
 		<div class="modal-dialog">
@@ -309,16 +411,16 @@
 								</label>
 							</div>
 
+						<div class="input-group">
+							<span class="input-group-addon"> <input type="radio"
+								name="optradio" id="holiday_decline" aria-label="...">
+							</span> <input type="text" placeholder="Antrag abgelehnt wegen"
+								class="form-control" aria-label="..." id="holiday_decline_text">
+						</div>
 
 						<div class="radio">
-							<label> <input type="radio" name="optradio" id="holiday_decline">
-								Abgelehnt wegen:
-							</label>
-						</div>
-						
-						<div class="radio">
 							<label> <input type="radio" name="optradio" id="holiday_change">
-								Geändert wie folgt wegen:
+								Änderung an Antrag vornehmen
 							</label>
 						</div>
 
@@ -333,6 +435,30 @@
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /department_popup -->
+	
+	
+	<div id="editHoliday"class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Urlaubsanträge bearbeiten</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+						<p>Hier sollen die ABteilungsleiter Vorschläge für einen anderen Urlaubszeitpunkt machen</p>
+						<p>HHier kann evtl ein Datepicker hin oder sowas</p>
+
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Urlaubsantrag ändern</button>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /changeHoliday -->
 
 
 </body>

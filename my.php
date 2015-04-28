@@ -25,7 +25,8 @@
 
 <script type="text/javascript">
 	var calendar;
-
+	var persons = getPersons();
+	var dep_new = new Array;
 	function restUrlaub(){
 		var rows=0;
 		rows = user.remaining_holiday;
@@ -35,7 +36,9 @@
 		$("#popup").modal("hide");
 		var start = new Date(calendar.selected_start).getTime() / 1000;
 		var end = new Date(calendar.selected_end).getTime() / 1000;
-		var substitutes = $.parseJSON($("#text_substitutes").val());
+		var substitutes = $("#substitutes_Menu").val();
+		console.log(substitutes);
+		//$.parseJSON($("#text_substitutes").val());
 
 		if ($("#radio_ua").prop("checked")) {
 			var type = "Urlaub"
@@ -47,13 +50,33 @@
 
 		createHolidayRequest(start, end, user.id, substitutes, type);
 	}
-
+	
+	/*
+	 *	Listet alle Vertretungen aus Abteilung auf.
+	 */
+		function showSubstitutesMenu() {
+		var sub = new Array;
+		var rows = "<option>---</option>";
+		for (var i = 0; i < persons.length; i++) {
+			var person = persons[i];
+			if (person.department == user.department && person.id != user.id){
+				//sub[i]=person.lastname;	
+				 rows += "<option>" +  person.lastname + "</option>";		
+			}
+		}
+		$("#substitutes_Menu").html(rows);
+	}
+	
+	function substitute_ok(){
+		
+	}
 	function onHolidayRequestSelection(start, end, allDay) {
 		var liveDate = new Date();
 		if(liveDate > start){
 			$('#wrongDate').modal("show");
 			} else{
 		$('#popup').modal("show");
+		showSubstitutesMenu();
 		calendar.fullCalendar('unselect');
 		calendar.selected_start = start;
 		calendar.selected_end = end;
@@ -147,6 +170,7 @@
 	$(document).ready(function() {
 		showOwnHolidayRequests();
 		restUrlaub();
+		
 
 		calendar = $('#calendar').fullCalendar({
 			lang : 'de', //geht eh nicht(-: alles in der fullcalendar.min.js geändert!
@@ -212,12 +236,16 @@
 					</form>
 
 
-						<div class="input-group">
-							<span class="input-group-addon" id="sizing-addon2">Die
-								Vertretung übernimmt</span> <input type="text" class="form-control"
-								placeholder="Vertretung" aria-describedby="sizing-addon2"
-								id="text_substitutes">
+				<div class="panel-body">
+					<form class="form-inline">
+						<div class="form-group">
+							<label for="substitutes_Menu">Vertretung Übernimmt:</label> <select
+								id="substitutes_Menu" class="form-control">
+								<option>---</option>
+							</select> <span class='btn btn-default' onclick="substitute_ok()">OK</span>
 						</div>
+					</form>
+				</div>
 
 			</div> <!-- /modal-body -->
 					<div class="modal-footer">

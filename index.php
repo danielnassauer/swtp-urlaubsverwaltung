@@ -148,7 +148,7 @@
 						title : title,
 						start : start,
 						end : end,
-						color: 'yellow'
+						color: 'red'
 					});
 			}else{
 			events.push({

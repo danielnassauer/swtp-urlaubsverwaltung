@@ -34,12 +34,13 @@
 	}
 	function onHolidayRequestCreation() {
 		$("#popup").modal("hide");
+		var substitutes = {};
 		var start = new Date(calendar.selected_start).getTime() / 1000;
 		var end = new Date(calendar.selected_end).getTime() / 1000;
-		var substitutes = $("#substitutes_Menu").val();							//Brauche id! nur wie?
-		console.log(substitutes);
-		//$.parseJSON($("#text_substitutes").val());
-
+			substitutes[$("#substitutes_Menu1").val()] = false;
+			substitutes[$("#substitutes_Menu2").val()] = false;
+			substitutes[$("#substitutes_Menu3").val()] = false;
+		console.log(substitutes);	
 		if ($("#radio_ua").prop("checked")) {
 			var type = "Urlaub"
 		} else if ($("#radio_fa").prop("checked")) {
@@ -60,10 +61,10 @@
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
 			if (person.department == user.department && person.id != user.id){
-				 rows += "<option>"+ person.id +"</option>";		
+				 rows += "<option value="+person.id+">"+ person.lastname +"</option>";		
 			}
 		}
-		$("#substitutes_Menu").html(rows);
+		$("#substitutes_Menu1").html(rows);
 		$("#substitutes_Menu2").html(rows);
 		$("#substitutes_Menu3").html(rows);
 	}
@@ -237,8 +238,8 @@
 				<div class="panel-body">
 					<form class="form-inline">
 						<div class="dropdown">
-							<label for="substitutes_Menu">Vertretung 1.</label> <select
-								id="substitutes_Menu" class="form-control">
+							<label for="substitutes_Menu1">Vertretung 1.</label> <select
+								id="substitutes_Menu1" class="form-control">
 								<option>---</option>
 							</select> 
 						<span class="form-group">

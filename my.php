@@ -36,7 +36,7 @@
 		$("#popup").modal("hide");
 		var start = new Date(calendar.selected_start).getTime() / 1000;
 		var end = new Date(calendar.selected_end).getTime() / 1000;
-		var substitutes = $("#substitutes_Menu").val();
+		var substitutes = $("#substitutes_Menu").val();							//Brauche id! nur wie?
 		console.log(substitutes);
 		//$.parseJSON($("#text_substitutes").val());
 
@@ -60,16 +60,14 @@
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
 			if (person.department == user.department && person.id != user.id){
-				//sub[i]=person.lastname;	
-				 rows += "<option>" +  person.lastname + "</option>";		
+				 rows += "<option>"+ person.id +"</option>";		
 			}
 		}
 		$("#substitutes_Menu").html(rows);
+		$("#substitutes_Menu2").html(rows);
+		$("#substitutes_Menu3").html(rows);
 	}
 	
-	function substitute_ok(){
-		
-	}
 	function onHolidayRequestSelection(start, end, allDay) {
 		var liveDate = new Date();
 		if(liveDate > start){
@@ -238,15 +236,26 @@
 
 				<div class="panel-body">
 					<form class="form-inline">
-						<div class="form-group">
-							<label for="substitutes_Menu">Vertretung Übernimmt:</label> <select
+						<div class="dropdown">
+							<label for="substitutes_Menu">Vertretung 1.</label> <select
 								id="substitutes_Menu" class="form-control">
 								<option>---</option>
-							</select> <span class='btn btn-default' onclick="substitute_ok()">OK</span>
+							</select> 
+						<span class="form-group">
+							<label for="substitutes_Menu2">2.</label> <select
+								id="substitutes_Menu2" class="form-control">
+								<option>---</option>
+							</select> 
+						</span>
+						<span class="form-group">
+							<label for="substitutes_Menu3">3.</label> <select
+								id="substitutes_Menu3" class="form-control">
+								<option>---</option>
+							</select> 
+						</span>
 						</div>
 					</form>
 				</div>
-
 			</div> <!-- /modal-body -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-lg btn-block"

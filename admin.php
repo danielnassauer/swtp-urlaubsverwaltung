@@ -38,24 +38,6 @@ if (isset ( $_POST ['delete_users_table'] )) {
 	}
 }
 
-if (isset ( $_POST ['create_remainingholiday_table'] )) {
-	try {
-		DBCreator::createRemainingHolidayTable ();
-		echo '<div class="alert alert-success" role="alert">RemainingHoliday-Table erfolgreich erstellt!</div>';
-	} catch ( Exception $e ) {
-		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
-	}
-}
-
-if (isset ( $_POST ['delete_remainingholiday_table'] )) {
-	try {
-		DBCreator::deleteRemainingHolidayTable ();
-		echo '<div class="alert alert-success" role="alert">RemainingHoliday-Table erfolgreich gelöscht!</div>';
-	} catch ( Exception $e ) {
-		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
-	}
-}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -207,22 +189,6 @@ $(document).ready(function() {
 					</table>
 				</div>
 			</div>
-
-			<!-- REMAININGHOLIDAY TABLE -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Verbleibende Urlaubstage</h3>
-				</div>
-				<div class="panel-body">
-
-					<button type="submit" class="btn btn-default"
-						name="create_remainingholiday_table">Tabelle erstellen</button>
-					<button type="submit" class="btn btn-default"
-						name="delete_remainingholiday_table">Tabelle löschen</button>
-
-				</div>
-			</div>
-
 
 
 		</div>

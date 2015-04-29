@@ -30,26 +30,15 @@ class DBCreator {
 				user INT(11) UNSIGNED PRIMARY KEY,
 				role INT(11),
 				fieldservice BOOLEAN,
-				is_admin BOOLEAN				
+				is_admin BOOLEAN,
+				remaining_holiday INT(11)				
 				)";
 		self::createTable ( $sql );
 	}
 
 	public static function deleteUsersTable() {
 		self::deleteTable ( "Users" );
-	}
-
-	public static function createRemainingHolidayTable() {
-		$sql = "CREATE TABLE RemainingHoliday (
-				user INT(11) UNSIGNED PRIMARY KEY,
-				remaining_holiday INT(11)
-				)";
-		self::createTable ( $sql );
-	}
-
-	public static function deleteRemainingHolidayTable() {
-		self::deleteTable ( "RemainingHoliday" );
-	}
+	}	
 
 	private static function createTable($sql_query) {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;

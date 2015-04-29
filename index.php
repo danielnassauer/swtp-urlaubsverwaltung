@@ -143,7 +143,7 @@
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
 			if(person.field_service){
-					title = person.forname + " " + person.lastname + " Außendienst";
+					title = person.forename + " " + person.lastname + " Außendienst";
 					events.push({
 						title : title,
 						start : start,

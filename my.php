@@ -230,11 +230,7 @@
 								class="form-control" aria-label="..." id="text_su">
 						</div>
 						<!-- /input-group -->
-
-					
 					</form>
-
-
 				<div class="panel-body">
 					<form class="form-inline">
 						<div class="dropdown">

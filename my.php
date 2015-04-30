@@ -63,13 +63,12 @@
 				var person = persons[i];
 				if (person.id == id){
 				name[j] = person.lastname;
-					console.log(name[j]);
+					//console.log(name[j]);
 				j++;
 				}
-			}
-				
+			}	
 		}			
-			return name;
+	return name;
 	}
 	
 	/*
@@ -149,9 +148,7 @@
 						+ ")'>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>"
-						+ JSON.stringify(request.substitutes) + "</td><td onclick='onHolidayRequestEdit(" + request.id
-						+ ")'>"
-						+ request.status + "</td><td><button type='button' class='btn btn-default'>pdf</button></td></tr>";
+						+ dictInSub(request.substitutes) + "</td><td><button type='button' class='btn btn-default'>pdf</button></td></tr>";
 			}else if(request.status == 2){
 				
 				rows += "<tr class='alert alert-warning' onclick='onHolidayRequestEdit(" + request.id
@@ -159,8 +156,7 @@
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>"
-						+ dictInSub(request.substitutes) + "</td><td>"
-						+ request.status + "</td><td>"+'---'+"</td></tr>";
+						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
 			}else if(request.status == 3){
 				
 			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
@@ -168,8 +164,7 @@
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>"
-						+ JSON.stringify(request.substitutes) + "</td><td>"
-						+ request.status + "</td><td>"+'---'+"</td></tr>";
+						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
 			}else if(request.status == 4){
 			
 			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
@@ -177,8 +172,7 @@
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>"
-						+ JSON.stringify(request.substitutes) + "</td><td>"
-						+ request.status + "</td><td>"+'---'+"</td></tr>";
+						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
 			}
 	}	
 		$("#holidayrequests_list").html(rows);
@@ -321,7 +315,6 @@
 						<th>Start</th>
 						<th>Ende</th>
 						<th>Vertretungen</th>
-						<th>Status</th>
 						<th></th>
 					</tr>
 					<tbody id="holidayrequests_list">

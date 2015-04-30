@@ -8,6 +8,9 @@
 
 <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+<!-- <link rel="stylesheet" href="lib/datepicker/css/datepicker.css" />
+<link rel="stylesheet" href="lib/datepicker/less/datepicker.less" /> -->
+<link rel="stylesheet" href="lib/jquery-datepicker/jquery-ui.css" />
 
 <script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
@@ -15,6 +18,11 @@
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
 <script src="js/HolidayRequestsFilter.js"></script>
+
+<script src="lib/less/less.js" type="text/javascript"></script>
+<!-- <script src="lib/datepicker/js/bootstrap-datepicker.js"></script> -->
+<script src="lib/jquery-datepicker/jquery-ui.min.js"></script>
+
 
 <?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
@@ -81,11 +89,53 @@
 			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, comment);
 			}else {
 				$("#editHoliday").modal("show");
-				}
-			console.log(comment);
+				offerNewHoliday();
+			}
 		updateDepartmentTable();
 		updateMySubstituteTable();
 	}
+	
+	function offerNewHoliday(){
+		$('#datepickerTest').datepicker({
+			dateFormat: 'dd.mm.yy',
+			onSelect: function(dateText, inst) {
+			$("input[name='test']").val(dateText);		
+		}});
+
+		$('#datepickerStart').datepicker({		
+				format: 'dd.mm.yyyy'
+		});
+		$('#datepickerEnd').datepicker({
+				format: 'dd.mm.yyyy'
+		});
+		
+
+		
+	}
+	
+	function test(){
+		Array.prototype.move = function(from,to){
+		this.splice(to,0,this.splice(from,1)[0]);
+		return this;
+		};
+		
+		var hey = $('#datepickerTest').val();
+		var so = hey.toString();
+		
+		var res = so.split(".");
+		res.move(0,1);
+		
+		var mon = res[0] + "/";
+		var tag = res[1] + "/";
+		var jahr = res[2] + " 06:00:00";
+		
+		var tagmon = mon.concat(tag);
+		var fertig = tagmon.concat(jahr);
+		
+		var datNeu = Date.parse(fertig);
+		
+		console.log(datNeu/1000);
+		}
 	
 	
 	function updateDepartmentTable(){
@@ -273,6 +323,7 @@
 		if(user.role != 1){
 			updateDepartmentTable();
 		}
+		offerNewHoliday();
 	})
 </script>
 <body>
@@ -348,8 +399,14 @@
 	</div> <!-- /panel -->
 	</div> <!-- /container -->
 	
+	<div class="input-group input-group-lg">
+		<span class="input-group-addon" id="sizing-addon1">Startdatum</span>
+		<input type="text" class="form-control " name="test" placeholder="Klicken um neues Startdatum zu wählen" aria-describedby="sizing-addon1" id="datepickerTest">
+	</div>
 	
-	
+	<div>
+		<button type="button" class="btn btn-primary" onclick="test()">Geparstes Datum in Konsole</button>
+	</div>
 	
 	<!-- Popup um Vertretung zuzustimmen oder abzulehnen -->
 	<div id="sub_popup" class="modal fade">
@@ -412,10 +469,9 @@
 							</div>
 
 						<div class="input-group">
-							<span class="input-group-addon"> <input type="radio"
-								name="optradio" id="holiday_decline" aria-label="...">
-							</span> <input type="text" placeholder="Antrag abgelehnt wegen"
-								class="form-control" aria-label="..." id="holiday_decline_text">
+							<span class="input-group-addon"> <input type="radio"  name="optradio" id="holiday_decline" aria-label="...">
+							</span> 
+							<input type="text" placeholder="Antrag abgelehnt wegen" class="form-control" aria-label="..." id="holiday_decline_text">
 						</div>
 
 						<div class="radio">
@@ -448,8 +504,16 @@
 					<h4>Urlaubsanträge bearbeiten</h4>
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
-						<p>Hier sollen die ABteilungsleiter Vorschläge für einen anderen Urlaubszeitpunkt machen</p>
-						<p>HHier kann evtl ein Datepicker hin oder sowas</p>
+						<div class="input-group input-group-lg">
+							<span class="input-group-addon" id="sizing-addon1">Startdatum</span>
+							<input type="text" class="form-control clsDatePicker" placeholder="KLicken um neues Startdatum zu wählen" aria-describedby="sizing-addon1" id="datepickerStart">
+						</div>
+						
+						<div class="input-group input-group-lg">
+							<span class="input-group-addon" id="sizing-addon1">Enddatum</span>
+							<input type="text" class="form-control" placeholder="KLicken um neues Enddatum zu wählen" aria-describedby="sizing-addon1" id="datepickerEnd">
+						</div>
+
 
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
@@ -459,6 +523,10 @@
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /changeHoliday -->
+	
+
+					
+	
 
 
 </body>

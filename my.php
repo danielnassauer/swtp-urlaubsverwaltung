@@ -37,9 +37,23 @@
 		var substitutes = {};
 		var start = new Date(calendar.selected_start).getTime() / 1000;
 		var end = new Date(calendar.selected_end).getTime() / 1000;
-			substitutes[$("#substitutes_Menu1").val()] = false;
-			substitutes[$("#substitutes_Menu2").val()] = false;
-			substitutes[$("#substitutes_Menu3").val()] = false;	
+		var sub =""; 
+			if($("#substitutes_Menu1").val()== "---"){
+				sub = null;
+			}else{
+				sub = $("#substitutes_Menu1").val();			
+			}
+			substitutes[sub] = false;
+			if($("#substitutes_Menu2").val()== "---"){
+				sub = null;
+			}else{
+				sub = $("#substitutes_Menu2").val();			
+			}
+			if($("#substitutes_Menu3").val()== "---"){
+				sub = null;
+			}else{
+				sub = $("#substitutes_Menu3").val();			
+			}	
 		if ($("#radio_ua").prop("checked")) {
 			var type = "Urlaub"
 		} else if ($("#radio_fa").prop("checked")) {
@@ -63,7 +77,7 @@
 				var person = persons[i];
 				if (person.id == id){
 				name[j] = person.lastname;
-					//console.log(name[j]);
+					console.log(name[j]);
 				j++;
 				}
 			}	
@@ -75,16 +89,23 @@
 	 *	Listet alle Vertretungen aus Abteilung auf.
 	 */
 	function showSubstitutesMenu() {
-		var rows = "<option>---</option>";
+		var rows = "<option disabled></option>";
+		var rows2 = "<option >---</option>";
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
 			if (person.department == user.department && person.id != user.id){
-				 rows += "<option value="+person.id+">"+ person.lastname +"</option>";		
+				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
+			}
+		}
+		for (var j = 0; j < persons.length; j++) {
+			var person = persons[j];
+			if (person.department == user.department && person.id != user.id){
+				 rows2 += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
 			}
 		}
 		$("#substitutes_Menu1").html(rows);
-		$("#substitutes_Menu2").html(rows);
-		$("#substitutes_Menu3").html(rows);
+		$("#substitutes_Menu2").html(rows2);
+		$("#substitutes_Menu3").html(rows2);
 	}
 	
 	function onHolidayRequestSelection(start, end, allDay) {
@@ -248,7 +269,7 @@
 						<div class="dropdown">
 							<label for="substitutes_Menu1">Vertretung 1.</label> <select
 								id="substitutes_Menu1" class="form-control">
-								<option>---</option>
+								<option disabled>---</option>
 							</select> 
 						<span class="form-group">
 							<label for="substitutes_Menu2">2.</label> <select

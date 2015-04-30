@@ -47,13 +47,15 @@
 			if($("#substitutes_Menu2").val()== "---"){
 				sub = null;
 			}else{
-				sub = $("#substitutes_Menu2").val();			
+			sub = $("#substitutes_Menu2").val();			
 			}
+			substitutes[sub] = false;
 			if($("#substitutes_Menu3").val()== "---"){
 				sub = null;
 			}else{
-				sub = $("#substitutes_Menu3").val();			
+			sub = $("#substitutes_Menu3").val();			
 			}	
+			substitutes[sub] = false;
 		if ($("#radio_ua").prop("checked")) {
 			var type = "Urlaub"
 		} else if ($("#radio_fa").prop("checked")) {
@@ -270,7 +272,7 @@
 						<div class="dropdown" >
 							<label for="substitutes_Menu1">1.</label> <select
 								id="substitutes_Menu1" class="form-control">
-								<option disabled>---</option>
+								<option>---</option>
 							</select> 
 						<span class="form-group">
 							<label for="substitutes_Menu2">2.</label> <select

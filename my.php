@@ -229,7 +229,7 @@
 
 <body>
 	<div id="popup" class="modal fade">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
@@ -266,8 +266,9 @@
 					</form>
 				<div class="panel-body">
 					<form class="form-inline">
-						<div class="dropdown">
-							<label for="substitutes_Menu1">Vertretung 1.</label> <select
+					<h4>Vertretungen:</h4>
+						<div class="dropdown" >
+							<label for="substitutes_Menu1">1.</label> <select
 								id="substitutes_Menu1" class="form-control">
 								<option disabled>---</option>
 							</select> 
@@ -290,10 +291,10 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-lg btn-block"
 							onclick="onHolidayRequestCreation()">Abschicken</button>
-					</div>
-				</div> <!-- /modal-content -->
-			</div> <!-- /modal-dialog -->
-		</div> <!-- /popup -->
+			</div>
+		</div> <!-- /modal-content -->
+	</div> <!-- /modal-dialog -->
+</div> <!-- /popup -->
 
 
 

@@ -26,7 +26,7 @@
 <script type="text/javascript">
 	var calendar;
 	var persons = getPersons();
-	var dep_new = new Array;
+	
 	function restUrlaub(){
 		var rows=0;
 		rows = user.remaining_holiday;
@@ -39,8 +39,7 @@
 		var end = new Date(calendar.selected_end).getTime() / 1000;
 			substitutes[$("#substitutes_Menu1").val()] = false;
 			substitutes[$("#substitutes_Menu2").val()] = false;
-			substitutes[$("#substitutes_Menu3").val()] = false;
-		console.log(substitutes);	
+			substitutes[$("#substitutes_Menu3").val()] = false;	
 		if ($("#radio_ua").prop("checked")) {
 			var type = "Urlaub"
 		} else if ($("#radio_fa").prop("checked")) {
@@ -53,10 +52,30 @@
 	}
 	
 	/*
+	 *	Vertretungen werden für die Tabelle gesetzt
+	 */	
+	function dictInSub(sub){
+		var name= new Array;
+		var j = 0;
+		var test="";
+		for(id in sub){
+			for (var i = 0; i < persons.length; i++) {
+				var person = persons[i];
+				if (person.id == id){
+				name[j] = person.lastname;
+					console.log(name[j]);
+				j++;
+				}
+			}
+				
+		}			
+			return name;
+	}
+	
+	/*
 	 *	Listet alle Vertretungen aus Abteilung auf.
 	 */
-		function showSubstitutesMenu() {
-		var sub = new Array;
+	function showSubstitutesMenu() {
 		var rows = "<option>---</option>";
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
@@ -115,7 +134,6 @@
 				own_requests.push(request);
 			}
 		}
-
 		var rows = "";
 		for (var i = 0; i < own_requests.length; i++) {
 			var request = own_requests[i];
@@ -141,7 +159,7 @@
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>"
-						+ JSON.stringify(request.substitutes) + "</td><td>"
+						+ dictInSub(request.substitutes) + "</td><td>"
 						+ request.status + "</td><td>"+'---'+"</td></tr>";
 			}else if(request.status == 3){
 				

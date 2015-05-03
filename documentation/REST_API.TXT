@@ -26,6 +26,12 @@ Es existieren folgende Ressourcen:
       status:              int,                // 1: angenommen, 2: wartend, 3: abgelehnt, 4: storniert
       comment:             string              // Begründung (nur wenn abgelehnt)
    }
+   
+* Holiday:
+   {
+      name:                string,             // Name des Feiertags
+      day:                 int                 // Datum des Feiertags als Unix-Timestamp
+   }
 
 
 REQUESTS
@@ -34,6 +40,7 @@ REQUESTS
 Personen können mit GET-Requests abgefragt und mit PUT geändert werden. 
 Urlaubsanträge können mit GET abgefragt, mit POST hinzugefügt, und
 mit PUT geändert werden.
+Feiertage können mit einem GET-Request abgefragt werden.
 Folgende Requests sind möglich:
 
 /Person
@@ -64,5 +71,10 @@ Folgende Requests sind möglich:
    PUT
       Body:     HolidayRequest (ohne type und person)
       Effekt:   HolidayRequest mit der entsprechenden ID wird abgeändert
+      
+      
+/Holiday
+   GET
+      Antwort:  Liste aller Feiertage: [Holiday, ...]
 
 

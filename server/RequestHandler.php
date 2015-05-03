@@ -2,6 +2,7 @@
 require_once dirname ( __FILE__ ) . '/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/db/Persons.php';
 require_once dirname ( __FILE__ ) . '/db/Holidays.php';
+require_once dirname ( __FILE__ ) . '/session/UserRights.php';
 class RequestHandler {
 
 	public function __construct($request) {
@@ -18,6 +19,8 @@ class RequestHandler {
 		
 		// Request auswerten
 		if ($ressource == "Person") {
+			
+			// GET PERSON
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
 					$person = Persons::getPerson ( $id );
@@ -29,10 +32,33 @@ class RequestHandler {
 					}
 					echo json_encode ( $persons );
 				}
-			} elseif ($request->method == "PUT") {
+			}			
+
+			// PUT PERSON
+			elseif ($request->method == "PUT") {
 				if (isset ( $id )) {
 					$person = $request->content;
-					Persons::editPerson ( $id, $person ["field_service"], $person ["remaining_holiday"], $person ["role"], $person ["is_admin"] );
+					$orig_person = Persons::getPerson ( $id );
+					
+					// Rechte prüfen
+					$is_admin = $orig_person->isAdmin ();
+					if (UserRights::editIsAdmin ()) {
+						$is_admin = $person ["is_admin"];
+					}
+					$role = $orig_person->getRole ();
+					if (UserRights::editRole ()) {
+						$role = $person ["role"];
+					}
+					$remaining_hol = $orig_person->getRemainingHoliday ();
+					if (UserRights::editRemainingHolidays ()) {
+						$remaining_hol = $person ["remaining_holiday"];
+					}
+					$field_service = $orig_person->getFieldservice ();
+					if (UserRights::editFieldService ( $id )) {
+						$field_service = $person ["field_service"];
+					}
+					
+					Persons::editPerson ( $id, $field_service, $remaining_hol, $role, $is_admin );
 				}
 			}
 		} elseif ($ressource == "HolidayRequest") {

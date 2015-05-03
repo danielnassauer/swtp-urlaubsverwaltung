@@ -67,6 +67,10 @@ class Person {
 	public function getRole() {
 		return $this->role;
 	}
+	
+	public function isAdmin(){
+		return $this->is_admin;
+	}
 
 	public function toArray() {
 		$data = array ();

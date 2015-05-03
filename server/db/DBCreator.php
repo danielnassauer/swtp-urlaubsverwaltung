@@ -1,5 +1,6 @@
 <?php
 require_once dirname ( __FILE__ ) . '/conf.php';
+require_once dirname ( __FILE__ ) . '/../session/UserRights.php';
 class DBCreator {
 
 	public static function createHolidayRequestsTable() {
@@ -70,9 +71,12 @@ class DBCreator {
 
 	private static function deleteTable($table) {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;
-		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
-		if (! $conn->query ( "DROP TABLE IF EXISTS " . $table )) {
-			throw new Exception ( "Table deletion failed: (" . $mysqli->errno . ") " . $mysqli->error );
+		
+		if (UserRights::deleteTables ()) {
+			$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_holiday );
+			if (! $conn->query ( "DROP TABLE IF EXISTS " . $table )) {
+				throw new Exception ( "Table deletion failed: (" . $mysqli->errno . ") " . $mysqli->error );
+			}
 		}
 	}
 

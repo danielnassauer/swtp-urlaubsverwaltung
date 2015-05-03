@@ -1,5 +1,6 @@
 <?php
 require_once dirname ( __FILE__ ) . '/../db/conf.php';
+require_once dirname ( __FILE__ ) . '/../db/Persons.php';
 define ( "IN_LOGIN", true );
 define ( 'IN_PHPBB', true );
 $phpbb_root_path = '/opt/lampp/htdocs/phpbb/';
@@ -19,11 +20,7 @@ class Session {
 			return self::getIdOfUser ( $username );
 		}
 		return null;
-	}
-	
-	public static function getRights(){
-		//TODO
-	}
+	}		
 
 	private static function getIdOfUser($username) {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;

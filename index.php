@@ -158,7 +158,6 @@
 				});
 				}
 		}
-
 		return events;
 	}
 

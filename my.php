@@ -65,6 +65,8 @@
 		}
 
 		createHolidayRequest(start, end, user.id, substitutes, type);
+		showOwnHolidayRequests();
+		restUrlaub();
 	}
 	
 	/*
@@ -200,14 +202,54 @@
 	}	
 		$("#holidayrequests_list").html(rows);
 	}
+	
+	function unixTS2calendarTS(timestamp) {
+		var date = new Date(timestamp * 1000);
+		return date.getFullYear() + "-" + (date.getMonth() + 1) + "-"
+				+ date.getDate();
+	}
+	
+	function getCalendarEvents() {
+		var events = [];
+		
+		var requests = getHolidayRequests();
+		var own_requests = [];
+		for (var i = 0; i < requests.length; i++) {
+			var request = requests[i];
+			if (request.person == user.id) {
+				own_requests.push(request);
+			}
+		}
+		console.log("hallo");
+		for (var i = 0; i < own_requests.length; i++) {
+			var request = own_requests[i];
+			var person;
+			for (var j = 0; j < persons.length; j++) {
+				if (persons[j].id == request.person) {
+					person = persons[j];
+					break;
+				}
+			}
+			var title = person.forename + " " + person.lastname;
+			var start = unixTS2calendarTS(request.start);
+			var end = unixTS2calendarTS(request.end);
+	
+			events.push({
+					title : title,
+					start : start,
+					end : end,
+				});
+				
+		}
+		return events;
+	}
 
 	$(document).ready(function() {
 		showOwnHolidayRequests();
 		restUrlaub();
-		
 
 		calendar = $('#calendar').fullCalendar({
-			lang : 'de', //geht eh nicht(-: alles in der fullcalendar.min.js geändert!
+			lang : 'de', 
 			selectable : true,
 			editable : true,
 			header : {
@@ -225,6 +267,8 @@
 			events : [ {} ],
 			eventColor : '#338005'
 		});
+		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
+		
 	});
 </script>
 </head>

@@ -98,7 +98,17 @@ class RequestHandler {
 			elseif ($request->method == "PUT") {
 				if (isset ( $id )) {
 					$holReq = $request->content;
-					HolidayRequests::editRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["substitutes"], $holReq ["status"], $holReq ["comment"] );
+					$orig_holReq = HolidayRequests::getRequest ( $id );
+					
+					// Rechte prüfen
+					$start = $orig_holReq->getStart ();
+					$end = $orig_holReq->getEnd ();
+					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {
+						$start = $holReq ["start"];
+						$end = $holReq ["end"];
+					}
+					
+					HolidayRequests::editRequest ( $id, $start, $end, $holReq ["substitutes"], $holReq ["status"], $holReq ["comment"] );
 				}
 			}
 		}		

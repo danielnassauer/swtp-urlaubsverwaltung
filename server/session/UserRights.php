@@ -62,6 +62,17 @@ class UserRights {
 		return self::$user->isAdmin () || $person_id == self::$user->getID ();
 	}
 	
+	/**
+	 * Prüft, ob der aktuelle user das Start- und Enddatum von Urlaubsanträgen ändern darf.
+	 * Admins und der eigene user dürfen Start- und Enddatum ändern.
+	 *
+	 * @param
+	 *        	person_id ID der Person, der der Urlaubsantrag gehört.
+	 */
+	public static function editStartAndEnd($person_id) {
+		return self::$user->isAdmin () || $person_id == self::$user->getID ();
+	}
+	
 	
 }
 

@@ -18,6 +18,8 @@ class RequestHandler {
 		}
 		
 		// Request auswerten
+		
+		// PERSONS
 		if ($ressource == "Person") {
 			
 			// GET PERSON
@@ -61,7 +63,12 @@ class RequestHandler {
 					Persons::editPerson ( $id, $field_service, $remaining_hol, $role, $is_admin );
 				}
 			}
-		} elseif ($ressource == "HolidayRequest") {
+		}		
+
+		// HOLIDAYREQUESTS
+		elseif ($ressource == "HolidayRequest") {
+			
+			// GET HOLIDAYREQUEST
 			if ($request->method == "GET") {
 				if (isset ( $id )) {
 					$request = HolidayRequests::getRequest ( $id );
@@ -73,19 +80,33 @@ class RequestHandler {
 					}
 					echo json_encode ( $requests );
 				}
-			} elseif ($request->method == "POST") {
+			}			
+
+			// POST HOLIDAYREQUEST
+			elseif ($request->method == "POST") {
 				if (! isset ( $id )) {
 					$holReq = $request->content;
-					$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
-					echo $request->toJSON ();
+					// Rechte prüfen
+					if (UserRights::createHolidayRequest ( $holReq ["person"] )) {
+						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
+						echo $request->toJSON ();
+					}
 				}
-			} elseif ($request->method == "PUT") {
+			}			
+
+			// PUT HOLIDAYREQUEST
+			elseif ($request->method == "PUT") {
 				if (isset ( $id )) {
 					$holReq = $request->content;
 					HolidayRequests::editRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["substitutes"], $holReq ["status"], $holReq ["comment"] );
 				}
 			}
-		} elseif ($ressource == "Holiday") {
+		}		
+
+		// HOLIDAYS
+		elseif ($ressource == "Holiday") {
+			
+			// GET HOLIDAY
 			if ($request->method == "GET") {
 				if (! isset ( $id )) {
 					$holidays = array ();

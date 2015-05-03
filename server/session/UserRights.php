@@ -50,6 +50,19 @@ class UserRights {
 	public static function editFieldService($person_id) {
 		return self::$user->isAdmin () || $person_id == self::$user->getID ();
 	}
+	
+	/**
+	 * Prüft, ob der aktuelle user Urlaubsanträge erstellen darf.
+	 * Admins und der eigene user dürfen Urlaubsanträge erstellen.
+	 *
+	 * @param
+	 *        	person_id ID der Person, der der Urlaubsantrag gehört.
+	 */
+	public static function createHolidayRequest($person_id) {
+		return self::$user->isAdmin () || $person_id == self::$user->getID ();
+	}
+	
+	
 }
 
 UserRights::init ();

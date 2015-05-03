@@ -38,6 +38,24 @@ if (isset ( $_POST ['delete_users_table'] )) {
 	}
 }
 
+if (isset ( $_POST ['create_holidays_table'] )) {
+	try {
+		DBCreator::createHolidaysTable ();
+		echo '<div class="alert alert-success" role="alert">Holidays-Table erfolgreich erstellt!</div>';
+	} catch ( Exception $e ) {
+		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+	}
+}
+
+if (isset ( $_POST ['delete_holidays_table'] )) {
+	try {
+		DBCreator::deleteHolidaysTable ();
+		echo '<div class="alert alert-success" role="alert">Holidays-Table erfolgreich gelöscht!</div>';
+	} catch ( Exception $e ) {
+		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+	}
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -190,6 +208,20 @@ $(document).ready(function() {
 
 						</tbody>
 					</table>
+				</div>
+			</div>
+
+			<!-- Holidays TABLE -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Feiertage</h3>
+				</div>
+				<div class="panel-body">
+
+					<button type="submit" class="btn btn-default"
+						name="create_holidays_table">Tabelle erstellen</button>
+					<button type="submit" class="btn btn-default"
+						name="delete_holidays_table">Tabelle löschen</button>
 				</div>
 			</div>
 

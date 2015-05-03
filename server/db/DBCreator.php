@@ -38,7 +38,19 @@ class DBCreator {
 
 	public static function deleteUsersTable() {
 		self::deleteTable ( "Users" );
-	}	
+	}
+
+	public static function createHolidaysTable() {
+		$sql = "CREATE TABLE Holidays (
+				name VARCHAR(100) PRIMARY KEY,
+				day INT(11)				
+				)";
+		self::createTable ( $sql );
+	}
+
+	public static function deleteHolidaysTable() {
+		self::deleteTable ( "Holidays" );
+	}
 
 	private static function createTable($sql_query) {
 		global $mysql_servername, $mysql_username, $mysql_password, $db_holiday;

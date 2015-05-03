@@ -73,7 +73,7 @@ var HolidayRequest = function(id, start, end, person, substitutes, type,
  * @param name
  *            Name des Feiertags
  * @param day
- *            Datum des Feiertags als Unix-Timestamp (Jahr = 0)
+ *            Datum des Feiertags als Unix-Timestamp
  */
 var Holiday = function(name, day) {
 	this.name = name;

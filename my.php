@@ -20,6 +20,8 @@
 
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
+<script src="js/HolidayRequestsFilter.js"></script>
+
 
 <?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
@@ -136,12 +138,19 @@
 	
 	function changeHoliday(id){
 		$('#changeHoliday').modal("hide");
-		console.log(id);
+		var request = getHolidayRequest(id);
+		var state;
 		var radio = $("#UA_storno").prop("checked");
 		if(radio){
 			$('#deleteHoliday').modal("show");
-			console.log("löschen");
-			}
+			$('#cancel_holiday').on('click', function () {
+				state = 4;
+				editHolidayRequest(id, request.start, request.end, request.substitutes, state, request.comment);
+				$('#deleteHoliday').modal("hide");
+				showOwnHolidayRequests();
+				
+			});
+		}
 		else{
 			$('#editHoliday').modal("show");
 			
@@ -213,8 +222,16 @@
 	
 	function getCalendarEvents() {
 		var events = [];
+		function notCanceledRequestFilter(request){
+		return (request.status == 1 || request.status == 2);
+		}
 		
 		var requests = getHolidayRequests();
+		
+		var filter_canceled = {"filter":notCanceledRequestFilter, "attachment":null};
+		
+		requests = filterHolidayRequests(requests,[filter_canceled]);
+		console.log(requests);
 		var own_requests = [];
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];
@@ -451,7 +468,7 @@
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Nein, doch nicht</button>
-						<button type="button" class="btn btn-primary" >Urlaubsantrag stornieren</button>
+						<button type="button" class="btn btn-primary" id="cancel_holiday">Urlaubsantrag stornieren</button>
 					</div> <!-- /modal-footer -->
 				
 			</div><!-- /modal-content -->

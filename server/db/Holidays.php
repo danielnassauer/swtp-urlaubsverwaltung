@@ -34,8 +34,22 @@ class Holidays {
 			throw new Exception ( $conn->error );
 		}
 		
+		$conn->close ();
 		$holiday = new Holiday ( $name, $day );
 		return $holiday;
+	}
+
+	public static function removeHoliday($name) {
+		$conn = self::getDBConnection ();
+		
+		$sql = "DELETE FROM Holidays 
+				WHERE name='" . $name . "';";
+		
+		$result = $conn->query ( $sql );
+		if (! $result) {
+			throw new Exception ( $conn->error );
+		}
+		$conn->close ();
 	}
 
 	private static function getDBConnection() {

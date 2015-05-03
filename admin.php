@@ -1,6 +1,7 @@
 <?php
 require_once dirname ( __FILE__ ) . '/server/db/DBCreator.php';
 require_once dirname ( __FILE__ ) . '/server/db/HolidayRequests.php';
+require_once dirname ( __FILE__ ) . '/server/db/Holidays.php';
 
 if (isset ( $_POST ['create_holidayrequests_table'] )) {
 	try {
@@ -56,6 +57,17 @@ if (isset ( $_POST ['delete_holidays_table'] )) {
 	}
 }
 
+if (isset ( $_POST ['create_holiday'] )) {
+	date_default_timezone_set('UTC');
+	$day = gmmktime ( 0, 0, 0, $_POST ["holiday_month"], $_POST ["holiday_day"], $_POST ["holiday_year"] );
+	Holidays::createHoliday ( htmlentities($_POST ["holiday_name"], ENT_QUOTES), $day );
+}
+
+if (isset ( $_POST ['remove_holiday'] )) {
+	$name = $_POST['remove_holiday'];
+	Holidays::removeHoliday($name);
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -73,6 +85,7 @@ if (isset ( $_POST ['delete_holidays_table'] )) {
 <script src="js/model.js"></script>
 
 <script type="text/javascript">
+var months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
 function editSelectedPerson(id){
 	var person = getPerson(id);
@@ -91,7 +104,6 @@ function showUsers(){
 		html += "<tr id='user"+persons[i].id+"'>"+getUserRow(persons[i])+"</tr>";
 	}
 	$("#table_users").html(html);
-	console.log(persons);
 }
 
 function getUserRow(person){
@@ -123,8 +135,20 @@ function getUserRow(person){
 	return "<td>"+person.id+"</td><td>"+person.forename+" "+person.lastname+"</td><td>"+rem_hol+"</td><td>"+role+"</td><td>"+fieldservice+"</td><td>"+admin+"</td><td>"+button_ok+" "+button_cancel+"</td>";
 }
 
+function showHolidays(){
+	var holidays = getHolidays();
+	var html = "";
+	for(var i=0;i<holidays.length;i++){	
+		var button_remove = "<button type='submit' class='btn btn-default' name='remove_holiday' value='"+holidays[i].name+"'><span class='ion-trash-a'></span></button>";	
+		var date = new Date(holidays[i].day*1000);
+		html += "<tr><td>"+holidays[i].name+"</td><td>"+date.getDate()+". "+months[date.getMonth()]+" "+date.getFullYear()+"</td><td>"+button_remove+"</td></tr>";
+	}
+	$("#table_holidays").html(html);
+}
+
 $(document).ready(function() {
-	showUsers();	
+	showUsers();
+	showHolidays();	
 });
 </script>
 
@@ -215,6 +239,7 @@ $(document).ready(function() {
 											<th>Rolle</th>
 											<th>Außendienst</th>
 											<th>Admin</th>
+											<th>&nbsp;</th>
 										</tr>
 									</thead>
 									<tbody id="table_users">
@@ -240,11 +265,31 @@ $(document).ready(function() {
 
 						<div class="panel panel-default">
 							<div class="panel-body">
+								<table>
+									<tr>
+										<td>Name</td>
+										<td><input type="text" name="holiday_name"></td>
+									</tr>
+									<tr>
+										<td>Tag.Monat.Jahr</td>
+										<td><input type="text" name="holiday_day" maxlength="2" size="2">.<input
+											type="text" name="holiday_month" maxlength="2" size="2">.<input
+											type="text" name="holiday_year" maxlength="4" size="4"></td>
+									</tr>
+								</table>
+								<button type="submit" class="btn btn-default"
+									name="create_holiday">Feiertag erstellen</button>
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
 								<table class="table table-condensed table-striped">
 									<thead>
 										<tr>
 											<th>Feiertag</th>
 											<th>Datum</th>
+											<th>&nbsp;</th>
 										</tr>
 									</thead>
 									<tbody id="table_holidays">

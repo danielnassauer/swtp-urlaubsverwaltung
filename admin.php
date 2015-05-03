@@ -147,88 +147,120 @@ $(document).ready(function() {
 		</div>
 	</nav>
 
-	<form action="admin.php" method="POST">
-		<div class="container">
 
+	<div class="container-fluid">
+		<div class="row">
 
-			<!-- HOLIDAYREQUESTS TABLE -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Urlaubsanträge</h3>
+			<nav class="col-xs-2">
+				<div style="position: fixed">
+					<ul class="nav nav-stacked fixed" id="sidebar">
+						<li>
+							<ul class="nav nav-stacked">
+								<li><a href="#requests">Urlaubsanträge</a></li>
+								<li><a href="#users">Benutzer</a></li>
+								<li><a href="#holidays">Feiertage</a></li>
+							</ul>
+						</li>
+					</ul>
 				</div>
-				<div class="panel-body">
-					<button type="submit" class="btn btn-default"
-						name="create_holidayrequests_table">Tabelle erstellen</button>
-					<button type="submit" class="btn btn-default"
-						name="delete_holidayrequests_table">Tabelle löschen</button>
+			</nav>
 
-					<table>
-						<tr>
-							<th>HolidayRequests</th>
-						</tr>
-				<?php
-				try {
-					foreach ( HolidayRequests::getRequests () as $request ) {
-						echo "<tr>";
-						echo "<td>" . $request->toJSON () . "</td>";
-						echo "</tr>";
-					}
-				} catch ( Exception $e ) {
-					echo '<tr><td colspan="10">' . $e->getMessage () . '</td></tr>';
-				}
-				?>
-				</table>
-				</div>
+			<div class="col-xs-10">
+				<form action="admin.php" method="POST">
+
+					<!-- HOLIDAYREQUESTS TABLE -->
+					<section id="requests">
+						<h1 class="page-header">Urlaubsanträge</h1>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<button type="submit" class="btn btn-default"
+									name="create_holidayrequests_table">Tabelle erstellen</button>
+								<button type="submit" class="btn btn-default"
+									name="delete_holidayrequests_table">Tabelle löschen</button>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<table>
+									<tr>
+										<th>HolidayRequests</th>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+					</section>
+
+					<!-- USERS TABLE -->
+					<section id="users">
+						<h1 class="page-header">Benutzer</h1>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<button type="submit" class="btn btn-default"
+									name="create_users_table">Tabelle erstellen</button>
+								<button type="submit" class="btn btn-default"
+									name="delete_users_table">Tabelle löschen</button>
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<table class="table table-condensed table-striped">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Verbleibende Urlaubstage</th>
+											<th>Rolle</th>
+											<th>Außendienst</th>
+											<th>Admin</th>
+										</tr>
+									</thead>
+									<tbody id="table_users">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+
+					<!-- HOLIDAYS TABLE -->
+					<section id="holidays">
+						<h1 class="page-header">Feiertage</h1>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<button type="submit" class="btn btn-default"
+									name="create_holidays_table">Tabelle erstellen</button>
+								<button type="submit" class="btn btn-default"
+									name="delete_holidays_table">Tabelle löschen</button>
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<table class="table table-condensed table-striped">
+									<thead>
+										<tr>
+											<th>Feiertag</th>
+											<th>Datum</th>
+										</tr>
+									</thead>
+									<tbody id="table_holidays">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+
+				</form>
 			</div>
-
-			<!-- USERRIGHTS TABLE -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Benutzer</h3>
-				</div>
-				<div class="panel-body">
-
-					<button type="submit" class="btn btn-default"
-						name="create_users_table">Tabelle erstellen</button>
-					<button type="submit" class="btn btn-default"
-						name="delete_users_table">Tabelle löschen</button>
-
-					<table class="table table-condensed table-striped">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Verbleibende Urlaubstage</th>
-								<th>Rolle</th>
-								<th>Außendienst</th>
-								<th>Admin</th>
-							</tr>
-						</thead>
-						<tbody id="table_users">
-
-						</tbody>
-					</table>
-				</div>
-			</div>
-
-			<!-- Holidays TABLE -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Feiertage</h3>
-				</div>
-				<div class="panel-body">
-
-					<button type="submit" class="btn btn-default"
-						name="create_holidays_table">Tabelle erstellen</button>
-					<button type="submit" class="btn btn-default"
-						name="delete_holidays_table">Tabelle löschen</button>
-				</div>
-			</div>
-
-
 		</div>
+	</div>
 
-	</form>
+
 </body>
 
 </html>

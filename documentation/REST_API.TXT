@@ -30,7 +30,7 @@ Es existieren folgende Ressourcen:
 * Holiday:
    {
       name:                string,             // Name des Feiertags
-      day:                 int                 // Datum des Feiertags als Unix-Timestamp
+      day:                 int                 // Datum des Feiertags als Unix-Timestamp (Jahr = 0)
    }
 
 

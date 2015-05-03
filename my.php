@@ -67,6 +67,8 @@
 		createHolidayRequest(start, end, user.id, substitutes, type);
 		showOwnHolidayRequests();
 		restUrlaub();
+		$("#calendar").fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 	
 	/*

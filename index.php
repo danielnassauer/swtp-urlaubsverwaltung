@@ -160,12 +160,33 @@
 		}
 		return events;
 	}
+	
+	/*
+	*	Füllt den Kalender mit Feiertagen.
+	*/
+	function holidays(){
+		var events = [];		
+		var holidays = getHolidays();
+		for (var i = 0; i < holidays.length; i++) {
+			var holiday = holidays[i];
+			var title = holiday.name;
+			var start = unixTS2calendarTS(holiday.day);
+			events.push({
+			title : title,
+			start : start,
+			color: '#ff9f89',
+			rendering: 'background'
+		});
+	}
+	return events;
+	}
 
 	/*
 	 * Alle HolidayRequests (gefiltert) werden in den Kalendar eingetragen.
 	 */
 	function updateCalendar() {
 		$("#calendar").fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", holidays());
 		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 

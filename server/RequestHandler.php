@@ -1,6 +1,7 @@
 <?php
 require_once dirname ( __FILE__ ) . '/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/db/Persons.php';
+require_once dirname ( __FILE__ ) . '/db/Holidays.php';
 class RequestHandler {
 
 	public function __construct($request) {
@@ -56,6 +57,16 @@ class RequestHandler {
 				if (isset ( $id )) {
 					$holReq = $request->content;
 					HolidayRequests::editRequest ( $holReq ["id"], $holReq ["start"], $holReq ["end"], $holReq ["substitutes"], $holReq ["status"], $holReq ["comment"] );
+				}
+			}
+		} elseif ($ressource == "Holiday") {
+			if ($request->method == "GET") {
+				if (! isset ( $id )) {
+					$holidays = array ();
+					foreach ( Holidays::getHolidays () as $holiday ) {
+						array_push ( $holidays, $holiday->toArray () );
+					}
+					echo json_encode ( $holidays );
 				}
 			}
 		}

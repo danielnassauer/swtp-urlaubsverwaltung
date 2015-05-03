@@ -36,12 +36,12 @@ class Persons {
 			$field_service = "FALSE";
 		}
 		// Erst versuchen, neuen Eintrag zu erstellen
-		$sql = "INSERT INTO Users (user, role, fieldservice, is_admin) 
-				VALUES ('" . $id . "', '1', FALSE, FALSE)";
+		$sql = "INSERT INTO Users (user, role, fieldservice, is_admin, remaining_holiday) 
+				VALUES ('" . $id . "', '1', FALSE, FALSE, '25')";
 		$conn->query ( $sql );
 		// Dann bestehenden Eintrag abändern
 		$sql = "UPDATE Users
-				SET fieldservice=" . $field_service . ", role='" . $role . "', is_admin=" . $is_admin . "
+				SET fieldservice=" . $field_service . ", role='" . $role . "', is_admin=" . $is_admin . ", remaining_holiday='" . $remaining_holiday . "' 
 				WHERE user=" . $id;
 		$conn->query ( $sql );
 		$conn->close ();
@@ -57,7 +57,7 @@ class Persons {
 	}
 
 	private static function getConnection() {
-		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;		
+		global $mysql_servername, $mysql_username, $mysql_password, $db_provider;
 		
 		// Create connection
 		$conn = new mysqli ( $mysql_servername, $mysql_username, $mysql_password, $db_provider );
@@ -81,15 +81,17 @@ class Persons {
 		
 		while ( $row = $result->fetch_assoc () ) {
 			$fieldservice = false;
+			$remaining_holiday = 25;
 			$role = 1;
 			$is_admin = false;
 			$id = $row ["id"];
 			if (array_key_exists ( $id, $users )) {
 				$fieldservice = $users [$id] ["fieldservice"];
 				$role = $users [$id] ["role"];
+				$remaining_holiday = $users [$id] ["remaining_holiday"];
 				$is_admin = $users [$id] ["is_admin"];
 			}
-			$p = new Person ( $id, $row ["vorname"], $row ["name"], $row ["abteilung"], $fieldservice, 25, $role, $is_admin );
+			$p = new Person ( $id, $row ["vorname"], $row ["name"], $row ["abteilung"], $fieldservice, $remaining_holiday, $role, $is_admin );
 			array_push ( self::$persons, $p );
 		}
 		
@@ -98,13 +100,14 @@ class Persons {
 
 	private static function getUsers() {
 		$conn = self::getUserDBConnection ();
-		$sql = "SELECT user, role, fieldservice, is_admin FROM Users";
+		$sql = "SELECT user, role, remaining_holiday, fieldservice, is_admin FROM Users";
 		$result = $conn->query ( $sql );
 		
 		$users = array ();
 		while ( $row = $result->fetch_assoc () ) {
 			$users [$row ["user"]] = array (
 					"role" => $row ["role"],
+					"remaining_holiday" => $row ["remaining_holiday"],
 					"fieldservice" => $row ["fieldservice"] == 1,
 					"is_admin" => $row ["is_admin"] == 1 
 			);

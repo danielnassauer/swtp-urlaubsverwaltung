@@ -58,10 +58,11 @@ if (isset ( $_POST ['delete_users_table'] )) {
 
 function editSelectedPerson(id){
 	var person = getPerson(id);
+	var remaining_holiday = $("#edit_remhol_" + id).val();
 	var role = $("#edit_role_" + id).val();
 	var fieldservice = $("#edit_fieldservice_" + id).val() == "Ja";
 	var admin = $("#edit_admin_" + id).val() == "Ja";
-	editPerson(id, fieldservice, person.remaining_holiday, role, admin);
+	editPerson(id, fieldservice, remaining_holiday, role, admin);
 	showUsers();
 }
 
@@ -79,6 +80,7 @@ function getUserRow(person){
 	var button_ok = "<span class='btn btn-default' onclick='editSelectedPerson("+person.id+")'><span class='ion-checkmark-round'></span></span>";
 	var button_cancel = "<span class='btn btn-default' onclick='showUsers()'><span class='ion-close-round'></span></span>";
 	var role = "<select class='form-control' id='edit_role_"+person.id+"'>";
+	var rem_hol = "<input type='text' value='"+person.remaining_holiday+"' id='edit_remhol_"+person.id+"'>";
 	if(person.role == 1){
 		role += "<option value='1' selected>Mitarbeiter</option><option value='2'>Abteilungsleiter</option><option value='3'>Geschäftsleitung</option></select>";
 	}
@@ -100,7 +102,7 @@ function getUserRow(person){
 	}else{
 		admin += "<option>Ja</option><option selected>Nein</option></select>";
 	}
-	return "<td>"+person.id+"</td><td>"+person.forename+" "+person.lastname+"</td><td>"+role+"</td><td>"+fieldservice+"</td><td>"+admin+"</td><td>"+button_ok+" "+button_cancel+"</td>";
+	return "<td>"+person.id+"</td><td>"+person.forename+" "+person.lastname+"</td><td>"+rem_hol+"</td><td>"+role+"</td><td>"+fieldservice+"</td><td>"+admin+"</td><td>"+button_ok+" "+button_cancel+"</td>";
 }
 
 $(document).ready(function() {
@@ -178,6 +180,7 @@ $(document).ready(function() {
 							<tr>
 								<th>ID</th>
 								<th>Name</th>
+								<th>Verbleibende Urlaubstage</th>
 								<th>Rolle</th>
 								<th>Außendienst</th>
 								<th>Admin</th>

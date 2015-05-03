@@ -202,3 +202,17 @@ function editHolidayRequest(id, start, end, substitutes, status, comment) {
 	}
 	PUT("HolidayRequest/" + id, r);
 }
+
+/**
+ * Liefert alle Feiertage als Liste.
+ * 
+ * @returns {Array} Liste von Feiertagen als Holiday-Objekt
+ */
+function getHolidays() {
+	var recv = GET("Holiday");
+	var holidays = [];
+	recv.forEach(function(data) {
+		holidays.push(new Holiday(data["name"], data["day"]));
+	});
+	return holidays;
+}

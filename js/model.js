@@ -66,3 +66,16 @@ var HolidayRequest = function(id, start, end, person, substitutes, type,
 	this.status = status;
 	this.comment = comment;
 };
+
+/**
+ * Repräsentiert einen Feiertag
+ * 
+ * @param name
+ *            Name des Feiertags
+ * @param day
+ *            Datum des Feiertags als Unix-Timestamp
+ */
+var Holiday = function(name, day) {
+	this.name = name;
+	this.day = day;
+};

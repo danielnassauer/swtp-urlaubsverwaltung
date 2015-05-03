@@ -69,7 +69,7 @@
 		createHolidayRequest(start, end, user.id, substitutes, type);
 		showOwnHolidayRequests();
 		restUrlaub();
-		$("#calendar").fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("removeEvents");
 		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 	
@@ -147,8 +147,9 @@
 				state = 4;
 				editHolidayRequest(id, request.start, request.end, request.substitutes, state, request.comment);
 				$('#deleteHoliday').modal("hide");
+				$("#calendar").fullCalendar("removeEvents");
+				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 				showOwnHolidayRequests();
-				
 			});
 		}
 		else{
@@ -239,7 +240,7 @@
 				own_requests.push(request);
 			}
 		}
-		console.log("hallo");
+		
 		for (var i = 0; i < own_requests.length; i++) {
 			var request = own_requests[i];
 			var person;
@@ -258,9 +259,31 @@
 					start : start,
 					end : end,
 				});
-				
+				console.log("hallo");
 		}
 		return events;
+	}
+	
+	/*
+	*	Füllt den Kalender mit Feiertagen.
+	*/
+	function holidays(){
+		var events = [];		
+		var holidays = getHolidays();
+		for (var i = 0; i < holidays.length; i++) {
+			var holiday = holidays[i];
+			var title = holiday.name;
+			var start = unixTS2calendarTS(holiday.day);
+			events.push({
+			title : title,
+			start : start,
+			//end : start,
+			color: '#ff9f89',
+			overlap: false,
+			rendering: 'background'
+		});
+	}
+	return events;
 	}
 
 	$(document).ready(function() {
@@ -286,8 +309,8 @@
 			events : [ {} ],
 			eventColor : '#338005'
 		});
+		$('#calendar').fullCalendar("addEventSource", holidays());
 		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
-		
 	});
 </script>
 </head>

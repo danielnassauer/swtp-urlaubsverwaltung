@@ -174,7 +174,9 @@
 			events.push({
 			title : title,
 			start : start,
+			//end : start,
 			color: '#ff9f89',
+			overlap: false,
 			rendering: 'background'
 		});
 	}

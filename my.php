@@ -8,16 +8,13 @@
 <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
 <link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
-<link rel="stylesheet/less" type="text/css"
-	href="lib/datepicker/less/datepicker.less" />
+
 
 <script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 <script src="lib/fullcalendar/lib/moment.min.js"></script>
 <script src="lib/fullcalendar/fullcalendar.js"></script>
 
-<script src="lib/datepicker/js/bootstrap-datepicker.js"></script>
-<script src="datepicker.css"></script>
 
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
@@ -149,6 +146,11 @@
 
 		}
 		
+	function showAlert(){
+		$('#wrongDate').modal("show");
+		
+	}
+		
 	function offerNewHoliday(id){
 			
 		var req = getHolidayRequest(id);
@@ -167,14 +169,28 @@
 		var newStart = (Date.parse(startDate))/1000;
 		var newEnd = (Date.parse(endDate))/1000;
 		
+		if(newStart > newEnd){
+			console.log("HIER");
+			showAlert();
+			return;
+		}
+		
 		var state = 2;
 		
 		editHolidayRequest(id, newStart, newEnd, req.substitutes, state, req.comment);
 		
-		$("#calendar").fullCalendar("removeEvents");
-		$('#calendar').fullCalendar("addEventSource", holidays());
-		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
-		showOwnHolidayRequests();	
+		updatePage();	
+	}
+	
+	function cancelRequest(id){
+		var request = getHolidayRequest(id);
+		
+		var status = 4;
+		
+		editHolidayRequest(id, request.start, request.end, request.substitutes, status, request.comment);
+		
+		updatePage();
+		
 	}
 		
 	function addRequest(request){
@@ -362,7 +378,8 @@
 </script>
 </head>
 
-<body>
+<body>	
+	
 	<div id="popup" class="modal fade">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">

@@ -221,6 +221,7 @@
 				right : 'year,month'
 			},
 			defaultView : 'year',
+			yearColumns : 1,
 			//weekends: false,
 			firstDay : 0
 		});

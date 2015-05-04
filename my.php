@@ -229,12 +229,7 @@
 						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
 			}else if(request.status == 4){
 			
-			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
-						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
-						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>"
-						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
+			rows += "";
 			}
 	}	
 		$("#holidayrequests_list").html(rows);
@@ -342,6 +337,10 @@
 </head>
 
 <body>
+<style>
+ p {padding-top: 50px;}
+</style>
+<p>
 	<div id="popup" class="modal fade">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
@@ -410,7 +409,7 @@
 	</div> <!-- /modal-dialog -->
 </div> <!-- /popup -->
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<span id ="loginPerson"class="navbar-brand"></span>
@@ -566,7 +565,7 @@
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /changeHoliday -->
-		
+</p>	
 </body>
 
 </html>

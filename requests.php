@@ -168,8 +168,9 @@
 		
 		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_me = {"filter":withoutMe, "attachment": user.id};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting]);
+		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_me]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){
@@ -239,9 +240,10 @@
 		var requests = getHolidayRequests();
 
 		
-		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id}
+		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id};
+		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_my_subs]);
+		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready]);
 		
 		var rows = "";
 		for (var i = 0; i < requests.length; i++){
@@ -309,25 +311,17 @@
 		}
 
 
-function updateManagementTable(){
-	
-		function abteilungsleiterFilter(request, attachmet) {;
-			persons = attachment["persons"];
-			for(var i = 0; i < persons.length; i++){
-				return persons[i].role == 2;
-				}
-			}
-			
-		
+function updateManagementTable(){		
 		
 		var requests = getHolidayRequests()
 		var persons = getPersons();
 		
-		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
-		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
-		var filter_leitung = {"filter":abteilunsleiterFilter, "attachment": {"persons": persons}};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_leitung]);
+		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_leitung = {"filter":abteilungsleiterFilter, "attachment": {"persons": persons}};
+		var filter_me = {"filter":withoutMe, "attachment": user.id};
+		
+		requests = filterHolidayRequests(requests,[filter_me, filter_waiting, filter_leitung]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){

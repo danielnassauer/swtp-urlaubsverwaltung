@@ -142,3 +142,12 @@ function abteilungsleiterFilter(request, attachment) {
 				}
 			}
 }
+/**
+ * Filtert HolidayRequests, deren Status = wartend oder angenommen ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status = wartend oder angenommen ist.
+ */
+function readyStatusFilter(request) {
+	return (request.status == 1 || request.status == 2);
+}

@@ -93,3 +93,52 @@ function isSubstituteFilter(request, person_id) {
 function isRequesterFilter(request, person_id) {
 	return request.person == person_id;
 }
+
+/**
+ * Filtert HolidayRequests anhand des Antragstellers
+ * 
+ * @param request
+ *            HolidayRequest
+ * @param person_id
+ *            ID des Antragstellers
+ * @returns {Boolean} true, wenn die Person nicht der Antragsteller des Requests ist.
+ */
+function withoutMe(request, person_id){
+		return request.person != person_id;
+}
+
+/**
+ * Filtert HolidayRequests nach Geschäftsleitung
+ * 
+ * @param request
+ *            HolidayRequest
+ * @param attachment
+ *            Dictionary: "persons": Array von allen Personen
+ * @returns Personen die nicht Geschäftsleiter sind.
+ */
+function leitungsFilter(request, attachment) {
+			persons = attachment["persons"];
+			for(var i = 0; i < persons.length; i++){
+				if (!(persons[i].role == 3)){
+					return persons[i];
+				}
+			}
+}
+
+/**
+ * Filtert HolidayRequests nach Abteilungsleitern
+ * 
+ * @param request
+ *            HolidayRequest
+ * @param attachment
+ *            Dictionary: "persons": Array von allen Personen
+ * @returns Personen die Abteilungsleiter sind.
+ */
+function abteilungsleiterFilter(request, attachment) {
+			persons = attachment["persons"];
+			for(var i = 0; i < persons.length; i++){
+				if (persons[i].role == 2){
+					return persons[i];
+				}
+			}
+}

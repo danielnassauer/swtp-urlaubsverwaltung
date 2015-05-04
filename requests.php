@@ -89,31 +89,46 @@
 			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, comment);
 			}else {
 				$("#editHoliday").modal("show");
-				offerNewHoliday();
+				$('#change_holiday_button').on('click', function () {
+					offerNewHoliday(id);
+				});
+				
 			}
 		updateDepartmentTable();
 		updateMySubstituteTable();
 	}
 	
-	function offerNewHoliday(){
-		$('#datepickerTest').datepicker({
-			dateFormat: 'dd.mm.yy',
-			onSelect: function(dateText, inst) {
-			$("input[name='test']").val(dateText);		
-		}});
-
-		$('#datepickerStart').datepicker({		
-				format: 'dd.mm.yyyy'
-		});
-		$('#datepickerEnd').datepicker({
-				format: 'dd.mm.yyyy'
-		});
+	function offerNewHoliday(id){
+			
+		var req = getHolidayRequest(id);
 		
+		var startDay = $('#start_day').val();
+		var startMonth = $('#start_month').val();
+		var startYear = $('#start_year').val();
+		
+		var endDay = $('#end_day').val();
+		var endMonth = $('#end_month').val();
+		var endYear = $('#end_year').val();
+		
+		var startDate = startMonth + "/" + startDay + "/" + startYear + " 06:00:00";
+		var endDate = endMonth + "/" + endDay + "/" + endYear + " 06:00:00";
+		
+		var newStart = (Date.parse(startDate))/1000;
+		var newEnd = (Date.parse(endDate))/1000;
+		
+		var state = 2;
+		
+		var comment = $('#change_comment').val();
+		
+		editHolidayRequest(id, newStart, newEnd, req.substitutes, state, comment);
+		
+		updateMySubstituteTable();
+		updateDepartmentTable();
 
 		
 	}
 	
-	function test(){
+	/*function test(){
 		Array.prototype.move = function(from,to){
 		this.splice(to,0,this.splice(from,1)[0]);
 		return this;
@@ -135,7 +150,7 @@
 		var datNeu = Date.parse(fertig);
 		
 		console.log(datNeu/1000);
-		}
+		}*/
 	
 	
 	function updateDepartmentTable(){
@@ -323,7 +338,7 @@
 		if(user.role != 1){
 			updateDepartmentTable();
 		}
-		offerNewHoliday();
+		
 	})
 </script>
 <body>
@@ -399,14 +414,14 @@
 	</div> <!-- /panel -->
 	</div> <!-- /container -->
 	
-	<div class="input-group input-group-lg">
+<!--	<div class="input-group input-group-lg">
 		<span class="input-group-addon" id="sizing-addon1">Startdatum</span>
 		<input type="text" class="form-control " name="test" placeholder="Klicken um neues Startdatum zu wählen" aria-describedby="sizing-addon1" id="datepickerTest">
 	</div>
 	
 	<div>
 		<button type="button" class="btn btn-primary" onclick="test()">Geparstes Datum in Konsole</button>
-	</div>
+	</div> -->
 	
 	<!-- Popup um Vertretung zuzustimmen oder abzulehnen -->
 	<div id="sub_popup" class="modal fade">
@@ -504,20 +519,37 @@
 					<h4>Urlaubsanträge bearbeiten</h4>
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
-						<div class="input-group input-group-lg">
-							<span class="input-group-addon" id="sizing-addon1">Startdatum</span>
-							<input type="text" class="form-control clsDatePicker" placeholder="KLicken um neues Startdatum zu wählen" aria-describedby="sizing-addon1" id="datepickerStart">
-						</div>
 						
-						<div class="input-group input-group-lg">
-							<span class="input-group-addon" id="sizing-addon1">Enddatum</span>
-							<input type="text" class="form-control" placeholder="KLicken um neues Enddatum zu wählen" aria-describedby="sizing-addon1" id="datepickerEnd">
-						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Neuen Urlaubstermin vorschlagen:</h3>
+							</div>
+							<div class="panel-body">
+								<table>
+									<tr>
+										<td>Anfangsdatum: Tag.Monat.Jahr</td>
+										<td><input type="text" id="start_day" maxlength="2" size="2">.<input
+											type="text" id="start_month" maxlength="2" size="2">.<input
+											type="text" id="start_year" maxlength="4" size="4">
+											</td>
+									</tr>
+									<tr>
+										<td>Enddatum: Tag.Monat.Jahr</td>
+										<td><input type="text" id="end_day" maxlength="2" size="2">.<input
+											type="text" id="end_month" maxlength="2" size="2">.<input
+											type="text" id="end_year" maxlength="4" size="4"></td>
+									</tr>
+								</table>
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Begründung der Änderung" aria-describedby="sizing-addon2" id="change_comment">
+								</div>
+							</div><!-- /panel-body -->
+						</div><!-- /panel -->
 
 
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-dismiss="modal">Urlaubsantrag ändern</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" id="change_holiday_button">Urlaubsantrag ändern</button>
 					</div> <!-- /modal-footer -->
 				
 			</div><!-- /modal-content -->

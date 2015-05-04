@@ -143,9 +143,9 @@
 	
 	function changeHoliday(id){
 			$('#editHoliday').modal("show");
-			$('#offer_new_holiday_button').on('click', function () {
-					offerNewHoliday(id);
-				});			
+			$('#offer_new_holiday_button').attr("onclick",
+					"offerNewHoliday(" + id +")");
+					
 
 		}
 		

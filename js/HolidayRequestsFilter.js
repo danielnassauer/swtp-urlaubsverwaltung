@@ -119,7 +119,7 @@ function withoutMe(request, person_id){
 function leitungsFilter(request, attachment) {
 			persons = attachment["persons"];
 			for(var i = 0; i < persons.length; i++){
-				if (!(persons[i].role == 3)){
+				if (persons[i].role != 3){
 					return persons[i];
 				}
 			}
@@ -141,4 +141,13 @@ function abteilungsleiterFilter(request, attachment) {
 					return persons[i];
 				}
 			}
+}
+/**
+ * Filtert HolidayRequests, deren Status = wartend oder angenommen ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status = wartend oder angenommen ist.
+ */
+function readyStatusFilter(request) {
+	return (request.status == 1 || request.status == 2);
 }

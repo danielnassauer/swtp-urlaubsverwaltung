@@ -169,6 +169,9 @@ function createHolidayRequest(start, end, person, substitutes, type) {
 		type : type
 	}
 	var data = POST("HolidayRequest", r);
+	if(data == null){
+		return null;
+	}
 	return new HolidayRequest(data["id"], data["start"], data["end"],
 			data["person"], data["substitutes"], data["type"], data["status"],
 			data["comment"]);

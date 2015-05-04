@@ -168,8 +168,10 @@
 		
 		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_leitung = {"filter":leitungsFilter, "attachment":{"persons": persons}};
+		var filter_me = {"filter":withoutMe, "attachment": user.id};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting]);
+		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_me, filter_leitung]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){
@@ -193,15 +195,15 @@
 				var check = []
 				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
 				if (check[j] == 1){
-					subStatus = "noch keine Antwort ";
+					subStatus = "noch keine Antwort";
 				}
 				if(check[j] == 2){
-					subStatus = "Vertretung angenommen ";
+					subStatus = "Vertretung angenommen";
 				} else if (check[j] == 3){
 					subStatus = "Vertretung abgelehnt ";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus;
+						+ subStatus + "<br></br>";
 				if (id == user.id) {
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
@@ -239,9 +241,10 @@
 		var requests = getHolidayRequests();
 
 		
-		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id}
+		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id};
+		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_my_subs]);
+		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready]);
 		
 		var rows = "";
 		for (var i = 0; i < requests.length; i++){
@@ -266,15 +269,15 @@
 				var check = []
 				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
 				if (check[j] == 1){
-					subStatus = "noch keine Antwort ";
+					subStatus = "noch keine Antwort <br></br>";
 				}
 				if(check[j] == 2){
-					subStatus = "Vertretung angenommen ";
+					subStatus = "Vertretung angenommen <br></br>";
 				} else if (check[j] == 3){
-					subStatus = "Vertretung abgelehnt ";
+					subStatus = "Vertretung abgelehnt <br></br>";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus;
+						+ subStatus + "<br></br>";
 				if (id == user.id) {
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
@@ -309,25 +312,17 @@
 		}
 
 
-function updateManagementTable(){
-	
-		function abteilungsleiterFilter(request, attachmet) {;
-			persons = attachment["persons"];
-			for(var i = 0; i < persons.length; i++){
-				return persons[i].role == 2;
-				}
-			}
-			
-		
+function updateManagementTable(){		
 		
 		var requests = getHolidayRequests()
 		var persons = getPersons();
 		
-		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
-		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
-		var filter_leitung = {"filter":abteilunsleiterFilter, "attachment": {"persons": persons}};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_leitung]);
+		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_leitung = {"filter":abteilungsleiterFilter, "attachment": {"persons": persons}};
+		var filter_me = {"filter":withoutMe, "attachment": user.id};
+		
+		requests = filterHolidayRequests(requests,[filter_me, filter_waiting, filter_leitung]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){
@@ -359,7 +354,7 @@ function updateManagementTable(){
 					subStatus = "Vertretung abgelehnt ";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus;
+						+ subStatus + "<br></br>";
 				if (id == user.id) {
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
@@ -461,10 +456,6 @@ function updateManagementTable(){
 	})
 </script>
 <body>
-<style>
- p {padding-top: 50px;}
-</style>
-<p>
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -485,6 +476,7 @@ function updateManagementTable(){
 			</div>
 		</div>
 	</nav>
+	<div style="padding-top:50px"></div>
 	
 	<div class="container">   <!-- Tabelle für Mitarbeiter -->
 	<div class="panel panel-default">
@@ -765,6 +757,5 @@ function updateManagementTable(){
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /changeHoliday -->
-</p>
 </body>
 </html>

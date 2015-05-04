@@ -371,10 +371,6 @@
 </head>
 
 <body>
-<style>
- p {padding-top: 50px;}
-</style>
-<p>
 	<div id="popup" class="modal fade">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
@@ -463,7 +459,7 @@
 			</div>
 		</div>
 </nav>
-
+<div style="padding-top:50px"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-7">
@@ -489,7 +485,6 @@
 				</table>
 			</div>
 		</div> <!-- /navbar -->
-		
 		
 	<div id="changeHoliday"class="modal fade">
 		<div class="modal-dialog">
@@ -586,8 +581,6 @@
 								</table>
 							</div><!-- /panel-body -->
 						</div><!-- /panel -->
-						
-						
 
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
@@ -609,17 +602,13 @@
 					<h4>Fehler</h4>
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
-						<p>Sie haben ein Datum gewählt welches bereits vergangen ist</p>
-						
+						<p>Sie haben ein Datum gewählt welches bereits vergangen ist</p>	
 				</div> <!-- /modal-body -->
 				<div class="modal-footer">
 						<button type="button" class="btn btn-primary" data-dismiss="modal">Zurück</button>
-				</div>
-				
+				</div>	
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
-	</div><!-- /changeHoliday -->
-</p>	
+	</div><!-- /changeHoliday -->	
 </body>
-
 </html>

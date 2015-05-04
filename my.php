@@ -173,7 +173,7 @@
 		
 		var liveDate = new Date();
 		
-		if(newStart > newEnd || liveDate > newStart){
+		if(newStart > newEnd){
 			showAlert();
 			return;
 		}

@@ -48,7 +48,7 @@ class HolidayCalculator {
 				}
 			}
 		}
-		return $count + 1;
+		return $count;
 	}
 }
 

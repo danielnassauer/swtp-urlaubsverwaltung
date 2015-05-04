@@ -116,13 +116,13 @@ class RequestHandler {
 					// Rechte prüfen
 					$start = $orig_holReq->getStart ();
 					$end = $orig_holReq->getEnd ();
-					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {
-						$person = Persons::getPerson ( $orig_holReq->getPerson () );
+					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {						
 						// zuerst zuvor verbrauchte Urlaubstage wieder gutschreiben
-						$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
-						self::addRemainingHoliday ( $person, $used_holidays );
 						$person = Persons::getPerson ( $orig_holReq->getPerson () );
+						$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
+						self::addRemainingHoliday ( $person, $used_holidays );						
 						// dann neu verbrauchte Urlaubstage wieder abziehen
+						$person = Persons::getPerson ( $orig_holReq->getPerson () );
 						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
 						self::subRemainingHoliday ( $person, $used_holidays );
 						
@@ -132,6 +132,14 @@ class RequestHandler {
 					$substitutes = $orig_holReq->getSubstitutes ();
 					if (UserRights::editSubstitutes ( $orig_holReq->getSubstitutes (), $holReq ["substitutes"] )) {
 						$substitutes = $holReq ["substitutes"];
+					}
+					
+					//TODO rechte prüfen
+					if($holReq ["status"] == 4){
+						//beim stornieren urlaubstage zurückbuchen
+						$person = Persons::getPerson ( $orig_holReq->getPerson () );
+						$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
+						self::addRemainingHoliday ( $person, $used_holidays );
 					}
 					
 					HolidayRequests::editRequest ( $id, $start, $end, $substitutes, $holReq ["status"], $holReq ["comment"] );

@@ -37,6 +37,7 @@
 	}
 	function restUrlaub(){
 		var rows=0;
+		user = getPerson(user.id);
 		rows = user.remaining_holiday;
 			$("#resttage").html(rows);
 	}
@@ -75,10 +76,10 @@
 			if(createHolidayRequest(start, end, user.id, substitutes, type) != null){
 				showOwnHolidayRequests();
 				restUrlaub();
+				console.log("hallo");
 				$('#calendar').fullCalendar("removeEvents");
 				$('#calendar').fullCalendar("addEventSource", holidays());
 				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
-				
 			}else {
 			$("#noHolidays").modal("show");
 		}
@@ -237,7 +238,7 @@
 			var end = new Date(request.end * 1000);
 				if (request.status == 1){
 					
-				rows += "<tr class='alert alert-success'><td onclick='onHolidayRequestEdit(" + request.id
+				rows += "<tr class='alert alert-success' data-toggle='tooltip' data-placement='left' title='Urlaubsantrag Bestätigt'><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>" + request.type + "</td><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>" + start.getDate()
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
@@ -248,7 +249,7 @@
 						+ dictInSub(request.substitutes) + "</td><td><form action='PDFCreator.php' method='POST' target='_blank'><button type='submit' class='btn btn-default'>pdf</button><input type='hidden' name='pdf_holidayrequest' value='"+request.id+"'></form></td></tr>";
 			}else if(request.status == 2){
 				
-				rows += "<tr class='alert alert-warning' onclick='onHolidayRequestEdit(" + request.id
+				rows += "<tr class='alert alert-warning' data-toggle='tooltip' data-placement='left' title='Urlaubsantrag noch nicht Bestätigt' onclick='onHolidayRequestEdit(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
@@ -256,7 +257,7 @@
 						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
 			}else if(request.status == 3){
 				
-			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
+			rows += "<tr class='alert alert-danger' data-toggle='tooltip' data-placement='left' title='Urlaubsantrag Abgelehnt' onclick='onHolidayRequestEdit(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
 						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
@@ -314,7 +315,6 @@
 					start : start,
 					end : end,
 				});
-				console.log("hallo");
 		}
 		return events;
 	}

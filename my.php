@@ -541,9 +541,7 @@
 					<h4>Urlaubsanträge löschen</h4>
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
-
 					<p>Möchten Sie ihren Urlaubsantrag wirklich stornieren?</p>
-
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Nein, doch nicht</button>

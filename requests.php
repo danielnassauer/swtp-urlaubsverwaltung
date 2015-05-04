@@ -152,29 +152,7 @@
 		
 	}
 	
-	/*function test(){
-		Array.prototype.move = function(from,to){
-		this.splice(to,0,this.splice(from,1)[0]);
-		return this;
-		};
-		
-		var hey = $('#datepickerTest').val();
-		var so = hey.toString();
-		
-		var res = so.split(".");
-		res.move(0,1);
-		
-		var mon = res[0] + "/";
-		var tag = res[1] + "/";
-		var jahr = res[2] + " 06:00:00";
-		
-		var tagmon = mon.concat(tag);
-		var fertig = tagmon.concat(jahr);
-		
-		var datNeu = Date.parse(fertig);
-		
-		console.log(datNeu/1000);
-		}*/
+
 	
 	
 	function updateDepartmentTable(){
@@ -223,8 +201,17 @@
 				}
 			}		
 			
-			console.log(subs);
-			console.log(request.substitutes);
+			var getState = request.status;
+			var state = "";
+			if(getState == 1){
+					state = "angenommen";
+			} else if(getState == 2){
+					state = "wartend"
+				} else if(getState == 3){
+					state = "abgelehnt"
+				} else{
+					state = "storniert"
+				}
 			
 			rows += "<tr onclick='onDepartmentHolidayRequestEdit(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + colleague
@@ -232,7 +219,7 @@
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + request.status + "</td></tr>";
+						+ "</td><td>" + state + "</td></tr>";
 			
 			}
 		
@@ -287,13 +274,26 @@
 				}
 			}			
 			
+			
+			var getState = request.status;
+			var state = "";
+			if(getState == 1){
+					state = "angenommen";
+			} else if(getState == 2){
+					state = "wartend"
+				} else if(getState == 3){
+					state = "abgelehnt"
+				} else{
+					state = "storniert"
+				}
+			
 			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + request.status + "</td></tr>";
+						+ "</td><td>" + state + "</td></tr>";
 			
 			}
 			
@@ -302,6 +302,89 @@
 		
 		}
 
+
+function updateManagementTable(){
+	
+		function abteilungsleiterFilter(request, attachmet) {;
+			persons = attachment["persons"];
+			for(var i = 0; i < persons.length; i++){
+				return persons[i].role == 2;
+				}
+			}
+			
+		
+		
+		var requests = getHolidayRequests()
+		var persons = getPersons();
+		
+		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
+		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_leitung = {"filter":abteilunsleiterFilter, "attachment": {"persons": persons}};
+		
+		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_leitung]);
+		
+		var rows = "";
+		for (i = 0; i < requests.length; i++){
+			
+			request = requests[i];
+			var start = new Date(request.start * 1000);
+			var end = new Date(request.end * 1000);
+			
+			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
+			var colleague = persons.forename + " " + persons.lastname;
+			
+			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
+			
+			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
+			var subStatus = "";
+			
+			
+			for (var j = 0; j < keys.length; j++) {
+				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
+				var id = names.id;
+				var check = []
+				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
+				if (check[j] == 1){
+					subStatus = "noch keine Antwort ";
+				}
+				if(check[j] == 2){
+					subStatus = "Vertretung angenommen ";
+				} else if (check[j] == 3){
+					subStatus = "Vertretung abgelehnt ";
+				}
+				subs[j] = names.forename + " " + names.lastname + ": "
+						+ subStatus;
+				if (id == user.id) {
+					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
+				}
+			}		
+			
+			var getState = request.status;
+			var state = "";
+			if(getState == 1){
+					state = "angenommen";
+			} else if(getState == 2){
+					state = "wartend"
+				} else if(getState == 3){
+					state = "abgelehnt"
+				} else{
+					state = "storniert"
+				}
+			
+			rows += "<tr onclick='onDepartmentHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + colleague
+						+ "</td><td>" + start.getDate() + "."
+						+ (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>" + subs
+						+ "</td><td>" + state + "</td></tr>";
+			
+			}
+		
+		$("#management_request_list").html(rows);
+
+		
+		}
 
 	/*function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
@@ -356,12 +439,17 @@
 	$(document).ready(function() {
 		if(user.role == 1){
 			$("#departmentTable").addClass('hidden');
+			$("#managementTable").addClass('hidden');
+		}
+		if(user.role == 2){
+			$("#managementTable").addClass('hidden');
+			updateDepartmentTable();
+		} else if(user.role == 3){
+			$("#departmentTable").addClass('hidden');
+			updateManagementTable();
 		}
 		restUrlaub();
 		updateMySubstituteTable();
-		if(user.role != 1){
-			updateDepartmentTable();
-		}
 		
 	})
 </script>
@@ -416,7 +504,7 @@
 	<div class="container" id="departmentTable">     <!-- Tabelle für Abteilungsleiter -->
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">Anträger der Mitarbeiter</h3>
+			<h3 class="panel-title">Anträge der Mitarbeiter</h3>
 		</div>
 	<div class="panel-body">	
 	<div> 
@@ -430,6 +518,32 @@
 				<th>Status</th>
 			</tr>
 			<tbody id="department_request_list">
+
+			</tbody>
+		</table>
+	</div> <!-- /Tabelle -->
+	</div> <!-- /Panel-body -->
+	</div> <!-- /panel -->
+	</div> <!-- /container -->
+	
+	
+	<div class="container" id="managementTable">     <!-- Tabelle für Abteilungsleiter -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Anträge der Abteilungsleiter</h3>
+		</div>
+	<div class="panel-body">	
+	<div> 
+		<table class="table table-hover">
+			<tr>
+				<th>Art</th>
+				<th>Mitarbeiter der Antrag gestellt hat</th>
+				<th>Start</th>
+				<th>Ende</th>
+				<th>Vertretungen</th>
+				<th>Status</th>
+			</tr>
+			<tbody id="management_request_list">
 
 			</tbody>
 		</table>
@@ -545,6 +659,52 @@
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /department_popup -->
+	
+	
+	
+	<!-- Popup für die Geschäftsleitung zum bearbeiten der Urlaubsanträge der Abteilungsleiter -->
+	<div id="management_popup" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Urlaubsanträge bearbeiten</h4>
+				</div> <!-- /modal-header -->
+				<div class="modal-body">
+
+						<form role="form">
+							<div class="radio">
+								<label> <input type="radio" name="optradio"
+									id="department_holiday_accept" checked=""> Einverstanden wie beantragt
+								</label>
+							</div>
+
+						<div class="input-group">
+							<span class="input-group-addon"> <input type="radio"  name="optradio" id="department_holiday_decline" aria-label="...">
+							</span> 
+							<input type="text" placeholder="Antrag abgelehnt wegen" class="form-control" aria-label="..." id="holiday_decline_text">
+						</div>
+
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="department_holiday_change">
+								Änderung an Antrag vornehmen
+							</label>
+						</div>
+
+					</form>
+
+				</div> <!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-lg btn-block"
+							id="btn_accept__department_holiday">Abschicken</button>
+					</div> <!-- /modal-footer -->
+				
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /management_popup -->
 	
 	
 	<div id="editHoliday"class="modal fade">

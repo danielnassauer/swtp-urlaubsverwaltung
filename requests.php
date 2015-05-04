@@ -8,9 +8,7 @@
 
 <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
-<!-- <link rel="stylesheet" href="lib/datepicker/css/datepicker.css" />
-<link rel="stylesheet" href="lib/datepicker/less/datepicker.less" /> -->
-<link rel="stylesheet" href="lib/jquery-datepicker/jquery-ui.css" />
+
 
 <script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
@@ -19,14 +17,12 @@
 <script src="js/model.js"></script>
 <script src="js/HolidayRequestsFilter.js"></script>
 
-<script src="lib/less/less.js" type="text/javascript"></script>
-<!-- <script src="lib/datepicker/js/bootstrap-datepicker.js"></script> -->
-<script src="lib/jquery-datepicker/jquery-ui.min.js"></script>
 
 
 <?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
 <script type="text/javascript">
+	
 	var persons = getPersons();
 	
 	function loginPerson(){
@@ -45,7 +41,8 @@
 	
 	function onHolidayRequestEdit(id) {
 		$("#btn_accept_substitute").attr("onclick",
-				"onSubstituteFinished(" + id + ")")
+				"onSubstituteFinished(" + id + ")");
+		
 		showSubstitutes();
 		$("#sub_popup").modal("show");
 		
@@ -97,9 +94,10 @@
 	}
 	
 	
-		function onDepartmentHolidayRequestEdit(id){
+	function onEditDepartmentRequests(id){
 		$("#btn_accept_holiday").attr("onclick",
 				"onAllowingFinished(" + id + ")")
+
 		$("#department_popup").modal("show");
 		
 		
@@ -110,26 +108,32 @@
 		$("#department_popup").modal("hide");
 		var request = getHolidayRequest(id);
 		var accepted;
-		var comment = $("#holiday_decline_text").val();
+		var commentDecline = $("#holiday_decline_text").val();
+		var commentChange = $("#holiday_change_text").val();
 		if($("#holiday_accept").prop("checked")){
 			var accepted = 1;
 			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, request.comment);
 		} else if($("#holiday_decline").prop("checked")){
 			var accepted = 3;
-			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, comment);
+			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, commentDecline);
 			}else {
-				$("#editHoliday").modal("show");
-				$('#change_holiday_button').on('click', function () {
-					offerNewHoliday(id);
-				});
+				/*$("#editHoliday").modal("show");
+				$('#change_holiday_button').attr("onclick",
+					"offerNewHoliday(" + id +")");*/
+				var accepted = 3;
+				editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, commentChange);
+				};
 				
-			}
+			
 		updateDepartmentTable();
 		updateMySubstituteTable();
+		updateManagementTable();
 	}
 	
 	function offerNewHoliday(id){
 			
+		var newId = id;
+		
 		var req = getHolidayRequest(id);
 		
 		var startDay = $('#start_day').val();
@@ -150,10 +154,11 @@
 		
 		var comment = $('#change_comment').val();
 		
-		editHolidayRequest(id, newStart, newEnd, req.substitutes, state, comment);
+		editHolidayRequest(newId, newStart, newEnd, req.substitutes, state, comment);
 		
 		updateMySubstituteTable();
 		updateDepartmentTable();
+		updateManagementTabel();
 
 		
 	}
@@ -195,10 +200,10 @@
 				var check = []
 				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
 				if (check[j] == 1){
-					subStatus = "noch keine Antwort";
+					subStatus = "noch keine Antwort ";
 				}
 				if(check[j] == 2){
-					subStatus = "Vertretung angenommen";
+					subStatus = "Vertretung angenommen ";
 				} else if (check[j] == 3){
 					subStatus = "Vertretung abgelehnt ";
 				}
@@ -221,13 +226,13 @@
 					state = "storniert"
 				}
 			
-			rows += "<tr onclick='onDepartmentHolidayRequestEdit(" + request.id
+			rows += "<tr onclick='onEditDepartmentRequests(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + state + "</td></tr>";
+						+ "</td><td>" + state + "</td><td>" + request.comment + "</td></tr>";
 			
 			}
 		
@@ -269,12 +274,12 @@
 				var check = []
 				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
 				if (check[j] == 1){
-					subStatus = "noch keine Antwort <br></br>";
+					subStatus = "noch keine Antwort ";
 				}
 				if(check[j] == 2){
-					subStatus = "Vertretung angenommen <br></br>";
+					subStatus = "Vertretung angenommen ";
 				} else if (check[j] == 3){
-					subStatus = "Vertretung abgelehnt <br></br>";
+					subStatus = "Vertretung abgelehnt ";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
 						+ subStatus + "<br></br>";
@@ -372,7 +377,7 @@ function updateManagementTable(){
 					state = "storniert"
 				}
 			
-			rows += "<tr onclick='onDepartmentHolidayRequestEdit(" + request.id
+			rows += "<tr onclick='onEditDepartmentRequests(" + request.id
 						+ ")'><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
@@ -493,6 +498,7 @@ function updateManagementTable(){
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
+				<th>Kommentar des Abteilungsleiters</th>
 			</tr>
 			<tbody id="request_list">
 
@@ -519,6 +525,7 @@ function updateManagementTable(){
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
+				<th>Kommentar der Geschäftsführung</th>
 			</tr>
 			<tbody id="department_request_list">
 
@@ -545,6 +552,7 @@ function updateManagementTable(){
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
+				<th>Kommentar der Geschäftsleitung</th>
 			</tr>
 			<tbody id="management_request_list">
 
@@ -645,10 +653,10 @@ function updateManagementTable(){
 							<input type="text" placeholder="Antrag abgelehnt wegen" class="form-control" aria-label="..." id="holiday_decline_text">
 						</div>
 
-						<div class="radio">
-							<label> <input type="radio" name="optradio" id="holiday_change">
-								Änderung an Antrag vornehmen
-							</label>
+						<div class="input-group">
+							<span class="input-group-addon"> <input type="radio"  name="optradio" id="holiday_change" aria-label="...">
+							</span> 
+							<input type="text" placeholder="Antrag ablehnen und Ausweichtermin vorschlagen" class="form-control" aria-label="..." id="holiday_change_text">
 						</div>
 
 					</form>
@@ -664,50 +672,6 @@ function updateManagementTable(){
 	</div><!-- /department_popup -->
 	
 	
-	
-	<!-- Popup für die Geschäftsleitung zum bearbeiten der Urlaubsanträge der Abteilungsleiter -->
-	<div id="management_popup" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Urlaubsanträge bearbeiten</h4>
-				</div> <!-- /modal-header -->
-				<div class="modal-body">
-
-						<form role="form">
-							<div class="radio">
-								<label> <input type="radio" name="optradio"
-									id="department_holiday_accept" checked=""> Einverstanden wie beantragt
-								</label>
-							</div>
-
-						<div class="input-group">
-							<span class="input-group-addon"> <input type="radio"  name="optradio" id="department_holiday_decline" aria-label="...">
-							</span> 
-							<input type="text" placeholder="Antrag abgelehnt wegen" class="form-control" aria-label="..." id="holiday_decline_text">
-						</div>
-
-						<div class="radio">
-							<label> <input type="radio" name="optradio" id="department_holiday_change">
-								Änderung an Antrag vornehmen
-							</label>
-						</div>
-
-					</form>
-
-				</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-lg btn-block"
-							id="btn_accept__department_holiday">Abschicken</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /management_popup -->
 	
 	
 	<div id="editHoliday"class="modal fade">

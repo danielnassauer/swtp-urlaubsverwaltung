@@ -147,6 +147,8 @@
 		}
 		
 	function showAlert(){
+		var fill = "Sie haben einen ungültigen Urlaubstermin ausgewählt";
+		$('#failure_text').html(fill);
 		$('#wrongDate').modal("show");
 		
 	}
@@ -169,8 +171,9 @@
 		var newStart = (Date.parse(startDate))/1000;
 		var newEnd = (Date.parse(endDate))/1000;
 		
-		if(newStart > newEnd){
-			console.log("HIER");
+		var liveDate = new Date();
+		
+		if(newStart > newEnd || liveDate > newStart){
 			showAlert();
 			return;
 		}
@@ -607,8 +610,8 @@
 						<h4>Fehler</h4>
 					</div>
 					<!-- /modal-header -->
-					<div class="modal-body">
-						<p>Sie haben ein Datum gewählt welches bereits vergangen ist</p>
+					<div class="modal-body" id="failure_text">
+						
 					</div>
 					<!-- /modal-body -->
 					<div class="modal-footer">

@@ -268,12 +268,12 @@
 				var check = []
 				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
 				if (check[j] == 1){
-					subStatus = "noch keine Antwort ";
+					subStatus = "noch keine Antwort <br></br>";
 				}
 				if(check[j] == 2){
-					subStatus = "Vertretung angenommen ";
+					subStatus = "Vertretung angenommen <br></br>";
 				} else if (check[j] == 3){
-					subStatus = "Vertretung abgelehnt ";
+					subStatus = "Vertretung abgelehnt <br></br>";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
 						+ subStatus;

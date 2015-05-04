@@ -93,11 +93,11 @@ class RequestHandler {
 						// verbrauchte urlaubstage abziehen (null ausgeben wenn verbleibende < 0)
 						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
 						$person = Persons::getPerson ( $holReq ["person"] );
-						if($person->getRemainingHoliday() - $used_holidays < 0){
+						if ($person->getRemainingHoliday () - $used_holidays < 0) {
 							echo "null";
 							return;
 						}
-						Persons::editPerson ( $person->getID (), $person->getFieldservice (), $person->getRemainingHoliday () - $used_holidays, $person->getRole (), $person->isAdmin () );
+						self::subRemainingHoliday ( $person, $used_holidays );
 						
 						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
 						echo $request->toJSON ();
@@ -115,6 +115,14 @@ class RequestHandler {
 					$start = $orig_holReq->getStart ();
 					$end = $orig_holReq->getEnd ();
 					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {
+						$person = Persons::getPerson ( $orig_holReq->getPerson () );
+						// zuerst zuvor verbrauchte Urlaubstage wieder gutschreiben
+						$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
+						self::addRemainingHoliday ( $person, $used_holidays );
+						// dann neu verbrauchte Urlaubstage wieder abziehen
+						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
+						self::subRemainingHoliday ( $person, $used_holidays );
+						
 						$start = $holReq ["start"];
 						$end = $holReq ["end"];
 					}
@@ -142,6 +150,14 @@ class RequestHandler {
 				}
 			}
 		}
+	}
+
+	private static function subRemainingHoliday($person, $value) {
+		Persons::editPerson ( $person->getID (), $person->getFieldservice (), $person->getRemainingHoliday () - $value, $person->getRole (), $person->isAdmin () );
+	}
+
+	private static function addRemainingHoliday($person, $value) {
+		Persons::editPerson ( $person->getID (), $person->getFieldservice (), $person->getRemainingHoliday () + $value, $person->getRole (), $person->isAdmin () );
 	}
 }
 ?>

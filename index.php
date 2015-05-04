@@ -28,6 +28,13 @@
 	var persons = getPersons();
 	var requests = getHolidayRequests();
 
+	function loginPerson(){
+			rows= "Hallo Hr/Fr: ";
+			rows += "<b>"+user.lastname+"</b>";
+			console.log(user);
+			$("#loginPerson").html(rows);
+	}
+	
 	/*
 	 *	Entfernt doppelte array Eintraege.
 	 */
@@ -220,6 +227,7 @@
 	}
 
 	$(document).ready(function() {
+		loginPerson();
 		showDepartmentMenu();
 		initCalendar();
 		updateCalendar();
@@ -231,7 +239,7 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span class="navbar-brand">Urlaubsverwaltung</span>
+				<span id ="loginPerson"class="navbar-brand"></span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">

@@ -29,6 +29,12 @@
 <script type="text/javascript">
 	var persons = getPersons();
 	
+	function loginPerson(){
+		rows= "Hallo Hr/Fr: ";
+		rows += "<b>"+user.lastname+"</b>";
+		console.log(user);
+		$("#loginPerson").html(rows);
+	}
 	
 	function restUrlaub(){
 	var rows=0;
@@ -437,6 +443,7 @@ function updateManagementTable(){
 	} */
 
 	$(document).ready(function() {
+		loginPerson();
 		if(user.role == 1){
 			$("#departmentTable").addClass('hidden');
 			$("#managementTable").addClass('hidden');
@@ -457,7 +464,7 @@ function updateManagementTable(){
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span class="navbar-brand">Urlaubsverwaltung</span>
+				<span id ="loginPerson"class="navbar-brand"></span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">

@@ -2,7 +2,9 @@
 require_once dirname ( __FILE__ ) . '/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/db/Persons.php';
 require_once dirname ( __FILE__ ) . '/db/Holidays.php';
+require_once dirname ( __FILE__ ) . '/model/Person.php';
 require_once dirname ( __FILE__ ) . '/session/UserRights.php';
+require_once dirname ( __FILE__ ) . '/HolidayCalculator.php';
 class RequestHandler {
 
 	public function __construct($request) {
@@ -88,6 +90,11 @@ class RequestHandler {
 					$holReq = $request->content;
 					// Rechte prüfen
 					if (UserRights::createHolidayRequest ( $holReq ["person"] )) {
+						// verbrauchte urlaubstage abziehen
+						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
+						$person = Persons::getPerson ( $holReq ["person"] );
+						Persons::editPerson ( $person->getID (), $person->getFieldservice (), $person->getRemainingHoliday () - $used_holidays, $person->getRole (), $person->isAdmin () );
+						
 						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
 						echo $request->toJSON ();
 					}

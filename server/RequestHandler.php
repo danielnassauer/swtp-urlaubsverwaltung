@@ -121,6 +121,7 @@ class RequestHandler {
 						// zuerst zuvor verbrauchte Urlaubstage wieder gutschreiben
 						$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
 						self::addRemainingHoliday ( $person, $used_holidays );
+						$person = Persons::getPerson ( $orig_holReq->getPerson () );
 						// dann neu verbrauchte Urlaubstage wieder abziehen
 						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
 						self::subRemainingHoliday ( $person, $used_holidays );

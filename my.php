@@ -66,9 +66,11 @@
 			}
 	
 			if(createHolidayRequest(start, end, user.id, substitutes, type) != null){
+				console.log("h")
 				updatePage();
 			}else {
 			$("#noHolidays").modal("show");
+				updatePage();
 		}
 	}
 

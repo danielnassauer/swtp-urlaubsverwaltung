@@ -42,42 +42,46 @@
 	}
 	function onHolidayRequestCreation() {
 		$("#popup").modal("hide");
-		var substitutes = {};
-		var start = new Date(calendar.selected_start).getTime() / 1000;
-		var end = new Date(calendar.selected_end).getTime() / 1000;
-		var sub =""; 
-			if($("#substitutes_Menu1").val()== "---"){
-				sub = null;
-			}else{
-				sub = $("#substitutes_Menu1").val();			
+			var substitutes = {};
+			var start = new Date(calendar.selected_start).getTime() / 1000;
+			var end = new Date(calendar.selected_end).getTime() / 1000;
+			var sub =""; 
+				if($("#substitutes_Menu1").val()== "---"){
+					sub = null;
+				}else{
+					sub = $("#substitutes_Menu1").val();			
+				}
+				substitutes[sub] = false;
+				if($("#substitutes_Menu2").val()== "---"){
+					sub = null;
+				}else{
+				sub = $("#substitutes_Menu2").val();			
+				}
+				substitutes[sub] = false;
+				if($("#substitutes_Menu3").val()== "---"){
+					sub = null;
+				}else{
+				sub = $("#substitutes_Menu3").val();			
+				}	
+				substitutes[sub] = false;
+			if ($("#radio_ua").prop("checked")) {
+				var type = "Urlaub"
+			} else if ($("#radio_fa").prop("checked")) {
+				var type = "Freizeit"
+			} else {
+				var type = $("#text_su").val();
 			}
-			substitutes[sub] = false;
-			if($("#substitutes_Menu2").val()== "---"){
-				sub = null;
-			}else{
-			sub = $("#substitutes_Menu2").val();			
-			}
-			substitutes[sub] = false;
-			if($("#substitutes_Menu3").val()== "---"){
-				sub = null;
-			}else{
-			sub = $("#substitutes_Menu3").val();			
-			}	
-			substitutes[sub] = false;
-		if ($("#radio_ua").prop("checked")) {
-			var type = "Urlaub"
-		} else if ($("#radio_fa").prop("checked")) {
-			var type = "Freizeit"
-		} else {
-			var type = $("#text_su").val();
+	
+			if(createHolidayRequest(start, end, user.id, substitutes, type) != null){
+				showOwnHolidayRequests();
+				restUrlaub();
+				$('#calendar').fullCalendar("removeEvents");
+				$('#calendar').fullCalendar("addEventSource", holidays());
+				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
+				
+			}else {
+			$("#noHolidays").modal("show");
 		}
-
-		createHolidayRequest(start, end, user.id, substitutes, type);
-		showOwnHolidayRequests();
-		restUrlaub();
-		$('#calendar').fullCalendar("removeEvents");
-		$('#calendar').fullCalendar("addEventSource", holidays());
-		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 	
 	/*
@@ -212,13 +216,10 @@
 		$("#calendar").fullCalendar("removeEvents");
 		$('#calendar').fullCalendar("addEventSource", holidays());
 		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
-		showOwnHolidayRequests();
-
-		
+		showOwnHolidayRequests();	
 	}
 		
-		
-		
+	
 
 	function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
@@ -525,7 +526,7 @@
 	</div><!-- /changeHoliday -->
 		
 		
-		<div id="deleteHoliday"class="modal fade">
+	<div id="deleteHoliday"class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -546,6 +547,23 @@
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /deleteHoliday -->
+	
+	<div id="noHolidays"class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4>Sie Haben zu wenig Urlaubstage</h4>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+					</div> <!-- /modal-footer -->
+				</div> <!-- /modal-header -->
+			</div><!-- /modal-content -->
+		</div><!-- /modal-dialog -->
+	</div><!-- /noHlidays-->
 	
 		<div id="editHoliday"class="modal fade">
 		<div class="modal-dialog">

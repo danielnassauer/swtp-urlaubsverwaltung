@@ -172,8 +172,10 @@
 		var newEnd = (Date.parse(endDate))/1000;
 		
 		var liveDate = new Date();
+		var heute = (Date.parse(liveDate))/1000;
 		
-		if(newStart > newEnd){
+		
+		if(newStart > newEnd || heute > newStart){
 			showAlert();
 			return;
 		}

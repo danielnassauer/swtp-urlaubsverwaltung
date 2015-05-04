@@ -29,6 +29,12 @@
 	var calendar;
 	var persons = getPersons();
 	
+	function loginPerson(){
+			rows= "Hallo Hr/Fr: ";
+			rows += "<b>"+user.lastname+"</b>";
+			console.log(user);
+			$("#loginPerson").html(rows);
+	}
 	function restUrlaub(){
 		var rows=0;
 		rows = user.remaining_holiday;
@@ -99,17 +105,34 @@
 	function showSubstitutesMenu() {
 		var rows = "<option disabled></option>";
 		var rows2 = "<option >---</option>";
+		rows += "<option role='presentation' disabled><Abteilung:</option>";
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
 			if (person.department == user.department && person.id != user.id){
 				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
-			}
 		}
+		}
+		rows += "<option role='presentation' disabled>Alle Mitarbeiter:</option>";
+		for (var x = 0; x < persons.length; x++) {
+		var person = persons[x];
+			if (person.department != user.department && person.id != user.id){
+				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
+		}
+		}
+		
+		rows2 += "<option role='presentation' disabled>Abteilung:</option>";
 		for (var j = 0; j < persons.length; j++) {
 			var person = persons[j];
 			if (person.department == user.department && person.id != user.id){
 				 rows2 += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
-			}
+		}
+		}
+		rows2 += "<option role='presentation' disabled>Alle Mitarbeiter:</option>";
+		for (var y = 0; y < persons.length; y++) {
+		var person = persons[y];
+			if (person.department != user.department && person.id != user.id){
+				 rows2 += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
+		}
 		}
 		$("#substitutes_Menu1").html(rows);
 		$("#substitutes_Menu2").html(rows2);
@@ -127,7 +150,7 @@
 		calendar.selected_start = start;
 		calendar.selected_end = end;
 	}
-}
+	}
 
 	function onHolidayRequestEdit(id) {
 		$('#changeHoliday').modal("show");
@@ -287,6 +310,7 @@
 	}
 
 	$(document).ready(function() {
+		loginPerson();
 		showOwnHolidayRequests();
 		restUrlaub();
 
@@ -384,13 +408,10 @@
 	</div> <!-- /modal-dialog -->
 </div> <!-- /popup -->
 
-
-
-
-	<nav class="navbar navbar-default">
+<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span class="navbar-brand">Urlaubsverwaltung</span>
+				<span id ="loginPerson"class="navbar-brand"></span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
@@ -406,7 +427,7 @@
 				<span id='resttage' style="margin-left: 1em" class="badge alert-danger"></span></span>
 			</div>
 		</div>
-	</nav>
+</nav>
 
 	<div class="container">
 		<div class="row">

@@ -22,7 +22,7 @@ Es existieren folgende Ressourcen:
       end:                 int,                // End-Datum als Unix-Timestamp
       person:              int,                // ID der beantragenden Person
       substitutes:         {int : int, ...},   // Dictionary mit IDs der Vertretungen als Key und einem Integer als Wert (1: wartend, 2: angenommen, 3: abgelehnt).  
-      type:                int,                // Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine Beschreibung für einen Sonderurlaub
+      type:                string,             // Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine Beschreibung für einen Sonderurlaub
       status:              int,                // 1: angenommen, 2: wartend, 3: abgelehnt, 4: storniert
       comment:             string              // Begründung (nur wenn abgelehnt)
    }

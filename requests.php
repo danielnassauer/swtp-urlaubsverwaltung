@@ -461,7 +461,11 @@ function updateManagementTable(){
 	})
 </script>
 <body>
-	<nav class="navbar navbar-default">
+<style>
+ p {padding-top: 50px;}
+</style>
+<p>
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<span id ="loginPerson"class="navbar-brand"></span>
@@ -761,11 +765,6 @@ function updateManagementTable(){
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /changeHoliday -->
-	
-
-					
-	
-
-
+</p>
 </body>
 </html>

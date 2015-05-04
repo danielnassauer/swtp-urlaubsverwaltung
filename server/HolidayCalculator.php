@@ -11,28 +11,53 @@ class HolidayCalculator{
 	 * @return Anzahl der verbrauchten Urlaubstage
 	 */
 	public static function calculateHolidays($start, $end){
-		return 5;
-		
 
 		$differenz = $end - $start;
-		$tag = floor($differenz / (3600 * 24)) + 1; // Anzahl der angenomene Urlaub
-		$holidays = Holidays::getHolidays(); //feiertage
+		$tag = floor($differenz / (3600 * 24)) + 1; //ingesamt Tage
+        $count = 0; //Zählt Samstage und Sonntage
+        $feiertage = feiertageInSE($start,$end);
 
-		for($i = 0; $i < sizeof($holidays) ; $i++)
-		{
+		  $iter = 24*60*60; // Ein Tag in Sekunden
 
-			$day = $holidays["day"];
-		    $datum = date("d.m.Y", $day);
-		    $wochentag = $datum['wday'];
+            for($i = $start; $i <= $end; $i=$i+$iter)
+            {
+             if(Date('D',$i) == 'Sat' || Date('D',$i) == 'Sun')
+              {
+                  $count++;
+              }
+            }
 
-		    //Prüfen, ob Wochenende
-		    if($wochentag == 0 || $wochentag == 6)
-		    {
+        $urlaubstage = (25 - ($tag - ($feiertage + $count)));
+        
+		return $urlaubstage;
+	}
 
-		    }
+	private function feiertageInSE($start,$end){
 
-		}
+	$holidays = Holidays::getHolidays(); //feiertage
+    
+	$count = 0; //Anzahl der Feiertage von Montag bis Freitag
 
+      foreach ($holidays as $value)
+      { 
+      	if($value["day"] == $start)
+      	{
+      		while ($value["day"] < $end)
+      	    {
+		        $datum = date("d.m.Y", $value["day"]);
+		        $wochentag = $datum['wday'];
+		        //Prüfen, ob Werkstag
+      			if($wochentag != 0 && $wochentag != 6)
+      			{
+                   $count++;
+      			}
+
+      			$value = $value["day"] + 86400;
+      		}
+      	}
+
+      }
+              return $count;
 	}
 }
 

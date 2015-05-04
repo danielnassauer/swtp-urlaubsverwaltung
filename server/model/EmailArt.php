@@ -5,6 +5,7 @@ require '../server/model/HolidayRequest.php';
 require '../server/db/Persons.php';
 
 
+
 /**
 * 
 */
@@ -19,7 +20,7 @@ public static function email1($holidayRequest){
 
 	foreach ($holidayRequest->getSubstitutes() as $i => $accepted)
   {
-    if($accepted)
+    if($accepted == 2)
     {
     	$id = $i;
     }
@@ -28,7 +29,7 @@ public static function email1($holidayRequest){
 	$header =  "From: ".$holidayRequest->getForename." ".$holidayRequest->getPerson()->getLastname()." <".Persons::getEmail($holidayRequest->getPerson()->getID()).">\n";
 	$message = "Sehr Geehrter ".Persons::getPerson($id)->getLastname()."\n";
 	$message .= "ich möchte Urlaub von ".date("d.m.Y",$holidayRequest->getStart())." bis ".date("d.m.Y",$holidayRequest->getEnd())." nehmen und wollte wissen,"
-	            ."ob Sie mich in dieser Zeitpunkt vertreten könnten.\n";
+	            ."ob Sie mich in dieser Zeitpunkt vertreten könnten.\n"
                 ."Mit freundlichen Grüßen\n"
                 .$holidayRequest->getPerson()->getForename()." ".$holidayRequest->getPerson()->getLastname();
 

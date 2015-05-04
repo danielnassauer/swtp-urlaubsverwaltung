@@ -168,9 +168,10 @@
 		
 		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_leitung = {"filter":leitungsFilter, "attachment":{"persons": persons}};
 		var filter_me = {"filter":withoutMe, "attachment": user.id};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_me]);
+		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_me, filter_leitung]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){

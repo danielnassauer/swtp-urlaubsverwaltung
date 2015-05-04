@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="lib/ionicons/css/ionicons.min.css" />
 <link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
-<link rel="stylesheet/less" type="text/css" href="lib/datepicker/less/datepicker.less" />
+<link rel="stylesheet/less" type="text/css"
+	href="lib/datepicker/less/datepicker.less" />
 
 <script type="text/javascript" src="lib/jquery/jquery-1.11.1.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
@@ -46,25 +47,19 @@
 			var substitutes = {};
 			var start = new Date(calendar.selected_start).getTime() / 1000;
 			var end = new Date(calendar.selected_end).getTime() / 1000;
-			var sub =""; 
-				if($("#substitutes_Menu1").val()== "---"){
-					sub = null;
-				}else{
-					sub = $("#substitutes_Menu1").val();			
-				}
-				substitutes[sub] = false;
-				if($("#substitutes_Menu2").val()== "---"){
-					sub = null;
-				}else{
-				sub = $("#substitutes_Menu2").val();			
-				}
-				substitutes[sub] = false;
-				if($("#substitutes_Menu3").val()== "---"){
-					sub = null;
-				}else{
-				sub = $("#substitutes_Menu3").val();			
-				}	
-				substitutes[sub] = false;
+
+			// substitutes bestimmen
+			if($("#substitutes_Menu1").val() != "-1"){
+				substitutes[$("#substitutes_Menu1").val()] = 1;
+			}
+			if($("#substitutes_Menu2").val() != "-1"){
+				substitutes[$("#substitutes_Menu2").val()] = 1;
+			}
+			if($("#substitutes_Menu3").val() != "-1"){
+				substitutes[$("#substitutes_Menu3").val()] = 1;
+			}
+
+			// type bestimmen
 			if ($("#radio_ua").prop("checked")) {
 				var type = "Urlaub"
 			} else if ($("#radio_fa").prop("checked")) {
@@ -74,15 +69,18 @@
 			}
 	
 			if(createHolidayRequest(start, end, user.id, substitutes, type) != null){
-				showOwnHolidayRequests();
-				restUrlaub();
-				console.log("hallo");
-				$('#calendar').fullCalendar("removeEvents");
-				$('#calendar').fullCalendar("addEventSource", holidays());
-				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
+				updatePage();
 			}else {
 			$("#noHolidays").modal("show");
 		}
+	}
+
+	function updatePage(){
+		showOwnHolidayRequests();
+		restUrlaub();
+		$('#calendar').fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", holidays());
+		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 	
 	/*
@@ -109,9 +107,8 @@
 	 *	Listet alle Vertretungen aus Abteilung auf.
 	 */
 	function showSubstitutesMenu() {
-		var rows = "<option disabled></option>";
-		var rows2 = "<option >---</option>";
-		rows += "<option role='presentation' disabled><Abteilung:</option>";
+		var rows = "<option value='-1'>keiner</option>";
+		rows += "<option role='presentation' disabled>Abteilung:</option>";
 		for (var i = 0; i < persons.length; i++) {
 			var person = persons[i];
 			if (person.department == user.department && person.id != user.id){
@@ -125,24 +122,10 @@
 				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
 		}
 		}
-		
-		rows2 += "<option role='presentation' disabled>Abteilung:</option>";
-		for (var j = 0; j < persons.length; j++) {
-			var person = persons[j];
-			if (person.department == user.department && person.id != user.id){
-				 rows2 += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
-		}
-		}
-		rows2 += "<option role='presentation' disabled>Alle Mitarbeiter:</option>";
-		for (var y = 0; y < persons.length; y++) {
-		var person = persons[y];
-			if (person.department != user.department && person.id != user.id){
-				 rows2 += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
-		}
-		}
+				
 		$("#substitutes_Menu1").html(rows);
-		$("#substitutes_Menu2").html(rows2);
-		$("#substitutes_Menu3").html(rows2);
+		$("#substitutes_Menu2").html(rows);
+		$("#substitutes_Menu3").html(rows);
 	}
 	
 	function onHolidayRequestSelection(start, end, allDay) {
@@ -157,38 +140,12 @@
 		calendar.selected_end = end;
 	}
 	}
-
-	function onHolidayRequestEdit(id) {
-		$('#changeHoliday').modal("show");
-		req = getHolidayRequest(id);
-		console.log(id);
-		
-	}
 	
 	function changeHoliday(id){
-		$('#changeHoliday').modal("hide");
-		var request = getHolidayRequest(id);
-		var state;
-		var radio = $("#UA_storno").prop("checked");
-		if(radio){
-			$('#deleteHoliday').modal("show");
-			$('#cancel_holiday').on('click', function () {
-				state = 4;
-				editHolidayRequest(id, request.start, request.end, request.substitutes, state, request.comment);
-				$('#deleteHoliday').modal("hide");
-				$("#calendar").fullCalendar("removeEvents");
-				$('#calendar').fullCalendar("addEventSource", holidays());
-				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
-				showOwnHolidayRequests();
-			});
-		}
-		else{
 			$('#editHoliday').modal("show");
 			$('#offer_new_holiday_button').on('click', function () {
 					offerNewHoliday(id);
-				});
-
-			}
+				});			
 
 		}
 		
@@ -220,55 +177,89 @@
 		showOwnHolidayRequests();	
 	}
 		
-	
-
-	function showOwnHolidayRequests() {
-		var requests = getHolidayRequests();
-		var own_requests = [];
-		for (var i = 0; i < requests.length; i++) {
-			var request = requests[i];
-			if (request.person == user.id) {
-				own_requests.push(request);
-			}
+	function addRequest(request){
+		var html = $("#my_requests").html();
+		var colors = {
+				1 : "alert-success",
+				2 : "alert-warning",
+				3 : "alert-danger"
 		}
-		var rows = "";
-		for (var i = 0; i < own_requests.length; i++) {
-			var request = own_requests[i];
-			var start = new Date(request.start * 1000);
-			var end = new Date(request.end * 1000);
-				if (request.status == 1){
-					
-				rows += "<tr class='alert alert-success' data-toggle='tooltip' data-placement='left' title='Urlaubsantrag Bestätigt'><td onclick='onHolidayRequestEdit(" + request.id
-						+ ")'>" + request.type + "</td><td onclick='onHolidayRequestEdit(" + request.id
-						+ ")'>" + start.getDate()
-						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
-						+ "</td><td onclick='onHolidayRequestEdit(" + request.id
-						+ ")'>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td onclick='onHolidayRequestEdit(" + request.id
-						+ ")'>"
-						+ dictInSub(request.substitutes) + "</td><td><form action='PDFCreator.php' method='POST' target='_blank'><button type='submit' class='btn btn-default'>pdf</button><input type='hidden' name='pdf_holidayrequest' value='"+request.id+"'></form></td></tr>";
-			}else if(request.status == 2){
-				
-				rows += "<tr class='alert alert-warning' data-toggle='tooltip' data-placement='left' title='Urlaubsantrag noch nicht Bestätigt' onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
-						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
-						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>"
-						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
-			}else if(request.status == 3){
-				
-			rows += "<tr class='alert alert-danger' data-toggle='tooltip' data-placement='left' title='Urlaubsantrag Abgelehnt' onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
-						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
-						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>"
-						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
-			}else if(request.status == 4){
-			
-			rows += "";
-			}
-	}	
-		$("#holidayrequests_list").html(rows);
+		var headers = {
+				1 : "Bestätigter Urlaubsantrag",
+				2 : "Nicht bestätigter Urlaubsantrag",
+				3 : "Abgelehnter Urlaubsantrag"
+		}
+		var subs_status = {
+				1 : "hat noch nicht geantwortet",
+				2 : "hat zugestimmt",
+				3 : "hat abgelehnt"
+		}
+
+		var substitutes = "";
+		if(Object.keys(request.substitutes).length > 0){
+			console.log("JA");
+			for(var substitute in request.substitutes){
+				var person = getPerson(substitute);
+				substitutes += "<br>" + person.forename + " " + person.lastname + " " + subs_status[request.substitutes[substitute]];
+			}	
+		}
+
+		var comment = "";
+		if(request.status == 3){
+			comment = "<br>Kommentar: " + request.comment;
+		}
+
+		var cancel = "";
+		if(request.status == 1 || request.status == 2){
+			cancel = "<a href='#' onclick='cancelRequest("+request.id+")'>stornieren</a> - ";
+		}
+
+		var edit = "";
+		if(request.status == 2){
+			edit = "<a href='#' onclick='changeHoliday("+request.id+")'>bearbeiten</a><br>";
+		}
+
+		var pdf = "";
+		if(request.status == 1){
+			pdf = "<form style='display: inline;' action='PDFCreator.php' method='POST' target='_blank' id='pdf_form'><a href='#' onclick='$(\"#pdf_form\").submit();'>PDF Bestätigung</a><input type='hidden' name='pdf_holidayrequest' value='"+request.id+"'></form><br>";
+		}
+		
+		
+		var start = new Date(request.start * 1000);
+		var end = new Date(request.end * 1000);		
+		html += "<div class='alert "+colors[request.status]+"'><h4>"+headers[request.status]+"</h4>"+cancel+edit+pdf+request.type+" vom "+start.getDate()
+		+ "." + (start.getMonth() + 1) + "." + start.getFullYear()+" bis "+end.getDate()
+		+ "." + (end.getMonth() + 1) + "." + end.getFullYear()+substitutes+comment+"</div>";
+		$("#my_requests").html(html);
+	}
+
+	function clearRequests(){
+		$("#my_requests").html("");
+	}
+	
+	function showOwnHolidayRequests() {
+		clearRequests();
+		
+		// Requests filtern
+		var requests = getHolidayRequests();
+		var filter_own = {"filter":isRequesterFilter, "attachment":user.id};
+		var filter_accepted = {"filter":acceptedStatusFilter, "attachment":null};
+		var filter_declined = {"filter":declinedStatusFilter, "attachment":null};
+		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};		
+		requests_accepted = filterHolidayRequests(requests,[filter_own, filter_accepted]);
+		requests_declined = filterHolidayRequests(requests,[filter_own, filter_declined]);
+		requests_waiting = filterHolidayRequests(requests,[filter_own, filter_waiting]);
+
+		// Requests anzeigen
+		for(var i=0; i<requests_waiting.length; i++){
+			addRequest(requests_waiting[i]);
+		}
+		for(var i=0; i<requests_accepted.length; i++){
+			addRequest(requests_accepted[i]);
+		}
+		for(var i=0; i<requests_declined.length; i++){
+			addRequest(requests_declined[i]);
+		}
 	}
 	
 	function unixTS2calendarTS(timestamp) {
@@ -381,69 +372,72 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4>Urlaub beantragen</h4>
-				</div> <!-- /modal-header -->
+				</div>
+				<!-- /modal-header -->
 				<div class="modal-body">
-					
-					<form role="form">
-		
-							<div class="radio">
-								<label> <input checked type="radio" name="optradio"
-									id="radio_ua"> Urlaubsantrag
-								</label>
-							</div>
 
-					
+					<form role="form">
+
+						<div class="radio">
+							<label> <input checked type="radio" name="optradio" id="radio_ua">
+								Urlaubsantrag
+							</label>
+						</div>
+
+
 						<div class="radio">
 							<label> <input type="radio" name="optradio" id="radio_fa">
 								Freizeitantrag
 							</label>
 						</div>
-					
-					
+
+
 						<div class="input-group">
 							<span class="input-group-addon"> <input type="radio"
 								name="optradio" id="radio_su" aria-label="...">
-							</span> <input type="text" placeholder="Antrag für Sonderurlaub wegen"
-								class="form-control" aria-label="..." id="text_su">
+							</span> <input type="text"
+								placeholder="Antrag für Sonderurlaub wegen" class="form-control"
+								aria-label="..." id="text_su">
 						</div>
 						<!-- /input-group -->
 					</form>
-				<div class="panel-body">
-					<form class="form-inline">
-					<h4>Vertretungen:</h4>
-						<div class="dropdown" >
-							<label for="substitutes_Menu1">1.</label> <select
-								id="substitutes_Menu1" class="form-control">
-								<option>---</option>
-							</select> 
-						<span class="form-group">
-							<label for="substitutes_Menu2">2.</label> <select
-								id="substitutes_Menu2" class="form-control">
-								<option>---</option>
-							</select> 
-						</span>
-						<span class="form-group">
-							<label for="substitutes_Menu3">3.</label> <select
-								id="substitutes_Menu3" class="form-control">
-								<option>---</option>
-							</select> 
-						</span>
-						</div>
-					</form>
+					<div class="panel-body">
+						<form class="form-inline">
+							<h4>Vertretungen:</h4>
+							<div class="dropdown">
+								<label for="substitutes_Menu1">1.</label> <select
+									id="substitutes_Menu1" class="form-control">
+									<option>---</option>
+								</select> <span class="form-group"> <label
+									for="substitutes_Menu2">2.</label> <select
+									id="substitutes_Menu2" class="form-control">
+										<option>---</option>
+								</select>
+								</span> <span class="form-group"> <label for="substitutes_Menu3">3.</label>
+									<select id="substitutes_Menu3" class="form-control">
+										<option>---</option>
+								</select>
+								</span>
+							</div>
+						</form>
+					</div>
 				</div>
-			</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-lg btn-block"
-							onclick="onHolidayRequestCreation()">Abschicken</button>
+				<!-- /modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-lg btn-block"
+						onclick="onHolidayRequestCreation()">Abschicken</button>
+				</div>
 			</div>
-		</div> <!-- /modal-content -->
-	</div> <!-- /modal-dialog -->
-</div> <!-- /popup -->
+			<!-- /modal-content -->
+		</div>
+		<!-- /modal-dialog -->
+	</div>
+	<!-- /popup -->
 
-<nav class="navbar navbar-default navbar-fixed-top">
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span id ="loginPerson"class="navbar-brand"></span>
+				<span id="loginPerson" class="navbar-brand"></span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
@@ -455,12 +449,14 @@
 				</ul>
 			</div>
 			<div>
-				<span style="margin-left: 6em" class="navbar-brand">Restliche Urlaubstage:	
-				<span id='resttage' style="margin-left: 1em" class="badge alert-danger"></span></span>
+				<span style="margin-left: 6em" class="navbar-brand">Restliche
+					Urlaubstage: <span id='resttage' style="margin-left: 1em"
+					class="badge alert-danger"></span>
+				</span>
 			</div>
 		</div>
-</nav>
-<div style="padding-top:50px"></div>
+	</nav>
+	<div style="padding-top: 50px"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-7">
@@ -472,111 +468,78 @@
 				</div>
 			</div>
 			<div class="col-xs-5">
-				<table class="table table-hover">
-					<tr>
-						<th>Art</th>
-						<th>Start</th>
-						<th>Ende</th>
-						<th>Vertretungen</th>
-						<th></th>
-					</tr>
-					<tbody id="holidayrequests_list">
-
-					</tbody>
-				</table>
+				<div id="my_requests"></div>
 			</div>
-		</div> <!-- /navbar -->
-		
-	<div id="changeHoliday"class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Urlaubsanträge bearbeiten</h4>
-				</div> <!-- /modal-header -->
-				<div class="modal-body">
+		</div>
+		<!-- /navbar -->
 
-						<form role="form">
-							
-							<div class="radio">
-								<label> <input type="radio" name="optradio" id="UA_change">
-								Urlaubsantrag ändern
-								</label>
-							</div>
-							
-							<div class="radio">
-								<label> <input type="radio" name="optradio"
-									id="UA_storno"> Urlaubsantrag stornieren
-								</label>
-							</div>
 
-					</form>
+		<div id="deleteHoliday" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4>Urlaubsanträge löschen</h4>
+					</div>
+					<!-- /modal-header -->
+					<div class="modal-body">
+						<p>Möchten Sie ihren Urlaubsantrag wirklich stornieren?</p>
+					</div>
+					<!-- /modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Nein,
+							doch nicht</button>
+						<button type="button" class="btn btn-primary" id="cancel_holiday">Urlaubsantrag
+							stornieren</button>
+					</div>
+					<!-- /modal-footer -->
 
-				</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-lg btn-block"
-							id="btn_edt_holiday" onclick="changeHoliday(req.id)">Weiter</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /changeHoliday -->
-		
-		
-	<div id="deleteHoliday"class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Urlaubsanträge löschen</h4>
-				</div> <!-- /modal-header -->
-				<div class="modal-body">
-					<p>Möchten Sie ihren Urlaubsantrag wirklich stornieren?</p>
-				</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Nein, doch nicht</button>
-						<button type="button" class="btn btn-primary" id="cancel_holiday">Urlaubsantrag stornieren</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /deleteHoliday -->
-	
-	<div id="noHolidays"class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Sie Haben zu wenig Urlaubstage</h4>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-					</div> <!-- /modal-footer -->
-				</div> <!-- /modal-header -->
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /noHlidays-->
-	
-		<div id="editHoliday"class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Urlaubsanträge bearbeiten</h4>
-				</div> <!-- /modal-header -->
-				<div class="modal-body">
-						
+				</div>
+				<!-- /modal-content -->
+			</div>
+			<!-- /modal-dialog -->
+		</div>
+		<!-- /deleteHoliday -->
+
+		<div id="noHolidays" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4>Sie Haben zu wenig Urlaubstage</h4>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">Schließen</button>
+						</div>
+						<!-- /modal-footer -->
+					</div>
+					<!-- /modal-header -->
+				</div>
+				<!-- /modal-content -->
+			</div>
+			<!-- /modal-dialog -->
+		</div>
+		<!-- /noHlidays-->
+
+		<div id="editHoliday" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4>Urlaubsanträge bearbeiten</h4>
+					</div>
+					<!-- /modal-header -->
+					<div class="modal-body">
+
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h3 class="panel-title">Neuen Urlaubstermin vorschlagen:</h3>
@@ -587,8 +550,7 @@
 										<td>Anfangsdatum: Tag.Monat.Jahr</td>
 										<td><input type="text" id="start_day" maxlength="2" size="2">.<input
 											type="text" id="start_month" maxlength="2" size="2">.<input
-											type="text" id="start_year" maxlength="4" size="4">
-											</td>
+											type="text" id="start_year" maxlength="4" size="4"></td>
 									</tr>
 									<tr>
 										<td>Enddatum: Tag.Monat.Jahr</td>
@@ -597,36 +559,50 @@
 											type="text" id="end_year" maxlength="4" size="4"></td>
 									</tr>
 								</table>
-							</div><!-- /panel-body -->
-						</div><!-- /panel -->
+							</div>
+							<!-- /panel-body -->
+						</div>
+						<!-- /panel -->
 
-				</div> <!-- /modal-body -->
+					</div>
+					<!-- /modal-body -->
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-dismiss="modal" id="offer_new_holiday_button">Urlaubsantrag ändern</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /changeHoliday -->
-	
-	<div id="wrongDate"class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Fehler</h4>
-				</div> <!-- /modal-header -->
-				<div class="modal-body">
-						<p>Sie haben ein Datum gewählt welches bereits vergangen ist</p>	
-				</div> <!-- /modal-body -->
-				<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal"
+							id="offer_new_holiday_button">Urlaubsantrag ändern</button>
+					</div>
+					<!-- /modal-footer -->
+
+				</div>
+				<!-- /modal-content -->
+			</div>
+			<!-- /modal-dialog -->
+		</div>
+		<!-- /changeHoliday -->
+
+		<div id="wrongDate" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4>Fehler</h4>
+					</div>
+					<!-- /modal-header -->
+					<div class="modal-body">
+						<p>Sie haben ein Datum gewählt welches bereits vergangen ist</p>
+					</div>
+					<!-- /modal-body -->
+					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" data-dismiss="modal">Zurück</button>
-				</div>	
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /changeHoliday -->	
+					</div>
+				</div>
+				<!-- /modal-content -->
+			</div>
+			<!-- /modal-dialog -->
+		</div>
+		<!-- /changeHoliday -->
+
 </body>
 </html>

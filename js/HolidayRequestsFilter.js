@@ -69,6 +69,26 @@ function waitingStatusFilter(request) {
 }
 
 /**
+ * Filtert HolidayRequests, deren Status = accepted ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status = accepted ist.
+ */
+function acceptedStatusFilter(request) {
+	return request.status == 1;
+}
+
+/**
+ * Filtert HolidayRequests, deren Status = declined ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status = declined ist.
+ */
+function declinedStatusFilter(request) {
+	return request.status == 3;
+}
+
+/**
  * Filtert HolidayRequests anhand der Vertretungen.
  * 
  * @param request

@@ -24,7 +24,7 @@ class HolidayRequest {
 	 * @param
 	 *        	substitutes Dictionary mit IDs der Vertretungen als Key und einem Integer als Wert (1: wartend, 2: angenommen, 3: abgelehnt).
 	 * @param
-	 *        	type Art des Urlaubsantrags 1: Urlaub, 2: Freizeit, 3: Sonderurlaub
+	 *        	type Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine Beschreibung für einen Sonderurlaub
 	 * @param
 	 *        	status Status des Urlaubsantrags 1: angenommen, 2: wartend, 3: abgelehnt
 	 * @param

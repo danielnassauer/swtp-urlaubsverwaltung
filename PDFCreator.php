@@ -1,5 +1,9 @@
 <?php
 require_once dirname ( __FILE__ ) . '/lib/fpdf/fpdf.php';
+require_once dirname ( __FILE__ ) . '/server/db/HolidayRequests.php';
+require_once dirname ( __FILE__ ) . '/server/db/Persons.php';
+require_once dirname ( __FILE__ ) . '/server/model/HolidayRequest.php';
+require_once dirname ( __FILE__ ) . '/server/model/Person.php';
 
 
 class PDFCreator {
@@ -13,7 +17,8 @@ class PDFCreator {
 	 */
 	public static function writePDF($holiday_request, $path) {
 		echo "PDF erfolgreich erzeugt... ";
-       $array = $holiday_request->getPerson()->toArray();
+		$person = Persons::getPerson($holiday_request->getPerson());
+        $array = $person->toArray();
 
 		$timestamp = time();
         $datum = date("d.m.Y",$timestamp);
@@ -24,7 +29,7 @@ class PDFCreator {
          $pdf->SetFont("Helvetica","BU",20);
          $pdf->AddPage();
 
-         $pdf->Image("../server/logo_orion.png",150,10,50);
+         $pdf->Image("server/logo_orion.png",150,10,50);
          $pdf->Ln(20);
          switch ($holiday_request->getType())
          {
@@ -147,5 +152,13 @@ class PDFCreator {
 	}
 	
 	
+}
+
+if(isset($_POST["pdf_holidayrequest"])){
+	$id = $_POST["pdf_holidayrequest"];
+	$request = HolidayRequests::getRequest($id);
+	$path = "pdf/".$id.".pdf";
+	PDFCreator::writePDF($request, $path);
+	echo "<a href='".$path."'>download</a>";
 }
 ?>

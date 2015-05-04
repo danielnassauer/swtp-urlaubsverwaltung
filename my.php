@@ -185,7 +185,7 @@
 						+ ")'>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td onclick='onHolidayRequestEdit(" + request.id
 						+ ")'>"
-						+ dictInSub(request.substitutes) + "</td><td><button type='button' class='btn btn-default'>pdf</button></td></tr>";
+						+ dictInSub(request.substitutes) + "</td><td><form action='PDFCreator.php' method='POST' target='_blank'><button type='submit' class='btn btn-default'>pdf</button><input type='hidden' name='pdf_holidayrequest' value='"+request.id+"'></form></td></tr>";
 			}else if(request.status == 2){
 				
 				rows += "<tr class='alert alert-warning' onclick='onHolidayRequestEdit(" + request.id

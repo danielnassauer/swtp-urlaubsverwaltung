@@ -90,9 +90,13 @@ class RequestHandler {
 					$holReq = $request->content;
 					// Rechte prüfen
 					if (UserRights::createHolidayRequest ( $holReq ["person"] )) {
-						// verbrauchte urlaubstage abziehen
+						// verbrauchte urlaubstage abziehen (null ausgeben wenn verbleibende < 0)
 						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
 						$person = Persons::getPerson ( $holReq ["person"] );
+						if($person->getRemainingHoliday() - $used_holidays < 0){
+							echo "null";
+							return;
+						}
 						Persons::editPerson ( $person->getID (), $person->getFieldservice (), $person->getRemainingHoliday () - $used_holidays, $person->getRole (), $person->isAdmin () );
 						
 						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );

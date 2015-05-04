@@ -61,7 +61,7 @@ Folgende Requests sind möglich:
       Antwort:  Liste aller Urlaubsanträge: [HolidayRequest, ...]
    POST
       Body:     HolidayRequest (ohne id, status und comment)
-      Antwort:  neu erzeugter HolidayRequest (mit neuer id)
+      Antwort:  neu erzeugter HolidayRequest (mit neuer id) oder null, wenn nicht genügend freie Urlaubstage vorhanden sind
       Effekt:   neuer HolidayRequest mit automatischer ID wird erstellt
 
 

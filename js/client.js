@@ -157,7 +157,8 @@ function getHolidayRequests() {
  * @param type
  *            Art des Urlaubsantrags: "Urlaub", "Freizeit", oder eine
  *            Beschreibung für einen Sonderurlaub
- * @returns {HolidayRequest} neu erzeugter HolidayRequest mit neuer ID
+ * @returns {HolidayRequest} neu erzeugter HolidayRequest mit neuer ID oder
+ *          null, wenn nicht genügend freie Urlaubstage vorhanden sind
  */
 function createHolidayRequest(start, end, person, substitutes, type) {
 	var r = {

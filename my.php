@@ -76,6 +76,7 @@
 		showOwnHolidayRequests();
 		restUrlaub();
 		$('#calendar').fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", holidays());
 		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 	
@@ -171,6 +172,7 @@
 				editHolidayRequest(id, request.start, request.end, request.substitutes, state, request.comment);
 				$('#deleteHoliday').modal("hide");
 				$("#calendar").fullCalendar("removeEvents");
+				$('#calendar').fullCalendar("addEventSource", holidays());
 				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 				showOwnHolidayRequests();
 			});
@@ -355,7 +357,7 @@
 					<form role="form">
 		
 							<div class="radio">
-								<label> <input type="radio" name="optradio"
+								<label> <input checked type="radio" name="optradio"
 									id="radio_ua"> Urlaubsantrag
 								</label>
 							</div>

@@ -87,6 +87,43 @@ class HolidayRequests {
 	public static function editRequest($id, $start, $end, $substitutes, $status, $comment) {
 		$conn = self::getDBConnection ();
 		
+		// Ersetzt ein Substitute einen anderen, muss zuvor die Zeile in der Tabelle umgebaut werden
+		$orig_request = self::getRequest ( $id );
+		foreach ( $orig_request->getSubstitutes () as $orig_sub => $orig_status ) {
+			if (! array_key_exists ( $orig_sub, $substitutes )) {
+				foreach ( $substitutes as $sub => $stat ) {
+					if (! array_key_exists ( $sub, $orig_request->getSubstitutes () )) {
+						// $sub ersetzt $orig_sub
+						// Frage alte substitutes ab
+						$sql = "SELECT substitute1, substitute2, substitute3 FROM  HolidayRequests WHERE id=" . $id . ";";
+						$result = $conn->query ( $sql );
+						if (! $result) {
+							throw new Exception ( "Could not query holiday requests table: " . $conn->error );
+						}
+						$row = $result->fetch_assoc ();
+						// welche substitute ist die ersetzte?
+						$subs_nr = null;
+						if ($row ["substitute1"] == $orig_sub) {
+							$subs_nr = "substitute1";
+						} elseif ($row ["substitute2"] == $orig_sub) {
+							$subs_nr = "substitute2";
+						} elseif ($row ["substitute3"] == $orig_sub) {
+							$subs_nr = "substitute3";
+						}
+						// Ersetzte die substitute in der Tabelle. Status = 1
+						$sql = "UPDATE HolidayRequests
+						SET " . $subs_nr . "='" . $sub . "', " . $subs_nr . "_accepted='1' 
+						WHERE id=" . $id;
+						$result = $conn->query ( $sql );
+						if (! $result) {
+							throw new Exception ( $conn->error );
+						}
+						break;
+					}
+				}
+			}
+		}
+		
 		// Unveränderten HolidayRequest abfragen, um herauszufinden, welche ID zu welcher substitute gehört
 		$sql = "SELECT substitute1, substitute2, substitute3 FROM  HolidayRequests WHERE id=" . $id . ";";
 		$result = $conn->query ( $sql );

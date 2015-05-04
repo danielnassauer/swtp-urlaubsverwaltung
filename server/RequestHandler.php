@@ -114,8 +114,12 @@ class RequestHandler {
 						$start = $holReq ["start"];
 						$end = $holReq ["end"];
 					}
+					$substitutes = $orig_holReq->getSubstitutes ();
+					if (UserRights::editSubstitutes ( $orig_holReq->getSubstitutes (), $holReq ["substitutes"] )) {
+						$substitutes = $holReq ["substitutes"];
+					}
 					
-					HolidayRequests::editRequest ( $id, $start, $end, $holReq ["substitutes"], $holReq ["status"], $holReq ["comment"] );
+					HolidayRequests::editRequest ( $id, $start, $end, $substitutes, $holReq ["status"], $holReq ["comment"] );
 				}
 			}
 		}		

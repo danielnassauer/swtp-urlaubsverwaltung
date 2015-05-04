@@ -76,6 +76,7 @@
 		showOwnHolidayRequests();
 		restUrlaub();
 		$('#calendar').fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", holidays());
 		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 	}
 	
@@ -171,18 +172,53 @@
 				editHolidayRequest(id, request.start, request.end, request.substitutes, state, request.comment);
 				$('#deleteHoliday').modal("hide");
 				$("#calendar").fullCalendar("removeEvents");
+				$('#calendar').fullCalendar("addEventSource", holidays());
 				$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
 				showOwnHolidayRequests();
 			});
 		}
 		else{
 			$('#editHoliday').modal("show");
-			
-			console.log("ändern");
+			$('#offer_new_holiday_button').on('click', function () {
+					offerNewHoliday(id);
+				});
+
 			}
-		$("#UA_storno").attr('checked' , false);
-		$("#UA_change").attr('checked' , false);
+
 		}
+		
+	function offerNewHoliday(id){
+			
+		var req = getHolidayRequest(id);
+		
+		var startDay = $('#start_day').val();
+		var startMonth = $('#start_month').val();
+		var startYear = $('#start_year').val();
+		
+		var endDay = $('#end_day').val();
+		var endMonth = $('#end_month').val();
+		var endYear = $('#end_year').val();
+		
+		var startDate = startMonth + "/" + startDay + "/" + startYear + " 06:00:00";
+		var endDate = endMonth + "/" + endDay + "/" + endYear + " 06:00:00";
+		
+		var newStart = (Date.parse(startDate))/1000;
+		var newEnd = (Date.parse(endDate))/1000;
+		
+		var state = 2;
+		
+		editHolidayRequest(id, newStart, newEnd, req.substitutes, state, req.comment);
+		
+		$("#calendar").fullCalendar("removeEvents");
+		$('#calendar').fullCalendar("addEventSource", holidays());
+		$('#calendar').fullCalendar("addEventSource", getCalendarEvents());
+		showOwnHolidayRequests();
+
+		
+	}
+		
+		
+		
 
 	function showOwnHolidayRequests() {
 		var requests = getHolidayRequests();
@@ -227,12 +263,7 @@
 						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
 			}else if(request.status == 4){
 			
-			rows += "<tr class='alert alert-danger' onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + start.getDate()
-						+ "." + (start.getMonth() + 1) + "." + start.getFullYear()
-						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>"
-						+ dictInSub(request.substitutes) + "</td><td>"+'---'+"</td></tr>";
+			rows += "";
 			}
 	}	
 		$("#holidayrequests_list").html(rows);
@@ -340,6 +371,10 @@
 </head>
 
 <body>
+<style>
+ p {padding-top: 50px;}
+</style>
+<p>
 	<div id="popup" class="modal fade">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
@@ -355,7 +390,7 @@
 					<form role="form">
 		
 							<div class="radio">
-								<label> <input type="radio" name="optradio"
+								<label> <input checked type="radio" name="optradio"
 									id="radio_ua"> Urlaubsantrag
 								</label>
 							</div>
@@ -408,7 +443,7 @@
 	</div> <!-- /modal-dialog -->
 </div> <!-- /popup -->
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<span id ="loginPerson"class="navbar-brand"></span>
@@ -530,13 +565,35 @@
 					<h4>Urlaubsanträge bearbeiten</h4>
 				</div> <!-- /modal-header -->
 				<div class="modal-body">
-						<p>Hier sollen die Mitarbeiter ihren Urlaub verschieben können</p>
-						<p>HHier kann evtl ein Datepicker hin oder sowas</p>
-						<p>Die Mitarbeiter sollen auf jeden Fall nicht per Hand ihren neuen Urlaub eintragen</p>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Neuen Urlaubstermin vorschlagen:</h3>
+							</div>
+							<div class="panel-body">
+								<table>
+									<tr>
+										<td>Anfangsdatum: Tag.Monat.Jahr</td>
+										<td><input type="text" id="start_day" maxlength="2" size="2">.<input
+											type="text" id="start_month" maxlength="2" size="2">.<input
+											type="text" id="start_year" maxlength="4" size="4">
+											</td>
+									</tr>
+									<tr>
+										<td>Enddatum: Tag.Monat.Jahr</td>
+										<td><input type="text" id="end_day" maxlength="2" size="2">.<input
+											type="text" id="end_month" maxlength="2" size="2">.<input
+											type="text" id="end_year" maxlength="4" size="4"></td>
+									</tr>
+								</table>
+							</div><!-- /panel-body -->
+						</div><!-- /panel -->
+						
+						
 
 				</div> <!-- /modal-body -->
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" >Urlaubsantrag ändern</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" id="offer_new_holiday_button">Urlaubsantrag ändern</button>
 					</div> <!-- /modal-footer -->
 				
 			</div><!-- /modal-content -->
@@ -564,7 +621,7 @@
 			</div><!-- /modal-content -->
 		</div><!-- /modal-dialog -->
 	</div><!-- /changeHoliday -->
-		
+</p>	
 </body>
 
 </html>

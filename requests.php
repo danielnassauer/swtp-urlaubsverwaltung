@@ -27,7 +27,7 @@
 <?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
 <script type="text/javascript">
-	
+	var persons = getPersons();
 	
 	
 	function restUrlaub(){
@@ -40,32 +40,56 @@
 	function onHolidayRequestEdit(id) {
 		$("#btn_accept_substitute").attr("onclick",
 				"onSubstituteFinished(" + id + ")")
+		showSubstitutes();
 		$("#sub_popup").modal("show");
 		
 
 	}
 	
 
-
 	function onSubstituteFinished(id) {
 		$("#sub_popup").modal("hide");
+		var request = getHolidayRequest(id);
 		var accepted;
 		if ($("#sub_accept").prop("checked")){
 			accepted = 2;
-		} else {
+		} else if ($("#sub_decline").prop("checked")){
 				accepted = 3;
-			}
+			} else if ($("#sub_change").prop("checked")){
+				var newSubID = $("#substitutes_Menu").val();
+				var newSubDic = request.substitutes;
+				delete newSubDic[user.id];
+				newSubDic[newSubID] = "1";
+				console.log(newSubDic);
+				editHolidayRequest(id, request.start, request.end, newSubDic, request.status, request.comment); 
+				var req = getHolidayRequest(id);
+				console.log(req);
+				updateMySubstituteTable();
+				updateDepartmentTable();
+				return;
+				}
+				
+				
 		var request = getHolidayRequest(id);
 		var subs = request.substitutes;
 		subs[user.id] = accepted;
-		console.log(subs);
 		editHolidayRequest(id, request.start, request.end, subs,
 				request.status, request.comment);
-		$("#sub_accept").attr('checked' , false);
-		$("#sub_decline").attr('checked' , false);
 		updateMySubstituteTable();
 		updateDepartmentTable();
 	}
+	
+	function showSubstitutes(){
+		var persons = getPersons();
+		var rows = "<option >---</option>";
+		for (var i = 0; i < persons.length; i++) {
+			var person = persons[i];
+				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
+		}
+		
+		$("#substitutes_Menu").html(rows);
+	}
+	
 	
 		function onDepartmentHolidayRequestEdit(id){
 		$("#btn_accept_holiday").attr("onclick",
@@ -439,7 +463,7 @@
 						<form role="form">
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
-									id="sub_accept"> Vertretung zustimmen
+									id="sub_accept" checked=""> Vertretung zustimmen
 								</label>
 							</div>
 
@@ -449,6 +473,21 @@
 								Vertretung ablehnen
 							</label>
 						</div>
+						
+						<form class="form-inline">
+					<div class="radio">
+							<label> <input type="radio" name="optradio" id="sub_change">
+								Ich bin krank und gebe meine Vertretung ab an:
+							</label>
+						</div>
+						<div class="dropdown" >
+							<label for="substitutes_Menu">Vertretung</label> <select
+								id="substitutes_Menu" class="form-control">
+								<option>---</option>
+							</select> 
+						</div>
+					</form>
+						
 
 					</form>
 
@@ -479,7 +518,7 @@
 						<form role="form">
 							<div class="radio">
 								<label> <input type="radio" name="optradio"
-									id="holiday_accept"> Einverstanden wie beantragt
+									id="holiday_accept" checked=""> Einverstanden wie beantragt
 								</label>
 							</div>
 

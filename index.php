@@ -218,7 +218,11 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-default">
+<style>
+ p {padding-top: 50px;}
+</style>
+<p>
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<span class="navbar-brand">Urlaubsverwaltung</span>
@@ -264,7 +268,7 @@
 		</div>
 	</div>
 
-
+</p>
 </body>
 
 </html>

@@ -237,10 +237,6 @@
 </head>
 
 <body>
-<style>
- p {padding-top: 50px;}
-</style>
-<p>
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -257,7 +253,7 @@
 			</div>
 		</div>
 	</nav>
-
+<div style="padding-top:50px"></div>
 	<div class="container">
 		<div class="row">
 			<div class="panel panel-default">
@@ -286,8 +282,5 @@
 			</div>
 		</div>
 	</div>
-
-</p>
 </body>
-
 </html>

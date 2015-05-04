@@ -4,11 +4,13 @@ require_once dirname ( __FILE__ ) . '/server/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/server/db/Persons.php';
 require_once dirname ( __FILE__ ) . '/server/model/HolidayRequest.php';
 require_once dirname ( __FILE__ ) . '/server/model/Person.php';
+require_once dirname ( __FILE__ ) . '/server/HolidayCalculator.php';
+
 
 
 class PDFCreator {
 
-	private $array;
+	private $array ;
 	
 	/**
 	 * Erzeugt ein PDF-Dokument zu einem Urlaubsantrag.
@@ -31,19 +33,10 @@ class PDFCreator {
 
          $pdf->Image("server/logo_orion.png",150,10,50);
          $pdf->Ln(20);
-         switch ($holiday_request->getType())
-         {
-         	case 1:
-            $pdf->MultiCell( 0, 10, "Urlaubsantrag" , 0, 'C', 0);	
-         		break;
-         	case 2:
-            $pdf->MultiCell( 0, 10, "Freizeitantrag" , 0, 'C', 0);	
-                break;
+         
+            $pdf->MultiCell( 0, 10, $holiday_request->getType() , 0, 'C', 0);	
          	
-         	default:
-            $pdf->MultiCell( 0, 10, "Sonderurlaub" , 0, 'C', 0);		 
-        		break;
-         }
+      
 
          $pdf->Ln(15);
 
@@ -96,8 +89,8 @@ class PDFCreator {
          $pdf->SetFont("Helvetica","BI",12);
 
          //Berechnung des Tages
-         $differenz = $holiday_request->getEnd() - $holiday_request->getStart();
-         $tag = floor($differenz / (3600 * 24)) + 1;
+         $tag = HolidayCalculator::calculateHolidays($holiday_request->getStart(), $holiday_request->getEnd());
+      
 
          $pdf->Write(5," ".$tag);
          $pdf->SetFont("Helvetica","I",12);

@@ -16,28 +16,28 @@ class EmailArt
 	
 
 	//E-mail zum Vetreter
-public static function email1($holidayRequest){
-
+public static function email1($holidayRequest){	
 
 	foreach ($holidayRequest->getSubstitutes() as $i => $accepted)
   {
-    if($accepted == 2)
+    if($accepted == 1)
     {
     	$id = $i;
     }
   }
+
 	$to = Persons::getEmail($id);
-	$header =  "From: ".$holidayRequest->getForename." ".$holidayRequest->getPerson()->getLastname()." <".Persons::getEmail($holidayRequest->getPerson()->getID()).">\n";
+	$requester = Persons::getPerson($holidayRequest->getPerson());
+	$header =  "From: ".$requester->getForename()." ".$requester->getLastname()." <".Persons::getEmail($holidayRequest->getPerson()).">\n";	
 	$message = "Sehr Geehrter ".Persons::getPerson($id)->getLastname()."\n";
 	$message .= "ich möchte Urlaub von ".date("d.m.Y",$holidayRequest->getStart())." bis ".date("d.m.Y",$holidayRequest->getEnd())." nehmen und wollte wissen,"
 	            ."ob Sie mich in dieser Zeitpunkt vertreten könnten.\n"
                 ."Mit freundlichen Grüßen\n"
-                .$holidayRequest->getPerson()->getForename()." ".$holidayRequest->getPerson()->getLastname();
+                .$requester->getForename()." ".$requester->getLastname();
 
     $subject = "Vertretung";
     $email = new Email($to,$subject,$message,$header);
     $email->senden();
-
 }
 
 	//E-mail zum Abteilungsleiter

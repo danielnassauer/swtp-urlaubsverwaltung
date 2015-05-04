@@ -5,6 +5,7 @@ require_once dirname ( __FILE__ ) . '/db/Holidays.php';
 require_once dirname ( __FILE__ ) . '/model/Person.php';
 require_once dirname ( __FILE__ ) . '/session/UserRights.php';
 require_once dirname ( __FILE__ ) . '/HolidayCalculator.php';
+require_once dirname ( __FILE__ ) . '/model/EmailArt.php';
 class RequestHandler {
 
 	public function __construct($request) {
@@ -100,6 +101,7 @@ class RequestHandler {
 						self::subRemainingHoliday ( $person, $used_holidays );
 						
 						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
+						EmailArt::email1($request);
 						echo $request->toJSON ();
 					}
 				}

@@ -41,7 +41,7 @@
 	
 	function onHolidayRequestEdit(id) {
 		$("#btn_accept_substitute").attr("onclick",
-				"onSubstituteFinished(" + id + ")");
+				"onSubstituteDecision(" + id + ")");
 		
 		showSubstitutes();
 		$("#sub_popup").modal("show");
@@ -50,7 +50,7 @@
 	}
 	
 
-	function onSubstituteFinished(id) {
+	function onSubstituteDecision(id) {
 		$("#sub_popup").modal("hide");
 		var request = getHolidayRequest(id);
 		var accepted;
@@ -96,14 +96,14 @@
 	
 	function onEditDepartmentRequests(id){
 		$("#btn_accept_holiday").attr("onclick",
-				"onAllowingFinished(" + id + ")")
+				"onDecisionOnHoliday(" + id + ")")
 
 		$("#department_popup").modal("show");
 		
 		
 		}
 
-	function onAllowingFinished(id){
+	function onDecisionOnHoliday(id){
 		
 		$("#department_popup").modal("hide");
 		var request = getHolidayRequest(id);
@@ -130,40 +130,81 @@
 		updateManagementTable();
 	}
 	
-	function offerNewHoliday(id){
+	function updateMySubstituteTable(){
+		
+		var requests = getHolidayRequests();
+
+		
+		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id};
+		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
+		
+		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready]);
+		
+		var rows = "";
+		for (var i = 0; i < requests.length; i++){
 			
-		var newId = id;
+			var request;
+			request = requests[i];
+			var start = new Date(request.start * 1000);
+			var end = new Date(request.end * 1000);
+			
+			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
+			var colleague = persons.forename + " " + persons.lastname;
+			
+			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
+			
+			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
+			var subStatus = "";
+			
+			
+			for (var j = 0; j < keys.length; j++) {
+				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
+				var id = names.id;
+				var check = []
+				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
+				if (check[j] == 1){
+					subStatus = "noch keine Antwort ";
+				}
+				if(check[j] == 2){
+					subStatus = "Vertretung angenommen ";
+				} else if (check[j] == 3){
+					subStatus = "Vertretung abgelehnt ";
+				}
+				subs[j] = names.forename + " " + names.lastname + ": "
+						+ subStatus + "<br></br>";
+				if (id == user.id) {
+					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
+				}
+			}			
+			
+			
+			var getState = request.status;
+			var state = "";
+			if(getState == 1){
+					state = "angenommen";
+			} else if(getState == 2){
+					state = "wartend"
+				} else if(getState == 3){
+					state = "abgelehnt"
+				} else{
+					state = "storniert"
+				}
+			
+			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
+						+ ")'><td>" + request.type + "</td><td>" + colleague
+						+ "</td><td>" + start.getDate() + "."
+						+ (start.getMonth() + 1) + "." + start.getFullYear()
+						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
+						+ "." + end.getFullYear() + "</td><td>" + subs
+						+ "</td><td>" + state + "</td></tr>";
+			
+			}
+			
+			$("#request_list").html(rows);
+			
 		
-		var req = getHolidayRequest(id);
-		
-		var startDay = $('#start_day').val();
-		var startMonth = $('#start_month').val();
-		var startYear = $('#start_year').val();
-		
-		var endDay = $('#end_day').val();
-		var endMonth = $('#end_month').val();
-		var endYear = $('#end_year').val();
-		
-		var startDate = startMonth + "/" + startDay + "/" + startYear + " 06:00:00";
-		var endDate = endMonth + "/" + endDay + "/" + endYear + " 06:00:00";
-		
-		var newStart = (Date.parse(startDate))/1000;
-		var newEnd = (Date.parse(endDate))/1000;
-		
-		var state = 2;
-		
-		var comment = $('#change_comment').val();
-		
-		editHolidayRequest(newId, newStart, newEnd, req.substitutes, state, comment);
-		
-		updateMySubstituteTable();
-		updateDepartmentTable();
-		updateManagementTabel();
-
-		
-	}
+		}
 	
-
 	
 	
 	function updateDepartmentTable(){
@@ -239,85 +280,12 @@
 		$("#department_request_list").html(rows);
 
 		
-		}
-
-	function updateMySubstituteTable(){
-		
-		var requests = getHolidayRequests();
-
-		
-		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id};
-		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
-		
-		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready]);
-		
-		var rows = "";
-		for (var i = 0; i < requests.length; i++){
-			
-			var request;
-			request = requests[i];
-			var start = new Date(request.start * 1000);
-			var end = new Date(request.end * 1000);
-			
-			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
-			var colleague = persons.forename + " " + persons.lastname;
-			
-			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
-			
-			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
-			var subStatus = "";
-			
-			
-			for (var j = 0; j < keys.length; j++) {
-				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
-				var id = names.id;
-				var check = []
-				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
-				if (check[j] == 1){
-					subStatus = "noch keine Antwort ";
-				}
-				if(check[j] == 2){
-					subStatus = "Vertretung angenommen ";
-				} else if (check[j] == 3){
-					subStatus = "Vertretung abgelehnt ";
-				}
-				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus + "<br></br>";
-				if (id == user.id) {
-					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
-				}
-			}			
-			
-			
-			var getState = request.status;
-			var state = "";
-			if(getState == 1){
-					state = "angenommen";
-			} else if(getState == 2){
-					state = "wartend"
-				} else if(getState == 3){
-					state = "abgelehnt"
-				} else{
-					state = "storniert"
-				}
-			
-			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + colleague
-						+ "</td><td>" + start.getDate() + "."
-						+ (start.getMonth() + 1) + "." + start.getFullYear()
-						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + state + "</td></tr>";
-			
-			}
-			
-			$("#request_list").html(rows);
-			
-		
-		}
+	}
 
 
-function updateManagementTable(){		
+
+
+	function updateManagementTable(){		
 		
 		var requests = getHolidayRequests()
 		var persons = getPersons();
@@ -392,61 +360,12 @@ function updateManagementTable(){
 		
 		}
 
-	/*function showOwnHolidayRequests() {
-		var requests = getHolidayRequests();
-		var own_requests = [];
-		for (var i = 0; i < requests.length; i++) {
-			var request = requests[i];
-			if (user.id in request.substitutes) { // Filtert angezeigte Requests danach ob man selber als Vertretung eingetragen ist
-				own_requests.push(request);
-
-			}
-
-		}
-				
-		
-		var rows = "";
-		for (var i = 0; i < own_requests.length; i++) {
-			var request = own_requests[i];
-			var start = new Date(request.start * 1000);
-			var end = new Date(request.end * 1000);
-
-			var persons = getPerson(request.person); // Speichert die Person die Urlaub haben will in persons
-			var colleague = persons.forename + " " + persons.lastname; // Variable colleague in der Name des Antragstellers und nicht ID in Tabelle eingetragen werden kann
-
-			var keys = Object.keys(request.substitutes); //holt IDs der eingetragenen Vertretungen
-
-			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
-			for (var j = 0; j < keys.length; j++) {
-				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
-				var id = names.id;
-				var check = []
-				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
-				subs[j] = names.forename + " " + names.lastname + ": "
-						+ (check[j] ? "Vertretung angenommen " : "Vertretung abgelehnt ");
-				if (id == user.id) {
-					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
-				}
-			}			
-
-			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-					+ ")'><td>" + request.type + "</td><td>" + colleague
-					+ "</td><td>" + start.getDate() + "."
-					+ (start.getMonth() + 1) + "." + start.getFullYear()
-					+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
-					+ "." + end.getFullYear() + "</td><td>" + subs
-					+ "</td><td>" + request.status + "</td></tr>";
-		}
-
-		$("#request_list").html(rows);
-
-	} */
+	
 
 	$(document).ready(function() {
 		loginPerson();
 		if(user.role == 1){
 			$("#departmentTable").addClass('hidden');
-			$("#managementTable").addClass('hidden');
 		}
 		if(user.role == 2){
 			$("#managementTable").addClass('hidden');
@@ -472,7 +391,7 @@ function updateManagementTable(){
 					<li><a href="my.php"><span class="ion-person"></span>
 							Mein Kalender</a></li>
 					<li class="active"><a href="#"><span class="ion-clipboard">Anfragen</a></li>
-					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
+					<li><a href="admin.php"><span class="ion-clipboard" id="admin_ion">Admin</a></li>
 				</ul>
 			</div>
 			<div>
@@ -563,14 +482,6 @@ function updateManagementTable(){
 	</div> <!-- /panel -->
 	</div> <!-- /container -->
 	
-<!--	<div class="input-group input-group-lg">
-		<span class="input-group-addon" id="sizing-addon1">Startdatum</span>
-		<input type="text" class="form-control " name="test" placeholder="Klicken um neues Startdatum zu wählen" aria-describedby="sizing-addon1" id="datepickerTest">
-	</div>
-	
-	<div>
-		<button type="button" class="btn btn-primary" onclick="test()">Geparstes Datum in Konsole</button>
-	</div> -->
 	
 	<!-- Popup um Vertretung zuzustimmen oder abzulehnen -->
 	<div id="sub_popup" class="modal fade">
@@ -671,55 +582,5 @@ function updateManagementTable(){
 		</div><!-- /modal-dialog -->
 	</div><!-- /department_popup -->
 	
-	
-	
-	
-	<div id="editHoliday"class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4>Urlaubsanträge bearbeiten</h4>
-				</div> <!-- /modal-header -->
-				<div class="modal-body">
-						
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Neuen Urlaubstermin vorschlagen:</h3>
-							</div>
-							<div class="panel-body">
-								<table>
-									<tr>
-										<td>Anfangsdatum: Tag.Monat.Jahr</td>
-										<td><input type="text" id="start_day" maxlength="2" size="2">.<input
-											type="text" id="start_month" maxlength="2" size="2">.<input
-											type="text" id="start_year" maxlength="4" size="4">
-											</td>
-									</tr>
-									<tr>
-										<td>Enddatum: Tag.Monat.Jahr</td>
-										<td><input type="text" id="end_day" maxlength="2" size="2">.<input
-											type="text" id="end_month" maxlength="2" size="2">.<input
-											type="text" id="end_year" maxlength="4" size="4"></td>
-									</tr>
-								</table>
-								<div class="input-group">
-									<input type="text" class="form-control" placeholder="Begründung der Änderung" aria-describedby="sizing-addon2" id="change_comment">
-								</div>
-							</div><!-- /panel-body -->
-						</div><!-- /panel -->
-
-
-				</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-dismiss="modal" id="change_holiday_button">Urlaubsantrag ändern</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /changeHoliday -->
 </body>
 </html>

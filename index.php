@@ -16,6 +16,7 @@
 
 <script src="js/client.js"></script>
 <script src="js/model.js"></script>
+<script src="js/HolidayRequestsFilter.js"></script>
 
 <?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
 
@@ -130,6 +131,15 @@
 	function getCalendarEvents() {
 		var events = [];
 		var requests = getFilteredHolidayRequests(getActualFilters());
+		
+		function notCanceledRequestFilter(request){
+			return (request.status == 1 || request.status == 2);
+		}
+		
+		var filter_canceled = {"filter": notCanceledRequestFilter, "attachment": null};
+		
+		requests = filterHolidayRequests(requests, [filter_canceled]);
+		
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];
 			var person;
@@ -218,11 +228,7 @@
 </head>
 
 <body>
-<style>
- p {padding-top: 50px;}
-</style>
-<p>
-	<nav class="navbar navbar-default navbar-fixed-top">
+	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<span class="navbar-brand">Urlaubsverwaltung</span>
@@ -268,7 +274,7 @@
 		</div>
 	</div>
 
-</p>
+
 </body>
 
 </html>

@@ -35,8 +35,8 @@ class HolidayCalculator {
 		$count = 0; // Anzahl der Feiertage von Montag bis Freitag
 		
 		foreach ( $holidays as $value ) {
-			if ($value->day == $start) {
-				while ( $value->day < $end ) {
+			if (strcmp(date("d.m.Y",$value->day), date("d.m.Y",$start)) == 0) {
+				while ( strcmp(date("d.m.Y",$value->day), date("d.m.Y",$end)) != 0 ) {
 					$datum = date ( "d.m.Y", $value->day );
 					$wochentag = $datum ['wday'];
 					// Prüfen, ob Werkstag
@@ -48,7 +48,7 @@ class HolidayCalculator {
 				}
 			}
 		}
-		return $count;
+		return $count + 1;
 	}
 }
 

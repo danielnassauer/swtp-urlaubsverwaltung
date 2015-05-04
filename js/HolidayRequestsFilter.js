@@ -119,7 +119,7 @@ function withoutMe(request, person_id){
 function leitungsFilter(request, attachment) {
 			persons = attachment["persons"];
 			for(var i = 0; i < persons.length; i++){
-				if (!(persons[i].role == 3)){
+				if (persons[i].role != 3){
 					return persons[i];
 				}
 			}

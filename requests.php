@@ -194,15 +194,15 @@
 				var check = []
 				check[j] = request.substitutes[keys[j]]; // checken, ob Vertretung zugesagt oder abgelehnt hat
 				if (check[j] == 1){
-					subStatus = "noch keine Antwort ";
+					subStatus = "noch keine Antwort";
 				}
 				if(check[j] == 2){
-					subStatus = "Vertretung angenommen ";
+					subStatus = "Vertretung angenommen";
 				} else if (check[j] == 3){
 					subStatus = "Vertretung abgelehnt ";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus;
+						+ subStatus + "<br></br>";
 				if (id == user.id) {
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
@@ -276,7 +276,7 @@
 					subStatus = "Vertretung abgelehnt <br></br>";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus;
+						+ subStatus + "<br></br>";
 				if (id == user.id) {
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
@@ -353,7 +353,7 @@ function updateManagementTable(){
 					subStatus = "Vertretung abgelehnt ";
 				}
 				subs[j] = names.forename + " " + names.lastname + ": "
-						+ subStatus;
+						+ subStatus + "<br></br>";
 				if (id == user.id) {
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}

@@ -100,9 +100,9 @@ class RequestHandler {
 						}
 						self::subRemainingHoliday ( $person, $used_holidays );
 						
-						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
-						EmailArt::email1($request);
+						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );						
 						echo $request->toJSON ();
+						EmailArt::email1($request);
 					}
 				}
 			}			

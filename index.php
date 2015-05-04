@@ -237,7 +237,11 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-default">
+<style>
+ p {padding-top: 50px;}
+</style>
+<p>
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<span id ="loginPerson"class="navbar-brand"></span>
@@ -283,7 +287,7 @@
 		</div>
 	</div>
 
-
+</p>
 </body>
 
 </html>

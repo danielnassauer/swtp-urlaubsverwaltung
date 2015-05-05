@@ -214,11 +214,11 @@
 		
 		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
-		var filter_leitung = {"filter":leitungsFilter, "attachment":{"persons": persons}};
+		var filter_management = {"filter":managementFilter, "attachment":{"persons": persons}};
 		var filter_me = {"filter":withoutMeFilter, "attachment": user.id};
 		var filter_sub_accepted = {"filter": substituteAcceptedFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_sub_accepted, filter_me]);
+		requests = filterHolidayRequests(requests,[filter_management,filter_dep, filter_waiting, filter_sub_accepted, filter_me]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){

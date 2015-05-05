@@ -136,11 +136,11 @@ function withoutMeFilter(request, person_id){
  *            Dictionary: "persons": Array von allen Personen
  * @returns Personen die nicht Geschäftsleiter sind.
  */
-function leitungsFilter(request, attachment) {
+function managementFilter(request, attachment) {
 			persons = attachment["persons"];
 			for(var i = 0; i < persons.length; i++){
 				if (persons[i].role != 3){
-					return persons[i];
+					return (persons.role == 1 || persons.role == 2);
 				}
 			}
 }
@@ -174,7 +174,7 @@ function readyStatusFilter(request) {
 
 
 /**
- * Filtert HolidayRequests, in denen der Status der Vertretungen = angenommen ist, oder keine Vertretung angegeben wurde.
+ * Filtert HolidayRequests, in denen der Status der Vertretungen = angenommen ist.
  * 
  * @param request
  * @returns {Boolean} true, wenn der Status der Vertretungen = angenommen ist, oder keine Vertretung angegeben wurde.

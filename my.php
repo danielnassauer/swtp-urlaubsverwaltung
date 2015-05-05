@@ -27,21 +27,14 @@
 	var calendar;
 	var persons = getPersons();
 	
-	function getFieldService(){
-		var checkedValue = $('#field_service_check').val();
-			if (user.field_service){
-				 $('#field_service_check').prop("checked", true);
-				} else $('#field_service_check').prop("checked", false);
-	}
-	
 	function setFieldService(){
-		var checkedValue = $('#field_service_check').val();
-			if (checkedValue){	
-				user.field_service = true;
-				console.log(user.field_service);
-			} else 
-				user.field_service = false;
-				console.log(user.field_service);
+		var checked = $('#field_service_check').is(':checked');
+		editPerson(user.id, checked, user.remaining_holiday, user.role, user.is_admin);	
+		user = getPerson(user.id);		
+	}
+
+	function updateFieldserviceCheckbox(){
+		$('#field_service_check').prop('checked', user.field_service);
 	}
 	
 	function loginPerson(){
@@ -397,10 +390,10 @@
 	}
 
 	$(document).ready(function() {
-		getFieldService();
 		loginPerson();
 		showOwnHolidayRequests();
 		restUrlaub();
+		updateFieldserviceCheckbox();
 		if(!user.is_admin){
 			$("#admin_ion").addClass('hidden');
 		}
@@ -430,8 +423,8 @@
 </script>
 </head>
 
-<body>	
-	
+<body>
+
 	<div id="popup" class="modal fade">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
@@ -525,22 +518,22 @@
 			</div>
 		</div>
 	</nav>
-	
-	<div style="padding-top: 50px"></div>
+
+	<div style="padding-top: 70px"></div>
 	<form>
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-7">
+		<div class="container">
+			<div class="panel panel-default">
 				<div class="checkbox">
-					<label>
-						<input type="checkbox" id="field_service_check" onclick="setFieldService()"> Ich befinde mich im Außendienst
-					</label>
+					<div class="panel-body">
+						<label> <input type="checkbox" id="field_service_check"
+							onclick="setFieldService()"> Ich befinde mich zurzeit im Außendienst
+						</label>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	</form>
-	
+
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-7">
@@ -674,9 +667,7 @@
 						<h4>Fehler</h4>
 					</div>
 					<!-- /modal-header -->
-					<div class="modal-body" id="failure_text">
-						
-					</div>
+					<div class="modal-body" id="failure_text"></div>
 					<!-- /modal-body -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" data-dismiss="modal">Zurück</button>

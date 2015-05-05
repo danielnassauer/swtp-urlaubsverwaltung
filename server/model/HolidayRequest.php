@@ -20,7 +20,7 @@ class HolidayRequest {
 	 * @param
 	 *        	end End-Datum (Unix-Timestamp)
 	 * @param
-	 *        	person Antragsteller
+	 *        	person Antragsteller-ID
 	 * @param
 	 *        	substitutes Dictionary mit IDs der Vertretungen als Key und einem Integer als Wert (1: wartend, 2: angenommen, 3: abgelehnt).
 	 * @param

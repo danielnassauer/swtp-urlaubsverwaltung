@@ -1,6 +1,7 @@
 <?php
 require_once dirname ( __FILE__ ) . '/Session.php';
 require_once dirname ( __FILE__ ) . '/../db/Persons.php';
+require_once dirname ( __FILE__ ) . '/../model/HolidayRequest.php';
 class UserRights {
 	private static $user = null;
 
@@ -78,7 +79,7 @@ class UserRights {
 	 * Admins dürfen Substitutes ändern.
 	 * Ein Substitute darf nur seinen eigenen Status ändern.
 	 * Ein Substitute darf sich selbst mit einem anderen Substitute ersetzen.
-	 * 
+	 *
 	 * @param
 	 *        	old_subs Unveränderte Substitutes
 	 * @param
@@ -109,21 +110,66 @@ class UserRights {
 		}
 		
 		// Ein Substitute darf sich selbst mit einem anderen Substitute ersetzen.
-		if (count ( $old_subs ) == count ( $new_subs ) && array_key_exists(self::$user->getID (), $old_subs) && !array_key_exists(self::$user->getID (), $new_subs)) {
+		if (count ( $old_subs ) == count ( $new_subs ) && array_key_exists ( self::$user->getID (), $old_subs ) && ! array_key_exists ( self::$user->getID (), $new_subs )) {
 			$ok = true;
 			$count = 0;
 			foreach ( $old_subs as $subs => $status ) {
 				if (! array_key_exists ( $subs, $new_subs )) {
-					$count++;
-					if($count > 1){
+					$count ++;
+					if ($count > 1) {
 						$ok = false;
 						break;
 					}
-				}				
+				}
 			}
 			if ($ok) {
 				return true;
 			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Prüft, ob der aktuelle user die Urlaubsanfragen stornieren darf.
+	 * Admins dürfen Urlaubsanfragen stornieren.
+	 * Antragsteller darf eigene Urlaubsanfragen stornieren.
+	 */
+	public static function cancel($holidayRequest) {
+		// Admin
+		if (self::$user->isAdmin ()) {
+			return true;
+		}
+		
+		// Antragsteller
+		if (self::$user->getID () == $holidayRequest->getPerson ()) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Prüft, ob der aktuelle user die Urlaubsanfragen akzeptieren oder ablehnen darf.
+	 * Admins dürfen Urlaubsanfragen akzeptieren oder ablehnen.
+	 * Geschäftsleiter dürfen Urlaubsanfragen akzeptieren oder ablehnen.
+	 * Der zugehörige Abteilungsleiter darf Urlaubsanfragen akzeptieren oder ablehnen.
+	 */
+	public static function acceptOrDeclineRequest($holidayRequest) {
+		// Admin
+		if (self::$user->isAdmin ()) {
+			return true;
+		}
+		
+		// Geschäftsleiter
+		if (self::$user->getRole () == 3) {
+			return true;
+		}
+		
+		// Abteilungsleiter
+		$requester = Persons::getPerson ( $holidayRequest->getPerson () );
+		if (self::$user->getRole () == 2 && self::$user->getDepartment () == $requester->getDepartment ()) {
+			return true;
 		}
 		
 		return false;

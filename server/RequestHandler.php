@@ -100,9 +100,9 @@ class RequestHandler {
 						}
 						self::subRemainingHoliday ( $person, $used_holidays );
 						
-						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );						
+						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
 						echo $request->toJSON ();
-						EmailArt::email1($request);
+						EmailArt::email1 ( $request );
 					}
 				}
 			}			
@@ -116,11 +116,11 @@ class RequestHandler {
 					// Rechte prüfen
 					$start = $orig_holReq->getStart ();
 					$end = $orig_holReq->getEnd ();
-					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {						
+					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {
 						// zuerst zuvor verbrauchte Urlaubstage wieder gutschreiben
 						$person = Persons::getPerson ( $orig_holReq->getPerson () );
 						$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
-						self::addRemainingHoliday ( $person, $used_holidays );						
+						self::addRemainingHoliday ( $person, $used_holidays );
 						// dann neu verbrauchte Urlaubstage wieder abziehen
 						$person = Persons::getPerson ( $orig_holReq->getPerson () );
 						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
@@ -134,12 +134,25 @@ class RequestHandler {
 						$substitutes = $holReq ["substitutes"];
 					}
 					
-					//TODO rechte prüfen
-					if($holReq ["status"] == 4){
-						//beim stornieren urlaubstage zurückbuchen
-						$person = Persons::getPerson ( $orig_holReq->getPerson () );
-						$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
-						self::addRemainingHoliday ( $person, $used_holidays );
+					$status = $orig_holReq->getStatus ();
+					if ($holReq ["status"] == 4) {
+						if (UserRights::cancel ( $orig_holReq )) {
+							// beim stornieren urlaubstage zurückbuchen
+							$person = Persons::getPerson ( $orig_holReq->getPerson () );
+							$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
+							self::addRemainingHoliday ( $person, $used_holidays );
+							$status = 4;
+						}
+					} elseif ($holReq ["status"] == 1 || $holReq ["status"] == 3) {
+						if (UserRights::acceptOrDeclineRequest ( $orig_holReq )) {
+							$status = $holReq ["status"];
+							// beim ablehnen urlaubstage zurückbuchen
+							if ($status == 3) {
+								$person = Persons::getPerson ( $orig_holReq->getPerson () );
+								$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
+								self::addRemainingHoliday ( $person, $used_holidays );
+							}
+						}
 					}
 					
 					HolidayRequests::editRequest ( $id, $start, $end, $substitutes, $holReq ["status"], $holReq ["comment"] );

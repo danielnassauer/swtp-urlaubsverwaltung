@@ -92,13 +92,15 @@ class RequestHandler {
 					// Rechte prüfen
 					if (UserRights::createHolidayRequest ( $holReq ["person"] )) {
 						// verbrauchte urlaubstage abziehen (null ausgeben wenn verbleibende < 0)
-						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
-						$person = Persons::getPerson ( $holReq ["person"] );
-						if ($person->getRemainingHoliday () - $used_holidays < 0) {
-							echo "null";
-							return;
+						if ($holReq ["type"] == "Urlaub" || $holReq ["type"] == "Freizeit") {
+							$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
+							$person = Persons::getPerson ( $holReq ["person"] );
+							if ($person->getRemainingHoliday () - $used_holidays < 0) {
+								echo "null";
+								return;
+							}
+							self::subRemainingHoliday ( $person, $used_holidays );
 						}
-						self::subRemainingHoliday ( $person, $used_holidays );
 						
 						$request = HolidayRequests::createRequest ( $holReq ["start"], $holReq ["end"], $holReq ["person"], $holReq ["substitutes"], $holReq ["type"] );
 						echo $request->toJSON ();
@@ -117,14 +119,16 @@ class RequestHandler {
 					$start = $orig_holReq->getStart ();
 					$end = $orig_holReq->getEnd ();
 					if (UserRights::editStartAndEnd ( $orig_holReq->getPerson () )) {
-						// zuerst zuvor verbrauchte Urlaubstage wieder gutschreiben
-						$person = Persons::getPerson ( $orig_holReq->getPerson () );
-						$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
-						self::addRemainingHoliday ( $person, $used_holidays );
-						// dann neu verbrauchte Urlaubstage wieder abziehen
-						$person = Persons::getPerson ( $orig_holReq->getPerson () );
-						$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
-						self::subRemainingHoliday ( $person, $used_holidays );
+						if ($orig_holReq->getType () == "Urlaub" || $orig_holReq->getType () == "Freizeit") {
+							// zuerst zuvor verbrauchte Urlaubstage wieder gutschreiben
+							$person = Persons::getPerson ( $orig_holReq->getPerson () );
+							$used_holidays = HolidayCalculator::calculateHolidays ( $start, $end );
+							self::addRemainingHoliday ( $person, $used_holidays );
+							// dann neu verbrauchte Urlaubstage wieder abziehen
+							$person = Persons::getPerson ( $orig_holReq->getPerson () );
+							$used_holidays = HolidayCalculator::calculateHolidays ( $holReq ["start"], $holReq ["end"] );
+							self::subRemainingHoliday ( $person, $used_holidays );
+						}
 						
 						$start = $holReq ["start"];
 						$end = $holReq ["end"];
@@ -137,10 +141,12 @@ class RequestHandler {
 					$status = $orig_holReq->getStatus ();
 					if ($holReq ["status"] == 4) {
 						if (UserRights::cancel ( $orig_holReq )) {
-							// beim stornieren urlaubstage zurückbuchen
-							$person = Persons::getPerson ( $orig_holReq->getPerson () );
-							$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
-							self::addRemainingHoliday ( $person, $used_holidays );
+							if ($orig_holReq->getType () == "Urlaub" || $orig_holReq->getType () == "Freizeit") {
+								// beim stornieren urlaubstage zurückbuchen
+								$person = Persons::getPerson ( $orig_holReq->getPerson () );
+								$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
+								self::addRemainingHoliday ( $person, $used_holidays );
+							}
 							$status = 4;
 						}
 					} elseif ($holReq ["status"] == 1 || $holReq ["status"] == 3) {
@@ -148,9 +154,11 @@ class RequestHandler {
 							$status = $holReq ["status"];
 							// beim ablehnen urlaubstage zurückbuchen
 							if ($status == 3) {
-								$person = Persons::getPerson ( $orig_holReq->getPerson () );
-								$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
-								self::addRemainingHoliday ( $person, $used_holidays );
+								if ($orig_holReq->getType () == "Urlaub" || $orig_holReq->getType () == "Freizeit") {
+									$person = Persons::getPerson ( $orig_holReq->getPerson () );
+									$used_holidays = HolidayCalculator::calculateHolidays ( $orig_holReq->getStart (), $orig_holReq->getEnd () );
+									self::addRemainingHoliday ( $person, $used_holidays );
+								}
 							}
 						}
 					}

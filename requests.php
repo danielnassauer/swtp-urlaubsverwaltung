@@ -215,9 +215,10 @@
 		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
 		var filter_leitung = {"filter":leitungsFilter, "attachment":{"persons": persons}};
-		var filter_me = {"filter":withoutMe, "attachment": user.id};
+		var filter_me = {"filter":withoutMeFilter, "attachment": user.id};
+		var filter_sub_accepted = {"filter": substituteAcceptedFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_me, filter_leitung]);
+		requests = filterHolidayRequests(requests,[filter_dep, filter_waiting, filter_sub_accepted, filter_me]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){
@@ -293,9 +294,10 @@
 		
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
 		var filter_leitung = {"filter":abteilungsleiterFilter, "attachment": {"persons": persons}};
-		var filter_me = {"filter":withoutMe, "attachment": user.id};
+		var filter_me = {"filter":withoutMeFilter, "attachment": user.id};
+		var filter_sub_accepted = {"filter": substituteAcceptedFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_me, filter_waiting, filter_leitung]);
+		requests = filterHolidayRequests(requests,[filter_me, filter_waiting, filter_leitung, filter_sub_accepted]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){

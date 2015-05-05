@@ -123,7 +123,7 @@ function isRequesterFilter(request, person_id) {
  *            ID des Antragstellers
  * @returns {Boolean} true, wenn die Person nicht der Antragsteller des Requests ist.
  */
-function withoutMe(request, person_id){
+function withoutMeFilter(request, person_id){
 		return request.person != person_id;
 }
 
@@ -171,3 +171,19 @@ function abteilungsleiterFilter(request, attachment) {
 function readyStatusFilter(request) {
 	return (request.status == 1 || request.status == 2);
 }
+
+
+/**
+ * Filtert HolidayRequests, in denen der Status der Vertretungen = angenommen ist, oder keine Vertretung angegeben wurde.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status der Vertretungen = angenommen ist, oder keine Vertretung angegeben wurde.
+ */
+function substituteAcceptedFilter(request){
+	if(Object.keys(request.substitutes).length > 0){
+		for(var substitute in request.substitutes){
+			return (request.substitutes[substitute] == 2);
+		}
+	} else return Object.keys(request.substitutes).length == 0;
+}
+

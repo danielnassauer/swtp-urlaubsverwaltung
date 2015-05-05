@@ -250,6 +250,13 @@
 				2 : "hat zugestimmt",
 				3 : "hat abgelehnt"
 		}
+		
+		if (request.type == "Krankheit"){
+				colors[1] = "alert-info";
+ 				colors[2] = "alert-info";
+				headers[2] = "Krankheitsfall";
+				headers[1] = "Krankheitsfall";
+		}
 
 		var substitutes = "";
 		if(Object.keys(request.substitutes).length > 0){

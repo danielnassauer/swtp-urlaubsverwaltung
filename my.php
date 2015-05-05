@@ -142,8 +142,9 @@
 	
 	function onHolidayRequestSelection(start, end, allDay) {
 		var liveDate = new Date();
+		liveDate.setHours(0,0,0,0)
 		var fill = "Sie haben ein bereits vergangenes Datum ausgewählt";
-		
+
 		if(liveDate > start){
 			$('#failure_text').html(fill);
 			$('#wrongDate').modal("show");

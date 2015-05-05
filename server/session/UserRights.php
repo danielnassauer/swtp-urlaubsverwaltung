@@ -1,6 +1,7 @@
 <?php
 require_once dirname ( __FILE__ ) . '/Session.php';
 require_once dirname ( __FILE__ ) . '/../db/Persons.php';
+require_once dirname ( __FILE__ ) . '/../db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/../model/HolidayRequest.php';
 class UserRights {
 	private static $user = null;
@@ -168,7 +169,7 @@ class UserRights {
 		
 		// Abteilungsleiter
 		$requester = Persons::getPerson ( $holidayRequest->getPerson () );
-		if (self::$user->getRole () == 2 && self::$user->getDepartment () == $requester->getDepartment ()) {
+		if (self::isDepartmentManager () && self::$user->getDepartment () == $requester->getDepartment ()) {
 			// nicht eigene Anfragen
 			if (self::$user->getID () != $holidayRequest->getPerson ()) {
 				return true;
@@ -176,6 +177,47 @@ class UserRights {
 		}
 		
 		return false;
+	}
+
+	/**
+	 * Ermittelt, ob die angemeldete Person ein Abteilungsleiter ist, oder die
+	 * Rechte eines Abteilungsleiters besitzt, das die Person zurzeit die
+	 * Vertretung für einen Abteilungsleiter übernimmt.
+	 *
+	 * @return true, wenn die angemeldete Person Abteilungsleiterrechte hat.
+	 */
+	private static function isDepartmentManager() {
+		if (self::$user->getRole () == 2) {
+			return true;
+		}
+		foreach ( HolidayRequests::getRequests () as $request ) {
+			$substitutes = $request->getSubstitutes ();
+			if (array_key_exists ( self::$user->getID (), $substitutes )) { // angemeldeter user ist vertretung
+				if ($substitutes [self::$user->getID ()] == 2) { // und hat zugestimmt
+					if (self::timeInRange ( gmmktime (), $request->getStart (), $request->getEnd () )) { // Vertretung findet heute statt
+						$requester = Persons::getPerson ( $request->getPerson () );
+						if ($requester->getRole () == 2) { // Abteilungsleiter wird vertreten
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	private static function timeInRange($timestamp, $start, $end) {
+		for($day = $start; $day <= $end; $day += 24 * 60 * 60) {
+			if (self::isSameDay ( $timestamp, $day )) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static function isSameDay($timestamp1, $timestamp2) {
+		return strcmp ( date ( "d.m.Y", $timestamp1 ), date ( "d.m.Y", $timestamp2 ) ) == 0;
 	}
 }
 

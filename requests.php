@@ -69,6 +69,7 @@
 				console.log(req);
 				updateMySubstituteTable();
 				updateDepartmentTable();
+				updateManagementTable();
 				return;
 				}
 				
@@ -80,6 +81,7 @@
 				request.status, request.comment);
 		updateMySubstituteTable();
 		updateDepartmentTable();
+		updateManagementTable();
 	}
 	
 	function showSubstitutes(){

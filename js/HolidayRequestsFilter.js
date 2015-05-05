@@ -191,3 +191,11 @@ function substituteAcceptedFilter(request){
 	} else return Object.keys(request.substitutes).length == 0;
 }
 
+function substituteDeclinedFilter(request, person_id){
+	if(Object.keys(request.substitutes).length > 0){
+		for(person_id in request.substitutes){
+		return (request.substitutes[person_id] == 1 || request.substitutes[person_id] == 2);
+		}
+
+	}
+}

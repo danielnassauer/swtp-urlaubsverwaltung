@@ -88,8 +88,10 @@
 		var persons = getPersons();
 		var rows = "<option >---</option>";
 		for (var i = 0; i < persons.length; i++) {
+			if(persons[i].id != user.id){
 			var person = persons[i];
-				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";		
+				 rows += "<option value="+person.id+">"+person.forename+" "+ person.lastname +"</option>";
+			}		
 		}
 		
 		$("#substitutes_Menu").html(rows);
@@ -517,7 +519,7 @@
 						<form class="form-inline">
 					<div class="radio">
 							<label> <input type="radio" name="optradio" id="sub_change">
-								Ich bin krank und gebe meine Vertretung ab an:
+								Ich möchte meine Vertretung abgeben an:
 							</label>
 						</div>
 						<div class="dropdown" >

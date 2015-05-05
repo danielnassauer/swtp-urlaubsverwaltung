@@ -189,18 +189,7 @@
 		updatePage();	
 	}
 	
-	function cancelWarning(id){
-		$('#btn_cancel_holiday').attr("onclick",
-					"cancelRequest(" + id +")");
-		$('#deleteHoliday').modal("show");
-	
-	}
-	
-	
 	function cancelRequest(id){
-		
-		$('#deleteHoliday').modal("hide");
-		
 		var request = getHolidayRequest(id);
 		
 		var status = 4;
@@ -245,7 +234,7 @@
 
 		var cancel = "";
 		if(request.status == 1 || request.status == 2){
-			cancel = "<a href='#' onclick='cancelWarning("+request.id+")'>stornieren</a> - ";
+			cancel = "<a href='#' onclick='cancelRequest("+request.id+")'>stornieren</a> - ";
 		}
 
 		var edit = "";
@@ -530,7 +519,7 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Nein,
 							doch nicht</button>
-						<button type="button" class="btn btn-primary" id="btn_cancel_holiday">Urlaubsantrag
+						<button type="button" class="btn btn-primary" id="cancel_holiday">Urlaubsantrag
 							stornieren</button>
 					</div>
 					<!-- /modal-footer -->

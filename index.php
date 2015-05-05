@@ -155,30 +155,41 @@
 			var title = person.forename + " " + person.lastname;
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-			if(person.field_service){
-					title = person.forename + " " + person.lastname + " (Außendienst)";
-					events.push({
+			if(request.type != "Krankheit"){
+				if(person.field_service){
+						title = person.forename + " " + person.lastname + " (Außendienst)";
+						events.push({
+							title : title,
+							start : start,
+							end : end,
+							textColor:'#333333',
+							borderColor : '#333333',
+							color: '#fcf8e3'
+						});
+				}else{
+				events.push({
 						title : title,
 						start : start,
 						end : end,
+						color : '#dff0d8',
 						textColor:'#333333',
-						borderColor : '#333333',
-						color: '#fcf8e3'
+						borderColor : '#333333'
 					});
-			}else{
-			events.push({
-					title : title,
-					start : start,
-					end : end,
-					color : '#dff0d8',
-					textColor:'#333333',
-					borderColor : '#333333'
-				});
 				}
-		}
+				}else{
+				title = person.forename + " " + person.lastname + " (Krank)";
+				events.push({
+								title : title,
+								start : start,
+								end : end,
+								color : '#d9edf7',
+								textColor:'#333333',
+								borderColor : '#333333'
+					})
+				}
+			}
 		return events;
 	}
-	
 	/*
 	*	Füllt den Kalender mit Feiertagen.
 	*/

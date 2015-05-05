@@ -136,14 +136,15 @@ function withoutMeFilter(request, person_id){
  *            Dictionary: "persons": Array von allen Personen
  * @returns Personen die nicht Geschäftsleiter sind.
  */
-function managementFilter(request, attachment) {
+function employeeFilter(request, attachment) {
 			persons = attachment["persons"];
 			for(var i = 0; i < persons.length; i++){
-				if (persons[i].role != 3){
-					return (persons.role == 1 || persons.role == 2);
-				}
+				return persons[i].role == 1;
+				
 			}
 }
+
+
 
 /**
  * Filtert HolidayRequests nach Abteilungsleitern

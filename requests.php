@@ -216,11 +216,11 @@
 		
 		var filter_dep = {"filter" :departmentFilter, "attachment": {"department": user.department, "persons" : persons}};
 		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
-		var filter_management = {"filter":managementFilter, "attachment":{"persons": persons}};
+		var filter_employee = {"filter":employeeFilter, "attachment":{"persons": persons}};
 		var filter_me = {"filter":withoutMeFilter, "attachment": user.id};
 		var filter_sub_accepted = {"filter": substituteAcceptedFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_management,filter_dep, filter_waiting, filter_sub_accepted, filter_me]);
+		requests = filterHolidayRequests(requests,[filter_employee, filter_dep, filter_waiting, filter_sub_accepted, filter_me]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){
@@ -276,7 +276,7 @@
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + state + "</td><td>" + request.comment + "</td></tr>";
+						+ "</td><td>" + state + "</td></tr>";
 			
 			}
 		
@@ -421,7 +421,6 @@
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
-				<th>Kommentar des Abteilungsleiters</th>
 			</tr>
 			<tbody id="request_list">
 
@@ -448,7 +447,6 @@
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
-				<th>Kommentar der Geschäftsführung</th>
 			</tr>
 			<tbody id="department_request_list">
 
@@ -475,7 +473,6 @@
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
-				<th>Kommentar der Geschäftsleitung</th>
 			</tr>
 			<tbody id="management_request_list">
 

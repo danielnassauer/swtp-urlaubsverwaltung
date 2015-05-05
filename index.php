@@ -224,6 +224,9 @@
 	}
 
 	$(document).ready(function() {
+		if(!user.is_admin){
+			$("#admin_ion").addClass('hidden');
+		}
 		loginPerson();
 		showDepartmentMenu();
 		initCalendar();
@@ -244,7 +247,7 @@
 					<li><a href="my.php"><span class="ion-person"></span>
 							Mein Kalender</a></li>
 					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
-					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
+					<li><a href="admin.php"><span class="ion-clipboard" id="admin_ion">Admin</a></li>
 				</ul>
 			</div>
 		</div>

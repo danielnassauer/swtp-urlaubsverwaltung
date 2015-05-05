@@ -359,6 +359,9 @@
 		loginPerson();
 		showOwnHolidayRequests();
 		restUrlaub();
+		if(!user.is_admin){
+			$("#admin_ion").addClass('hidden');
+		}
 
 		calendar = $('#calendar').fullCalendar({
 			lang : 'de', 
@@ -469,7 +472,7 @@
 					<li class="active"><a href="#"><span class="ion-person"></span>
 							Mein Kalender</a></li>
 					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
-					<li><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
+					<li><a href="admin.php"><span class="ion-clipboard" id="admin_ion">Admin</a></li>
 				</ul>
 			</div>
 			<div>

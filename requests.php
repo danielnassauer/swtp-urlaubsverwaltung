@@ -368,6 +368,9 @@
 
 	$(document).ready(function() {
 		loginPerson();
+		if(!user.is_admin){
+			$("#admin_ion").addClass('hidden');
+		}
 		if(user.role == 1){
 			$("#departmentTable").addClass('hidden');
 		}

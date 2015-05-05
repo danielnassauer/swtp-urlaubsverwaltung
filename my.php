@@ -71,6 +71,8 @@
 				var type = "Urlaub"
 			} else if ($("#radio_fa").prop("checked")) {
 				var type = "Freizeit"
+			} else if ($("#radio_ill").prop("checked")) {
+				var type = "Krankheit";
 			} else {
 				var type = $("#text_su").val();
 			}
@@ -449,6 +451,12 @@
 								Freizeitantrag
 							</label>
 						</div>
+						
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="radio_ill">
+								Krankheitsfall
+							</label>
+						</div>
 
 
 						<div class="input-group">
@@ -458,7 +466,8 @@
 								placeholder="Antrag für Sonderurlaub wegen" class="form-control"
 								aria-label="..." id="text_su">
 						</div>
-						<!-- /input-group -->
+						
+						
 					</form>
 					<div class="panel-body">
 						<form class="form-inline">

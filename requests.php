@@ -43,7 +43,7 @@
 		$("#btn_accept_substitute").attr("onclick",
 				"onSubstituteDecision(" + id + ")");
 		
-		showSubstitutes();
+		showSubstitutes(id);
 		$("#sub_popup").modal("show");
 		
 
@@ -84,7 +84,8 @@
 		updateManagementTable();
 	}
 	
-	function showSubstitutes(){
+	function showSubstitutes(id){
+		var request = getHolidayRequest(id);
 		var persons = getPersons();
 		var rows = "<option >---</option>";
 		for (var i = 0; i < persons.length; i++) {
@@ -141,8 +142,9 @@
 		
 		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id};
 		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
+		var filter_declined = {"filter": substituteDeclinedFilter, "attachment":user.id};
 		
-		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready]);
+		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready, filter_declined]);
 		
 		var rows = "";
 		for (var i = 0; i < requests.length; i++){
@@ -160,7 +162,7 @@
 			var subs = []; // Vertretungen als String in Array subs, damit sie nicht mit IDs angezeigt werden
 			var subStatus = "";
 			
-			
+			var edit = "";
 			for (var j = 0; j < keys.length; j++) {
 				var names = getPerson(keys[j]); //Namen der Vertretungen aus Array keys, in dem Vertretungen als Person Objekt gespeichert sind
 				var id = names.id;
@@ -177,6 +179,9 @@
 				subs[j] = names.forename + " " + names.lastname + ": "
 						+ subStatus + "<br></br>";
 				if (id == user.id) {
+					if(check[j] == 1){
+					edit = "<a href='#' onclick='onHolidayRequestEdit(" + request.id
+						+ ")'>antworten</a><br>";}
 					subs[j] = "<b>"+subs[j]+"</b>"; // eigenen Namen wird dick geschrieben, damit man sofort darauf aufmerksam wird
 				}
 			}			
@@ -194,13 +199,12 @@
 					state = "storniert"
 				}
 			
-			rows += "<tr onclick='onHolidayRequestEdit(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + colleague
+			rows += "<tr><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + state + "</td></tr>";
+						+ "</td><td>" + state + "</td><td>" + edit + "</td></tr>";
 			
 			}
 			
@@ -261,24 +265,18 @@
 			}		
 			
 			var getState = request.status;
-			var state = "";
-			if(getState == 1){
-					state = "angenommen";
-			} else if(getState == 2){
-					state = "wartend"
-				} else if(getState == 3){
-					state = "abgelehnt"
-				} else{
-					state = "storniert"
-				}
+			var edit = "";
+			if(getState == 2){
+					edit = "<a href='#' onclick='onEditDepartmentRequests(" + request.id
+						+ ")'>antworten</a><br>";
+			}
 			
-			rows += "<tr onclick='onEditDepartmentRequests(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + colleague
+			rows += "<tr><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + state + "</td></tr>";
+						+ "</td><td>" + edit + "</td></tr>";
 			
 			}
 		
@@ -340,24 +338,18 @@
 			}		
 			
 			var getState = request.status;
-			var state = "";
-			if(getState == 1){
-					state = "angenommen";
-			} else if(getState == 2){
-					state = "wartend"
-				} else if(getState == 3){
-					state = "abgelehnt"
-				} else{
-					state = "storniert"
-				}
+			var edit = "";
+			if(getState == 2){
+					edit = "<a href='#' onclick='onEditDepartmentRequests(" + request.id
+						+ ")'>antworten</a><br>";
+			}
 			
-			rows += "<tr onclick='onEditDepartmentRequests(" + request.id
-						+ ")'><td>" + request.type + "</td><td>" + colleague
+			rows += "<tr><td>" + request.type + "</td><td>" + colleague
 						+ "</td><td>" + start.getDate() + "."
 						+ (start.getMonth() + 1) + "." + start.getFullYear()
 						+ "</td><td>" + end.getDate() + "." + (end.getMonth() + 1)
 						+ "." + end.getFullYear() + "</td><td>" + subs
-						+ "</td><td>" + state + "</td></tr>";
+						+ "</td><td>" + edit + "</td></tr>";
 			
 			}
 		
@@ -427,6 +419,7 @@
 				<th>Ende</th>
 				<th>Vertretungen</th>
 				<th>Status</th>
+				<th></th>
 			</tr>
 			<tbody id="request_list">
 
@@ -452,7 +445,7 @@
 				<th>Start</th>
 				<th>Ende</th>
 				<th>Vertretungen</th>
-				<th>Status</th>
+				<th></th>
 			</tr>
 			<tbody id="department_request_list">
 
@@ -464,7 +457,7 @@
 	</div> <!-- /container -->
 	
 	
-	<div class="container" id="managementTable">     <!-- Tabelle für Abteilungsleiter -->
+	<div class="container" id="managementTable">     <!-- Tabelle für Geschäftsleitung -->
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h3 class="panel-title">Anträge der Abteilungsleiter</h3>
@@ -478,7 +471,7 @@
 				<th>Start</th>
 				<th>Ende</th>
 				<th>Vertretungen</th>
-				<th>Status</th>
+				<th></th>
 			</tr>
 			<tbody id="management_request_list">
 

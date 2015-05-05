@@ -89,6 +89,16 @@ function declinedStatusFilter(request) {
 }
 
 /**
+ * Filtert HolidayRequests, deren Status = storniert ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status = storniert ist.
+ */
+function canceledFilter(request) {
+	return request.status == 4;
+}
+
+/**
  * Filtert HolidayRequests anhand der Vertretungen.
  * 
  * @param request

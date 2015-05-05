@@ -155,7 +155,7 @@ class RequestHandler {
 						}
 					}
 					
-					HolidayRequests::editRequest ( $id, $start, $end, $substitutes, $holReq ["status"], $holReq ["comment"] );
+					HolidayRequests::editRequest ( $id, $start, $end, $substitutes, $status, $holReq ["comment"] );
 				}
 			}
 		}		

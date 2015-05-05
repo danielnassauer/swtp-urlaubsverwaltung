@@ -153,7 +153,7 @@ class UserRights {
 	 * Prüft, ob der aktuelle user die Urlaubsanfragen akzeptieren oder ablehnen darf.
 	 * Admins dürfen Urlaubsanfragen akzeptieren oder ablehnen.
 	 * Geschäftsleiter dürfen Urlaubsanfragen akzeptieren oder ablehnen.
-	 * Der zugehörige Abteilungsleiter darf Urlaubsanfragen akzeptieren oder ablehnen.
+	 * Der zugehörige Abteilungsleiter darf Urlaubsanfragen akzeptieren oder ablehnen (nicht eigene Anfragen).
 	 */
 	public static function acceptOrDeclineRequest($holidayRequest) {
 		// Admin
@@ -169,7 +169,10 @@ class UserRights {
 		// Abteilungsleiter
 		$requester = Persons::getPerson ( $holidayRequest->getPerson () );
 		if (self::$user->getRole () == 2 && self::$user->getDepartment () == $requester->getDepartment ()) {
-			return true;
+			// nicht eigene Anfragen
+			if (self::$user->getID () != $holidayRequest->getPerson ()) {
+				return true;
+			}
 		}
 		
 		return false;

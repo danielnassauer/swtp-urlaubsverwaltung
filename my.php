@@ -27,6 +27,23 @@
 	var calendar;
 	var persons = getPersons();
 	
+	function getFieldService(){
+		var checkedValue = $('#field_service_check').val();
+			if (user.field_service){
+				 $('#field_service_check').prop("checked", true);
+				} else $('#field_service_check').prop("checked", false);
+	}
+	
+	function setFieldService(){
+		var checkedValue = $('#field_service_check').val();
+			if (checkedValue){	
+				user.field_service = true;
+				console.log(user.field_service);
+			} else 
+				user.field_service = false;
+				console.log(user.field_service);
+	}
+	
 	function loginPerson(){
 			rows= "Hallo Hr/Fr: ";
 			rows += "<b>"+user.lastname+"</b>";
@@ -64,7 +81,8 @@
 			} else {
 				var type = $("#text_su").val();
 			}
-	
+			$("#text_su").val('');
+			
 			if(createHolidayRequest(start, end, user.id, substitutes, type) != null){
 				console.log("h")
 				updatePage();
@@ -129,7 +147,10 @@
 	
 	function onHolidayRequestSelection(start, end, allDay) {
 		var liveDate = new Date();
+		var fill = "Sie haben ein bereits vergangenes Datum ausgewählt";
+		
 		if(liveDate > start){
+			$('#failure_text').html(fill);
 			$('#wrongDate').modal("show");
 			} else{
 		$('#popup').modal("show");
@@ -142,6 +163,26 @@
 	
 	function changeHoliday(id){
 			$('#editHoliday').modal("show");
+			var request = getHolidayRequest(id);
+			var start = new Date(request.start*1000);
+			var end = new Date(request.end*1000);
+			
+			var startDay = start.getDate();
+			var startMonth = (start.getMonth() + 1);
+			var startYear = start.getFullYear();
+			
+			var endDay = end.getDate();
+			var endMonth = (end.getMonth() + 1);
+			var endYear = end.getFullYear();
+			
+			$('#start_day').val(startDay);
+			$('#start_month').val(startMonth);
+			$('#start_year').val(startYear);
+			
+			$('#end_day').val(endDay);
+			$('#end_month').val(endMonth);
+			$('#end_year').val(endYear);
+			
 			$('#offer_new_holiday_button').attr("onclick",
 					"offerNewHoliday(" + id +")");
 					
@@ -356,6 +397,7 @@
 	}
 
 	$(document).ready(function() {
+		getFieldService();
 		loginPerson();
 		showOwnHolidayRequests();
 		restUrlaub();
@@ -483,7 +525,22 @@
 			</div>
 		</div>
 	</nav>
+	
 	<div style="padding-top: 50px"></div>
+	<form>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-7">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="field_service_check" onclick="setFieldService()"> Ich befinde mich im Außendienst
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+	
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-7">

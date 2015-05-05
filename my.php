@@ -365,7 +365,7 @@
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
 				if(request.type == "Krankheit"){
-					title= "Krank";
+					title= "Krankheitsfall";
 							events.push({
 							editable: false,
 							title : title,
@@ -387,7 +387,7 @@
 							borderColor : '#333333'
 						});
 				}else if(request.status == 2){
-					title= "Wartend";
+					title= "Nicht bestätigt";
 						events.push({
 							editable: false,
 							title : title,

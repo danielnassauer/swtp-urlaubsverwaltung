@@ -17,6 +17,14 @@ class UserRights {
 	public static function deleteTables() {
 		return self::$user->isAdmin ();
 	}
+	
+	/**
+	 * Prüft, ob der aktuelle user Urlaubsanträge löschen darf.
+	 * Admins dürfen Urlaubsanträge löschen.
+	 */
+	public static function deleteHolidayRequests() {
+		return self::$user->isAdmin ();
+	}
 
 	/**
 	 * Prüft, ob der aktuelle user andere user zum Admin ernennen darf.

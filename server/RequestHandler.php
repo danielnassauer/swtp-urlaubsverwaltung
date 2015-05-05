@@ -185,6 +185,15 @@ class RequestHandler {
 					HolidayRequests::editRequest ( $id, $start, $end, $substitutes, $status, $holReq ["comment"] );
 				}
 			}
+			
+			// DELETE HOLIDAYREQUEST
+			elseif ($request->method == "DELETE") {
+				if (isset ( $id )) {
+					if(UserRights::deleteHolidayRequests()){
+						HolidayRequests::deleteRequest($id);
+					}
+				}
+			}
 		}		
 
 		// HOLIDAYS

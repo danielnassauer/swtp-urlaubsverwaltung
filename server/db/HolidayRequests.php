@@ -57,6 +57,19 @@ class HolidayRequests {
 		return $request;
 	}
 
+	public static function deleteRequest($id) {
+		$conn = self::getDBConnection ();
+		
+		$sql = "DELETE FROM HolidayRequests 
+				WHERE id='" . $id . "';";
+		
+		$result = $conn->query ( $sql );
+		if (! $result) {
+			throw new Exception ( $conn->error );
+		}
+		$conn->close ();
+	}
+
 	public static function createRequest($start, $end, $person, $substitutes, $type) {
 		$conn = self::getDBConnection ();
 		

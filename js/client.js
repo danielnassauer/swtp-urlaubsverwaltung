@@ -57,6 +57,23 @@ function POST(path, content) {
 }
 
 /**
+ * Sendet einen DELETE-Request an den angegebenen Pfad und parset die
+ * JSON-Antwort.
+ * 
+ * @param path
+ *            Pfad
+ * @returns JavaScript-Wert des JSON-Strings
+ */
+function DELETE(path, content) {
+	var response = $.ajax({
+		type : "DELETE",
+		url : path,
+		async : false
+	}).responseText;
+	console.log(response);
+}
+
+/**
  * Liefert die Person zu einer ID.
  * 
  * @param id
@@ -169,7 +186,7 @@ function createHolidayRequest(start, end, person, substitutes, type) {
 		type : type
 	}
 	var data = POST("HolidayRequest", r);
-	if(data == null){
+	if (data == null) {
 		return null;
 	}
 	return new HolidayRequest(data["id"], data["start"], data["end"],
@@ -205,6 +222,13 @@ function editHolidayRequest(id, start, end, substitutes, status, comment) {
 		comment : comment
 	}
 	PUT("HolidayRequest/" + id, r);
+}
+
+/**
+ * Löscht einen HolidayRequest.
+ */
+function deleteHolidayRequest(id) {
+	DELETE("HolidayRequest/" + id);
 }
 
 /**

@@ -224,14 +224,11 @@
 	}
 	
 	function cancelRequest(id){
-		var request = getHolidayRequest(id);
-		
-		var status = 4;
-		
-		editHolidayRequest(id, request.start, request.end, request.substitutes, status, request.comment);
-		
-		updatePage();
-		
+		if(confirm("Möchten Sie diesen Urlaubsantrag wirklich stornieren?")){
+			var request = getHolidayRequest(id);
+			editHolidayRequest(id, request.start, request.end, request.substitutes, 4, request.comment);		
+			updatePage();	
+		}	
 	}
 		
 	function addRequest(request){
@@ -526,7 +523,8 @@
 				<div class="checkbox">
 					<div class="panel-body">
 						<label> <input type="checkbox" id="field_service_check"
-							onclick="setFieldService()"> Ich befinde mich zurzeit im Außendienst
+							onclick="setFieldService()"> Ich befinde mich zurzeit im
+							Außendienst
 						</label>
 					</div>
 				</div>
@@ -549,37 +547,6 @@
 			</div>
 		</div>
 		<!-- /navbar -->
-
-
-		<div id="deleteHoliday" class="modal fade">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4>Urlaubsanträge löschen</h4>
-					</div>
-					<!-- /modal-header -->
-					<div class="modal-body">
-						<p>Möchten Sie ihren Urlaubsantrag wirklich stornieren?</p>
-					</div>
-					<!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Nein,
-							doch nicht</button>
-						<button type="button" class="btn btn-primary" id="cancel_holiday">Urlaubsantrag
-							stornieren</button>
-					</div>
-					<!-- /modal-footer -->
-
-				</div>
-				<!-- /modal-content -->
-			</div>
-			<!-- /modal-dialog -->
-		</div>
-		<!-- /deleteHoliday -->
 
 		<div id="noHolidays" class="modal fade">
 			<div class="modal-dialog">

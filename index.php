@@ -139,13 +139,9 @@
 		var events = [];
 		var requests = getFilteredHolidayRequests(getActualFilters());
 		
-		function notCanceledRequestFilter(request){
-			return (request.status == 1 || request.status == 2);
-		}
+		var filter_accepted = {"filter": acceptedStatusFilter, "attachment": null};
 		
-		var filter_canceled = {"filter": notCanceledRequestFilter, "attachment": null};
-		
-		requests = filterHolidayRequests(requests, [filter_canceled]);
+		requests = filterHolidayRequests(requests, [filter_accepted]);
 		
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];

@@ -156,18 +156,23 @@
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
 			if(person.field_service){
-					title = person.forename + " " + person.lastname + " Außendienst";
+					title = person.forename + " " + person.lastname + " (Außendienst)";
 					events.push({
 						title : title,
 						start : start,
 						end : end,
-						color: 'red'
+						textColor:'#333333',
+						borderColor : '#333333',
+						color: '#fcf8e3'
 					});
 			}else{
 			events.push({
 					title : title,
 					start : start,
 					end : end,
+					color : '#dff0d8',
+					textColor:'#333333',
+					borderColor : '#333333'
 				});
 				}
 		}

@@ -353,15 +353,54 @@
 					break;
 				}
 			}
-			var title = person.forename + " " + person.lastname;
+			var title = "";
 			var start = unixTS2calendarTS(request.start);
 			var end = unixTS2calendarTS(request.end);
-	
-			events.push({
-					title : title,
-					start : start,
-					end : end,
-				});
+				if(request.type == "Krankheit"){
+					title= "Krank";
+							events.push({
+							editable: false,
+							title : title,
+							start : start,
+							end : end,
+							color : '#d9edf7',
+							textColor:'#333333',
+							borderColor : '#333333'
+						});
+				}else if(request.status == 1){
+					title= "Bestätigt";
+						events.push({
+							editable: false,
+							title : title,
+							start : start,
+							end : end,
+							color : '#dff0d8',
+							textColor:'#333333',
+							borderColor : '#333333'
+						});
+				}else if(request.status == 2){
+					title= "Wartend";
+						events.push({
+							editable: false,
+							title : title,
+							start : start,
+							end : end,
+							color : '#fcf8e3',
+							textColor:'#333333',
+							borderColor : '#333333'
+						});
+				}else if(request.status == 3){
+					title= "Abgelehnt";
+						events.push({
+							editable: false,
+							title : title,
+							start : start,
+							end : end,
+							color : '#f2dede',
+							textColor:'#333333',
+							borderColor : '#333333'
+						});
+				}
 		}
 		return events;
 	}
@@ -377,6 +416,7 @@
 			var title = holiday.name;
 			var start = unixTS2calendarTS(holiday.day);
 			events.push({
+			editable: false,
 			title : title,
 			start : start,
 			//end : start,

@@ -128,19 +128,20 @@ function withoutMeFilter(request, person_id){
 }
 
 /**
- * Filtert HolidayRequests nach Geschäftsleitung
+ * Filtert HolidayRequests nach Mitarbeitern
  * 
  * @param request
  *            HolidayRequest
  * @param attachment
  *            Dictionary: "persons": Array von allen Personen
- * @returns Personen die nicht Geschäftsleiter sind.
+ * @returns {Boolean} true, wenn die Person ein Mitarbeiter ist.
  */
 function employeeFilter(request, attachment) {
 			persons = attachment["persons"];
 			for(var i = 0; i < persons.length; i++){
-				return persons[i].role == 1;
-				
+				if(request.person == persons[i].id){
+					return persons[i].role == 1;
+				}
 			}
 }
 
@@ -153,16 +154,18 @@ function employeeFilter(request, attachment) {
  *            HolidayRequest
  * @param attachment
  *            Dictionary: "persons": Array von allen Personen
- * @returns Personen die Abteilungsleiter sind.
+ * @returns {Boolean} true, wenn die Person ein Abteilungsleiter ist.
  */
 function abteilungsleiterFilter(request, attachment) {
 			persons = attachment["persons"];
 			for(var i = 0; i < persons.length; i++){
-				if (persons[i].role == 2){
-					return persons[i];
+				if(request.person == persons[i].id){
+					return (persons[i].role == 2 || persons[i].role == 3);
 				}
 			}
 }
+
+
 /**
  * Filtert HolidayRequests, deren Status = wartend oder angenommen ist.
  * 

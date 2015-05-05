@@ -45,6 +45,12 @@ class RequestHandler {
 					$person = $request->content;
 					$orig_person = Persons::getPerson ( $id );
 					
+					//escape html
+					$person ["is_admin"] = $person ["is_admin"] == true;
+					$person ["field_service"] = $person ["field_service"] == true;
+					$person ["remaining_holiday"] = intval($person ["remaining_holiday"]);
+					$person ["role"] = intval($person ["role"]);										
+					
 					// Rechte prüfen
 					$is_admin = $orig_person->isAdmin ();
 					if (UserRights::editIsAdmin ()) {
@@ -89,6 +95,13 @@ class RequestHandler {
 			elseif ($request->method == "POST") {
 				if (! isset ( $id )) {
 					$holReq = $request->content;
+					
+					//escape html
+					$holReq ["start"] = intval($holReq ["start"]);
+					$holReq ["end"] = intval($holReq ["end"]);
+					$holReq ["person"] = intval($holReq ["person"]);
+					$holReq ["type"] = htmlentities($holReq ["type"], ENT_QUOTES);
+					
 					// Rechte prüfen
 					if (UserRights::createHolidayRequest ( $holReq ["person"] )) {
 						// verbrauchte urlaubstage abziehen (null ausgeben wenn verbleibende < 0)
@@ -114,6 +127,12 @@ class RequestHandler {
 				if (isset ( $id )) {
 					$holReq = $request->content;
 					$orig_holReq = HolidayRequests::getRequest ( $id );
+					
+					//escape html
+					$holReq ["start"] = intval($holReq ["start"]);
+					$holReq ["end"] = intval($holReq ["end"]);
+					$holReq ["status"] = intval($holReq ["status"]);
+					$holReq ["comment"] = htmlentities($holReq ["comment"], ENT_QUOTES);
 					
 					// Rechte prüfen
 					$start = $orig_holReq->getStart ();
@@ -191,5 +210,6 @@ class RequestHandler {
 	private static function addRemainingHoliday($person, $value) {
 		Persons::editPerson ( $person->getID (), $person->getFieldservice (), $person->getRemainingHoliday () + $value, $person->getRole (), $person->isAdmin () );
 	}
+
 }
 ?>

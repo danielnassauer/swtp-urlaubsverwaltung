@@ -375,6 +375,7 @@
 		}
 		if(user.role == 1){
 			$("#departmentTable").addClass('hidden');
+			$("#managementTable").addClass('hidden');
 		}
 		if(user.role == 2){
 			$("#managementTable").addClass('hidden');

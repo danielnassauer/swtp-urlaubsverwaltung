@@ -26,14 +26,7 @@
 	// Beim Start werden einmalig alle Personen und Urlaubsanträge abgefragt.
 	// Es ist nicht nötig, eine Person oder einen Urlaubsantrag erneut abzufragen.
 	var persons = getPersons();
-	var requests = getHolidayRequests();
-
-	function loginPerson(){
-			rows= "Hallo Hr/Fr: ";
-			rows += "<b>"+user.lastname+"</b>";
-			console.log(user);
-			$("#loginPerson").html(rows);
-	}
+	var requests = getHolidayRequests();	
 	
 	/*
 	 *	Entfernt doppelte array Eintraege.
@@ -240,10 +233,12 @@
 	}
 
 	$(document).ready(function() {
+		if(user == null){
+			window.location = "login.php";
+		}
 		if(!user.is_admin){
 			$("#admin_ion").addClass('hidden');
 		}
-		loginPerson();
 		showDepartmentMenu();
 		initCalendar();
 		updateCalendar();
@@ -255,20 +250,33 @@
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span id ="loginPerson"class="navbar-brand"></span>
+				<span class="navbar-brand">Urlaubsverwaltung</span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#"><span class="ion-home">Übersicht</a></li>
-					<li><a href="my.php"><span class="ion-person"></span>
-							Mein Kalender</a></li>
-					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
-					<li><a href="admin.php"><span class="ion-clipboard" id="admin_ion">Admin</a></li>
+					<li class="active"><a href="index.php"><span class="ion-grid">
+								Übersicht</a></li>
+					<li><a href="my.php"><span class="ion-home"></span> Mein Kalender</a></li>
+					<li><a href="requests.php"><span class="ion-clipboard"> Anfragen</a></li>
+					<li><a href="help.php"><span class="ion-help-circled"> Hilfe</a></li>
+					<li><a href="admin.php"><span class="ion-gear-b" id="admin_ion">
+								Admin</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li id="loginPerson"></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-<div style="padding-top:50px"></div>
+	<script type="text/javascript">
+		rows= "<a href='#'>angemeldet als ";
+		rows += "<b>"+user.forename + " " + user.lastname+"</b></a>";
+		console.log(user);
+		$("#loginPerson").html(rows);
+	</script>
+	<div style="padding-top: 70px"></div>
+
+
 	<div class="container">
 		<div class="row">
 			<div class="panel panel-default">
@@ -278,8 +286,8 @@
 							<label for="filter_department">Abteilung</label> <select
 								id="filter_department" class="form-control">
 								<option>Alle</option>
-							</select> <span class='btn btn-default' onclick="updateCalendar()">Filter
-								anwenden</span>
+							</select> <span class='btn btn-default'
+								onclick="updateCalendar()">Filter anwenden</span>
 						</div>
 					</form>
 				</div>
@@ -290,7 +298,9 @@
 		<div class="row">
 
 			<div class="panel panel-default">
-				<div class="panel-heading">Kalender</div>
+				<div class="panel-heading">
+					<h3 class="panel-title" style="color: #aaaaaa">Kalender</h3>
+				</div>
 				<div class="panel-body">
 					<div id='calendar'></div>
 				</div>

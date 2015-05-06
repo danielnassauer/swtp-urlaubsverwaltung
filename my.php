@@ -36,13 +36,7 @@
 	function updateFieldserviceCheckbox(){
 		$('#field_service_check').prop('checked', user.field_service);
 	}
-	
-	function loginPerson(){
-			rows= "Hallo Hr/Fr: ";
-			rows += "<b>"+user.lastname+"</b>";
-			console.log(user);
-			$("#loginPerson").html(rows);
-	}
+		
 	function restUrlaub(){
 		var rows=0;
 		user = getPerson(user.id);
@@ -437,7 +431,9 @@
 	}
 
 	$(document).ready(function() {
-		loginPerson();
+		if(user == null){
+			window.location = "login.php";
+		}
 		showOwnHolidayRequests();
 		restUrlaub();
 		updateFieldserviceCheckbox();
@@ -499,7 +495,7 @@
 								Freizeitantrag
 							</label>
 						</div>
-						
+
 						<div class="radio">
 							<label> <input type="radio" name="optradio" id="radio_ill">
 								Krankheitsfall
@@ -514,8 +510,8 @@
 								placeholder="Antrag für Sonderurlaub wegen" class="form-control"
 								aria-label="..." id="text_su">
 						</div>
-						
-						
+
+
 					</form>
 					<div class="panel-body">
 						<form class="form-inline">
@@ -553,36 +549,50 @@
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span id="loginPerson" class="navbar-brand"></span>
+				<span class="navbar-brand">Urlaubsverwaltung</span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
-					<li><a href="index.php"><span class="ion-home">Übersicht</a></li>
-					<li class="active"><a href="#"><span class="ion-person"></span>
+					<li><a href="index.php"><span class="ion-grid"> Übersicht</a></li>
+					<li class="active"><a href="my.php"><span class="ion-home"></span>
 							Mein Kalender</a></li>
-					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
-					<li><a href="admin.php"><span class="ion-clipboard" id="admin_ion">Admin</a></li>
+					<li><a href="requests.php"><span class="ion-clipboard"> Anfragen</a></li>
+					<li><a href="help.php"><span class="ion-help-circled"> Hilfe</a></li>
+					<li><a href="admin.php"><span class="ion-gear-b" id="admin_ion">
+								Admin</a></li>
 				</ul>
-			</div>
-			<div>
-				<span style="margin-left: 6em" class="navbar-brand">Restliche
-					Urlaubstage: <span id='resttage' style="margin-left: 1em"
-					class="badge alert-danger"></span>
-				</span>
+				<ul class="nav navbar-nav navbar-right">
+					<li id="loginPerson"></li>
+				</ul>
 			</div>
 		</div>
 	</nav>
-
+	<script type="text/javascript">
+		rows= "<a href='#'>angemeldet als ";
+		rows += "<b>"+user.forename + " " + user.lastname+"</b></a>";
+		console.log(user);
+		$("#loginPerson").html(rows);
+	</script>
 	<div style="padding-top: 70px"></div>
+
+
 	<form>
 		<div class="container">
 			<div class="panel panel-default">
 				<div class="checkbox">
 					<div class="panel-body">
-						<label> <input type="checkbox" id="field_service_check"
-							onclick="setFieldService()"> Ich befinde mich zurzeit im
-							Außendienst
-						</label>
+						<table>
+							<tr>
+								<td>Restliche Urlaubstage</td>
+								<td><span id='resttage' class="badge alert-danger"></span></td>
+							</tr>
+							<tr>
+								<td>Zurzeit im Außendienst&nbsp;&nbsp;&nbsp;</td>
+								<td><label></label><input type="checkbox" id="field_service_check"
+									onclick="setFieldService()"></label></td>
+							</tr>
+						</table>
+
 					</div>
 				</div>
 			</div>
@@ -593,7 +603,9 @@
 		<div class="row">
 			<div class="col-xs-7">
 				<div class="panel panel-default">
-					<div class="panel-heading">Kalender</div>
+					<div class="panel-heading">
+						<h3 class="panel-title" style="color: #aaaaaa">Kalender</h3>
+					</div>
 					<div class="panel-body">
 						<div id='calendar'></div>
 					</div>

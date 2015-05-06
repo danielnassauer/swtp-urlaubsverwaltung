@@ -25,13 +25,6 @@
 	
 	var persons = getPersons();
 	
-	function loginPerson(){
-		rows= "Hallo Hr/Fr: ";
-		rows += "<b>"+user.lastname+"</b>";
-		console.log(user);
-		$("#loginPerson").html(rows);
-	}
-	
 	function restUrlaub(){
 	var rows=0;
 	rows = user.remaining_holiday;
@@ -358,22 +351,36 @@
 		
 		}
 
-	
+	function showDepartmentTable(){
+		console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		$("#departmentTable").removeClass('hidden');
+		$("#substitute_link").addClass('hidden');
+	}
+
+	function hideDepartmentTable(){
+		$("#departmentTable").addClass('hidden');
+		if(user.role != 3){
+			$("#substitute_link").removeClass('hidden');			
+		}
+	}
 
 	$(document).ready(function() {
-		loginPerson();
+		if(user == null){
+			window.location = "login.php";
+		}
+		showDepartmentTable();
 		if(!user.is_admin){
 			$("#admin_ion").addClass('hidden');
 		}
 		if(user.role == 1){
-			$("#departmentTable").addClass('hidden');
+			hideDepartmentTable();
 			$("#managementTable").addClass('hidden');
 		}
 		if(user.role == 2){
 			$("#managementTable").addClass('hidden');
 			updateDepartmentTable();
 		} else if(user.role == 3){
-			$("#departmentTable").addClass('hidden');
+			hideDepartmentTable();
 			updateManagementTable();
 		}
 		restUrlaub();
@@ -381,108 +388,133 @@
 		
 	})
 </script>
+
+
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span id ="loginPerson"class="navbar-brand"></span>
+				<span class="navbar-brand">Urlaubsverwaltung</span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
-					<li><a href="index.php"><span class="ion-home">Übersicht</a></li>
-					<li><a href="my.php"><span class="ion-person"></span>
-							Mein Kalender</a></li>
-					<li class="active"><a href="#"><span class="ion-clipboard">Anfragen</a></li>
-					<li><a href="admin.php"><span class="ion-clipboard" id="admin_ion">Admin</a></li>
+					<li><a href="index.php"><span class="ion-grid"> Übersicht</a></li>
+					<li><a href="my.php"><span class="ion-home"></span> Mein Kalender</a></li>
+					<li class="active"><a href="requests.php"><span
+							class="ion-clipboard"> Anfragen</a></li>
+					<li><a href="help.php"><span class="ion-help-circled"> Hilfe</a></li>
+					<li><a href="admin.php"><span class="ion-gear-b" id="admin_ion">
+								Admin</a></li>
 				</ul>
-			</div>
-			<div>
-				<span style="margin-left: 6em" class="navbar-brand">Restliche Urlaubstage:	
-				<span id='resttage' style="margin-left: 1em" class="badge alert-danger"></span></span>
+				<ul class="nav navbar-nav navbar-right">
+					<li id="loginPerson"></li>
+				</ul>
 			</div>
 		</div>
 	</nav>
-	<div style="padding-top:50px"></div>
-	
-	<div class="container">   <!-- Tabelle für Mitarbeiter -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">Anträge in denen Ich als Vertretung angegeben wurde</h3>
-		</div>
-	<div class="panel-body">	
-	<div> 
-		<table class="table table-hover">
-			<tr>
-				<th>Art</th>
-				<th>Mitarbeiter der Antrag gestellt hat</th>
-				<th>Start</th>
-				<th>Ende</th>
-				<th>Vertretungen</th>
-				<th>Status</th>
-				<th></th>
-			</tr>
-			<tbody id="request_list">
+	<script type="text/javascript">
+		rows= "<a href='#'>angemeldet als ";
+		rows += "<b>"+user.forename + " " + user.lastname+"</b></a>";
+		console.log(user);
+		$("#loginPerson").html(rows);
+	</script>
+	<div style="padding-top: 70px"></div>
 
-			</tbody>
-		</table>
-	</div> <!-- /Tabelle -->
-	</div> <!-- /Panel-body -->
-	</div> <!-- /panel -->
-	</div> <!-- /container -->
-	
-	
-	<div class="container" id="departmentTable">     <!-- Tabelle für Abteilungsleiter -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">Anträge der Mitarbeiter</h3>
-		</div>
-	<div class="panel-body">	
-	<div> 
-		<table class="table table-hover">
-			<tr>
-				<th>Art</th>
-				<th>Mitarbeiter der Antrag gestellt hat</th>
-				<th>Start</th>
-				<th>Ende</th>
-				<th>Vertretungen</th>
-				<th></th>
-			</tr>
-			<tbody id="department_request_list">
+	<div class="container">
+		<!-- Tabelle für Mitarbeiter -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title" style="color: #aaaaaa">Meine
+					Vertretungsanfragen</h3>
+			</div>
+			<div class="panel-body">					
+				Bitte bearbeiten Sie die an Sie gerichteten Vertretungsanfragen.
+				<!-- /Tabelle -->
+			</div>
+			<table class="table">
+						<tr>
+							<th>Art</th>
+							<th>Mitarbeiter der Antrag gestellt hat</th>
+							<th>Start</th>
+							<th>Ende</th>
+							<th>Vertretungen</th>
+							<th>Status</th>
+							<th></th>
+						</tr>
+						<tbody id="request_list">
 
-			</tbody>
-		</table>
-	</div> <!-- /Tabelle -->
-	</div> <!-- /Panel-body -->
-	</div> <!-- /panel -->
-	</div> <!-- /container -->
-	
-	
-	<div class="container" id="managementTable">     <!-- Tabelle für Geschäftsleitung -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">Anträge der Abteilungsleiter</h3>
+						</tbody>
+					</table>
+			<!-- /Panel-body -->
 		</div>
-	<div class="panel-body">	
-	<div> 
-		<table class="table table-hover">
-			<tr>
-				<th>Art</th>
-				<th>Mitarbeiter der Antrag gestellt hat</th>
-				<th>Start</th>
-				<th>Ende</th>
-				<th>Vertretungen</th>
-				<th></th>
-			</tr>
-			<tbody id="management_request_list">
+		<!-- /panel -->
+	</div>
+	<!-- /container -->
 
-			</tbody>
-		</table>
-	</div> <!-- /Tabelle -->
-	</div> <!-- /Panel-body -->
-	</div> <!-- /panel -->
-	</div> <!-- /container -->
-	
-	
+
+	<div class="container">
+		<!-- Tabelle für Abteilungsleiter -->
+		<div class="panel panel-default" id="departmentTable">
+			<div class="panel-heading">
+				<h3 class="panel-title" style="color: #aaaaaa">Urlaubsanfragen der
+					Mitarbeiter</h3>
+			</div>
+			<div class="panel-body">
+				Bitte bearbeiten Sie die Urlaubsanfragen ihrer Mitarbeiter.
+				<!-- /Tabelle -->
+			</div>
+			<table class="table table-hover">
+						<tr>
+							<th>Art</th>
+							<th>Mitarbeiter der Antrag gestellt hat</th>
+							<th>Start</th>
+							<th>Ende</th>
+							<th>Vertretungen</th>
+							<th></th>
+						</tr>
+						<tbody id="department_request_list">
+
+						</tbody>
+					</table>
+			<!-- /Panel-body -->
+		</div>
+		<!-- /panel -->
+		<a href="#" onclick="showDepartmentTable()" id="substitute_link">Ich übernehme zurzeit die Vertretung für meinen Abteilungsleiter</a>
+	</div>
+	<!-- /container -->
+
+
+	<div class="container" id="managementTable">
+		<!-- Tabelle für Geschäftsleitung -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title" style="color: #aaaaaa">Urlaubsanfragen der
+					Abteilungsleiter</h3>
+			</div>
+			<div class="panel-body">					
+				Bitte bearbeiten Sie die Urlaubsanfragen der Abteilungsleiter.
+				<!-- /Tabelle -->
+			</div>
+			<table class="table table-hover">
+						<tr>
+							<th>Art</th>
+							<th>Mitarbeiter der Antrag gestellt hat</th>
+							<th>Start</th>
+							<th>Ende</th>
+							<th>Vertretungen</th>
+							<th></th>
+						</tr>
+						<tbody id="management_request_list">
+
+						</tbody>
+					</table>
+			<!-- /Panel-body -->
+		</div>
+		<!-- /panel -->
+	</div>
+	<!-- /container -->
+
+
 	<!-- Popup um Vertretung zuzustimmen oder abzulehnen -->
 	<div id="sub_popup" class="modal fade">
 		<div class="modal-dialog">
@@ -493,15 +525,16 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4>Urlaubsanträge bearbeiten</h4>
-				</div> <!-- /modal-header -->
+				</div>
+				<!-- /modal-header -->
 				<div class="modal-body">
 
-						<form role="form">
-							<div class="radio">
-								<label> <input type="radio" name="optradio"
-									id="sub_accept" checked=""> Vertretung zustimmen
-								</label>
-							</div>
+					<form role="form">
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="sub_accept"
+								checked=""> Vertretung zustimmen
+							</label>
+						</div>
 
 
 						<div class="radio">
@@ -509,35 +542,40 @@
 								Vertretung ablehnen
 							</label>
 						</div>
-						
+
 						<form class="form-inline">
-					<div class="radio">
-							<label> <input type="radio" name="optradio" id="sub_change">
-								Ich möchte meine Vertretung abgeben an:
-							</label>
-						</div>
-						<div class="dropdown" >
-							<label for="substitutes_Menu">Vertretung</label> <select
-								id="substitutes_Menu" class="form-control">
-								<option>---</option>
-							</select> 
-						</div>
-					</form>
-						
+							<div class="radio">
+								<label> <input type="radio" name="optradio" id="sub_change"> Ich
+									möchte meine Vertretung abgeben an:
+								</label>
+							</div>
+							<div class="dropdown">
+								<label for="substitutes_Menu">Vertretung</label> <select
+									id="substitutes_Menu" class="form-control">
+									<option>---</option>
+								</select>
+							</div>
+						</form>
+
 
 					</form>
 
-				</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-lg btn-block"
-							id="btn_accept_substitute">Abschicken</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /sub_popup -->
-	
-	
+				</div>
+				<!-- /modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-lg btn-block"
+						id="btn_accept_substitute">Abschicken</button>
+				</div>
+				<!-- /modal-footer -->
+
+			</div>
+			<!-- /modal-content -->
+		</div>
+		<!-- /modal-dialog -->
+	</div>
+	<!-- /sub_popup -->
+
+
 	<!-- Popup für Abteilungsleiter zum bearbeiten der Urlaubsanträge -->
 	<div id="department_popup" class="modal fade">
 		<div class="modal-dialog">
@@ -548,39 +586,48 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 					<h4>Urlaubsanträge bearbeiten</h4>
-				</div> <!-- /modal-header -->
+				</div>
+				<!-- /modal-header -->
 				<div class="modal-body">
 
-						<form role="form">
-							<div class="radio">
-								<label> <input type="radio" name="optradio"
-									id="holiday_accept" checked=""> Einverstanden wie beantragt
-								</label>
-							</div>
-
-						<div class="input-group">
-							<span class="input-group-addon"> <input type="radio"  name="optradio" id="holiday_decline" aria-label="...">
-							</span> 
-							<input type="text" placeholder="Antrag abgelehnt wegen" class="form-control" aria-label="..." id="holiday_decline_text">
+					<form role="form">
+						<div class="radio">
+							<label> <input type="radio" name="optradio" id="holiday_accept"
+								checked=""> Einverstanden wie beantragt
+							</label>
 						</div>
 
 						<div class="input-group">
-							<span class="input-group-addon"> <input type="radio"  name="optradio" id="holiday_change" aria-label="...">
-							</span> 
-							<input type="text" placeholder="Antrag ablehnen und Ausweichtermin vorschlagen" class="form-control" aria-label="..." id="holiday_change_text">
+							<span class="input-group-addon"> <input type="radio"
+								name="optradio" id="holiday_decline" aria-label="...">
+							</span> <input type="text" placeholder="Antrag abgelehnt wegen"
+								class="form-control" aria-label="..." id="holiday_decline_text">
+						</div>
+
+						<div class="input-group">
+							<span class="input-group-addon"> <input type="radio"
+								name="optradio" id="holiday_change" aria-label="...">
+							</span> <input type="text"
+								placeholder="Antrag ablehnen und Ausweichtermin vorschlagen"
+								class="form-control" aria-label="..." id="holiday_change_text">
 						</div>
 
 					</form>
 
-				</div> <!-- /modal-body -->
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-lg btn-block"
-							id="btn_accept_holiday">Abschicken</button>
-					</div> <!-- /modal-footer -->
-				
-			</div><!-- /modal-content -->
-		</div><!-- /modal-dialog -->
-	</div><!-- /department_popup -->
-	
+				</div>
+				<!-- /modal-body -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-lg btn-block"
+						id="btn_accept_holiday">Abschicken</button>
+				</div>
+				<!-- /modal-footer -->
+
+			</div>
+			<!-- /modal-content -->
+		</div>
+		<!-- /modal-dialog -->
+	</div>
+	<!-- /department_popup -->
+
 </body>
 </html>

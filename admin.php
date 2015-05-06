@@ -85,6 +85,8 @@ if (isset ( $_POST ['remove_holiday'] )) {
 <script src="js/model.js"></script>
 <script src="js/HolidayRequestsFilter.js"></script>
 
+<?php require_once dirname ( __FILE__ ) . '/server/session/user.php';?>
+
 <script type="text/javascript">
 var months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
@@ -109,7 +111,7 @@ function showUsers(){
 
 function getUserRow(person){
 	var button_ok = "<span class='btn btn-default' onclick='editSelectedPerson("+person.id+")'><span class='ion-checkmark-round'></span></span>";
-	var button_cancel = "<span class='btn btn-default' onclick='showUsers()'><span class='ion-close-round'></span></span>";
+	var button_cancel = "<span class='btn btn-default' onclick='showUsers()'><span class='ion-ios-undo'></span></span>";
 	var role = "<select class='form-control' id='edit_role_"+person.id+"'>";
 	var rem_hol = "<input type='text' value='"+person.remaining_holiday+"' id='edit_remhol_"+person.id+"'>";
 	if(person.role == 1){
@@ -195,6 +197,9 @@ $(document).ready(function() {
 	showHolidayRequests();
 	showUsers();
 	showHolidays();	
+	if(user == null){
+		window.location = "login.php";
+	}
 });
 </script>
 
@@ -204,19 +209,29 @@ $(document).ready(function() {
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<span id="loginPerson" class="navbar-brand"></span>
+				<span class="navbar-brand">Urlaubsverwaltung</span>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
-					<li><a href="index.php"><span class="ion-home">Übersicht</a></li>
-					<li><a href="my.php"><span class="ion-person"></span> Mein Kalender</a></li>
-					<li><a href="requests.php"><span class="ion-clipboard">Anfragen</a></li>
-					<li class="active"><a href="admin.php"><span class="ion-clipboard">Admin</a></li>
+					<li><a href="index.php"><span class="ion-grid"> Übersicht</a></li>
+					<li><a href="my.php"><span class="ion-home"></span> Mein Kalender</a></li>
+					<li><a href="requests.php"><span class="ion-clipboard"> Anfragen</a></li>
+					<li><a href="help.php"><span class="ion-help-circled"> Hilfe</a></li>
+					<li class="active"><a href="admin.php"><span class="ion-gear-b" id="admin_ion"> Admin</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">				
+					<li id="loginPerson"></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-	<div style="padding-top: 50px"></div>
+	<script type="text/javascript">
+		rows= "<a href='#'>angemeldet als ";
+		rows += "<b>"+user.forename + " " + user.lastname+"</b></a>";
+		console.log(user);
+		$("#loginPerson").html(rows);
+	</script>
+	<div style="padding-top: 70px"></div>
 
 
 	<div class="container-fluid">

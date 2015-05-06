@@ -2,6 +2,7 @@
 require_once dirname ( __FILE__ ) . '/server/db/DBCreator.php';
 require_once dirname ( __FILE__ ) . '/server/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/server/db/Holidays.php';
+require_once dirname ( __FILE__ ) . '/server/session/UserRights.php';
 
 if (isset ( $_POST ['create_holidayrequests_table'] )) {
 	try {
@@ -13,11 +14,13 @@ if (isset ( $_POST ['create_holidayrequests_table'] )) {
 }
 
 if (isset ( $_POST ['delete_holidayrequests_table'] )) {
-	try {
-		DBCreator::deleteHolidayRequestsTable ();
-		echo '<div class="alert alert-success" role="alert">HolidayRequests-Table erfolgreich gelöscht!</div>';
-	} catch ( Exception $e ) {
-		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+	if (UserRights::deleteTables ()) {
+		try {
+			DBCreator::deleteHolidayRequestsTable ();
+			echo '<div class="alert alert-success" role="alert">HolidayRequests-Table erfolgreich gelöscht!</div>';
+		} catch ( Exception $e ) {
+			echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+		}
 	}
 }
 
@@ -25,15 +28,6 @@ if (isset ( $_POST ['create_users_table'] )) {
 	try {
 		DBCreator::createUsersTable ();
 		echo '<div class="alert alert-success" role="alert">Users-Table erfolgreich erstellt!</div>';
-	} catch ( Exception $e ) {
-		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
-	}
-}
-
-if (isset ( $_POST ['delete_users_table'] )) {
-	try {
-		DBCreator::deleteUsersTable ();
-		echo '<div class="alert alert-success" role="alert">Users-Table erfolgreich gelöscht!</div>';
 	} catch ( Exception $e ) {
 		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
 	}
@@ -49,11 +43,13 @@ if (isset ( $_POST ['create_holidays_table'] )) {
 }
 
 if (isset ( $_POST ['delete_holidays_table'] )) {
-	try {
-		DBCreator::deleteHolidaysTable ();
-		echo '<div class="alert alert-success" role="alert">Holidays-Table erfolgreich gelöscht!</div>';
-	} catch ( Exception $e ) {
-		echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+	if (UserRights::deleteTables ()) {
+		try {
+			DBCreator::deleteHolidaysTable ();
+			echo '<div class="alert alert-success" role="alert">Holidays-Table erfolgreich gelöscht!</div>';
+		} catch ( Exception $e ) {
+			echo '<div class="alert alert-danger" role="alert">' . $e->getMessage () . '</div>';
+		}
 	}
 }
 
@@ -183,10 +179,12 @@ function showHolidayRequests(){
 			4 : "storniert"
 		}
 	var html = "";
+	
 	for(var i=0; i<requests.length; i++){
-		var request = requests[i];		
+		var request = requests[i];	
+		var requester = getPerson(request.person);	
 		var remove_button = "<span class='btn btn-default' onclick='removeHolidayRequest("+request.id+")'><span class='ion-trash-a'></span></span>"
-		html += "<tr class='"+colors[request.status]+"'><td>"+request.id+"</td><td>"+request.type+"</td><td>"+status[request.status]+"</td><td>"+TsToDate(request.start)+"</td><td>"+TsToDate(request.end)+"</td><td>"+remove_button+"</td></tr>"
+		html += "<tr class='"+colors[request.status]+"'><td>"+request.id+"</td><td>"+request.type+"</td><td>"+status[request.status]+"</td><td>"+requester.forename + " " + requester.lastname +"</td><td>"+TsToDate(request.start)+"</td><td>"+TsToDate(request.end)+"</td><td>"+remove_button+"</td></tr>"
 	}
 	$("#table_requests").html(html);
 	
@@ -217,9 +215,10 @@ $(document).ready(function() {
 					<li><a href="my.php"><span class="ion-home"></span> Mein Kalender</a></li>
 					<li><a href="requests.php"><span class="ion-clipboard"> Anfragen</a></li>
 					<li><a href="help.php"><span class="ion-help-circled"> Hilfe</a></li>
-					<li class="active"><a href="admin.php"><span class="ion-gear-b" id="admin_ion"> Admin</a></li>
+					<li class="active"><a href="admin.php"><span class="ion-gear-b"
+							id="admin_ion"> Admin</a></li>
 				</ul>
-				<ul class="nav navbar-nav navbar-right">				
+				<ul class="nav navbar-nav navbar-right">
 					<li id="loginPerson"></li>
 				</ul>
 			</div>
@@ -274,6 +273,7 @@ $(document).ready(function() {
 											<th>ID</th>
 											<th>Art</th>
 											<th>Status</th>
+											<th>Antragsteller</th>
 											<th>von</th>
 											<th>bis</th>
 											<th>&nbsp</th>
@@ -293,8 +293,6 @@ $(document).ready(function() {
 							<div class="panel-body">
 								<button type="submit" class="btn btn-default"
 									name="create_users_table">Tabelle erstellen</button>
-								<button type="submit" class="btn btn-default"
-									name="delete_users_table">Tabelle löschen</button>
 							</div>
 						</div>
 

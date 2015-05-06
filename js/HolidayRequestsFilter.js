@@ -201,6 +201,13 @@ function substituteAcceptedFilter(request){
 	} else return Object.keys(request.substitutes).length == 0;
 }
 
+
+/**
+ * Filtert HolidayRequests, in denen der Status der Vertretungen = abgelehnt ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Status der Vertretungen = abgelehnt.
+ */
 function substituteDeclinedFilter(request, person_id){
 	if(Object.keys(request.substitutes).length > 0){
 		for(person_id in request.substitutes){
@@ -208,4 +215,25 @@ function substituteDeclinedFilter(request, person_id){
 		}
 
 	}
+}
+
+/**
+ * Filtert HolidayRequests, in deren Typ nicht "Krankheit" ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Typ des HolidayRequests != "Krankheit" ist.
+ */
+function noIllnessFilter(request){
+	return request.type != "Krankheit";
+	
+}
+
+/**
+ * Filtert HolidayRequests, in deren Typ = "Krankheit" ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, wenn der Typ des HolidayRequests = "Krankheit" ist.
+ */
+function illnessFilter(request){
+	return request.type == "Krankheit";
 }

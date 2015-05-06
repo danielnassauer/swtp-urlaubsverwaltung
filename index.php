@@ -133,8 +133,16 @@
 		var requests = getFilteredHolidayRequests(getActualFilters());
 		
 		var filter_accepted = {"filter": acceptedStatusFilter, "attachment": null};
+		var filter_illness = {"filter": illnessFilter ,"attachment":null};
+		
+		requestIll = getHolidayRequests();
+		requestIll = filterHolidayRequests(requests, [filter_illness]);
 		
 		requests = filterHolidayRequests(requests, [filter_accepted]);
+		
+		requests.push.apply(requests, requestIll);
+		
+		
 		
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];

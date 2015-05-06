@@ -137,7 +137,10 @@
 		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
 		var filter_declined = {"filter": substituteDeclinedFilter, "attachment":user.id};
 		
+		
 		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready, filter_declined]);
+		
+		
 		
 		var rows = "";
 		for (var i = 0; i < requests.length; i++){
@@ -218,8 +221,10 @@
 		var filter_employee = {"filter":employeeFilter, "attachment":{"persons": persons}};
 		var filter_me = {"filter":withoutMeFilter, "attachment": user.id};
 		var filter_sub_accepted = {"filter": substituteAcceptedFilter, "attachment":null};
+		var filter_no_illness = {"filter": noIllnessFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_employee, filter_dep, filter_waiting, filter_sub_accepted, filter_me]);
+		requests = filterHolidayRequests(requests,[filter_employee, filter_dep, filter_waiting, filter_sub_accepted, filter_me, filter_no_illness]);
+;
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){
@@ -291,8 +296,9 @@
 		var filter_leitung = {"filter":abteilungsleiterFilter, "attachment": {"persons": persons}};
 		var filter_me = {"filter":withoutMeFilter, "attachment": user.id};
 		var filter_sub_accepted = {"filter": substituteAcceptedFilter, "attachment":null};
+		var filter_no_illness = {"filter": noIllnessFilter, "attachment":null};
 		
-		requests = filterHolidayRequests(requests,[filter_me, filter_waiting, filter_leitung, filter_sub_accepted]);
+		requests = filterHolidayRequests(requests,[filter_me, filter_waiting, filter_leitung, filter_sub_accepted, filter_no_illness]);
 		
 		var rows = "";
 		for (i = 0; i < requests.length; i++){

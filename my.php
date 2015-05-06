@@ -298,15 +298,19 @@
 	function showOwnHolidayRequests() {
 		clearRequests();
 		
+		var liveDate = new Date();
+		var today = (Date.parse(liveDate))/1000;
+		
 		// Requests filtern
 		var requests = getHolidayRequests();
 		var filter_own = {"filter":isRequesterFilter, "attachment":user.id};
 		var filter_accepted = {"filter":acceptedStatusFilter, "attachment":null};
 		var filter_declined = {"filter":declinedStatusFilter, "attachment":null};
-		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};		
-		requests_accepted = filterHolidayRequests(requests,[filter_own, filter_accepted]);
-		requests_declined = filterHolidayRequests(requests,[filter_own, filter_declined]);
-		requests_waiting = filterHolidayRequests(requests,[filter_own, filter_waiting]);
+		var filter_waiting = {"filter":waitingStatusFilter, "attachment":null};
+		var filter_expired = {"filter": expiredHoliday,"attachment":{"today":today}};		
+		requests_accepted = filterHolidayRequests(requests,[filter_own, filter_accepted, filter_expired]);
+		requests_declined = filterHolidayRequests(requests,[filter_own, filter_declined, filter_expired]);
+		requests_waiting = filterHolidayRequests(requests,[filter_own, filter_waiting, filter_expired]);
 
 		// Requests anzeigen
 		for(var i=0; i<requests_waiting.length; i++){

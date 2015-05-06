@@ -56,10 +56,10 @@
 				var newSubDic = request.substitutes;
 				delete newSubDic[user.id];
 				newSubDic[newSubID] = "1";
-				console.log(newSubDic);
+
 				editHolidayRequest(id, request.start, request.end, newSubDic, request.status, request.comment); 
 				var req = getHolidayRequest(id);
-				console.log(req);
+
 				updateMySubstituteTable();
 				updateDepartmentTable();
 				updateManagementTable();
@@ -115,13 +115,11 @@
 			var accepted = 3;
 			editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, commentDecline);
 			}else {
-				/*$("#editHoliday").modal("show");
-				$('#change_holiday_button').attr("onclick",
-					"offerNewHoliday(" + id +")");*/
 				var accepted = 3;
 				editHolidayRequest(id, request.start, request.end, request.substitutes, accepted, commentChange);
 				};
-				
+		$("#holiday_decline_text").val('');
+		$("#holiday_change_text").val('');
 			
 		updateDepartmentTable();
 		updateMySubstituteTable();
@@ -131,16 +129,17 @@
 	function updateMySubstituteTable(){
 		
 		var requests = getHolidayRequests();
-
+		var liveDate = new Date();
+		var today = (Date.parse(liveDate))/1000;
 		
 		var filter_my_subs = {"filter": isSubstituteFilter, "attachment":user.id};
 		var filter_ready = {"filter": readyStatusFilter, "attachment":null};
 		var filter_declined = {"filter": substituteDeclinedFilter, "attachment":user.id};
+		var filter_expired = {"filter": expiredHoliday,"attachment":{"today":today}};
 		
 		
-		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready, filter_declined]);
-		
-		
+		requests = filterHolidayRequests(requests,[filter_my_subs, filter_ready, filter_declined, filter_expired]);
+		console.log(requests);
 		
 		var rows = "";
 		for (var i = 0; i < requests.length; i++){
@@ -358,7 +357,6 @@
 		}
 
 	function showDepartmentTable(){
-		console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		$("#departmentTable").removeClass('hidden');
 		$("#substitute_link").addClass('hidden');
 	}
@@ -421,7 +419,6 @@
 	<script type="text/javascript">
 		rows= "<a href='#'>angemeldet als ";
 		rows += "<b>"+user.forename + " " + user.lastname+"</b></a>";
-		console.log(user);
 		$("#loginPerson").html(rows);
 	</script>
 	<div style="padding-top: 70px"></div>

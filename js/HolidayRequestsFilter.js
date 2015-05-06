@@ -237,3 +237,16 @@ function noIllnessFilter(request){
 function illnessFilter(request){
 	return request.type == "Krankheit";
 }
+
+
+/**
+ * Filtert HolidayRequests, deren Enddatum vergangen ist.
+ * 
+ * @param request
+ * @returns {Boolean} true, das Enddatum des HolidayRequests vergangen ist.
+ */
+function expiredHoliday(request, attachment){
+	today = attachment["today"];
+	return (today < request.end);
+}
+

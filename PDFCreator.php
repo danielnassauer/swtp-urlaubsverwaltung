@@ -4,7 +4,7 @@ require_once dirname ( __FILE__ ) . '/server/db/HolidayRequests.php';
 require_once dirname ( __FILE__ ) . '/server/db/Persons.php';
 require_once dirname ( __FILE__ ) . '/server/model/HolidayRequest.php';
 require_once dirname ( __FILE__ ) . '/server/model/Person.php';
-require_once dirname ( __FILE__ ) . '/server/HolidayCalculator.php';
+//require_once dirname ( __FILE__ ) . '/server/HolidayCalculator.php';
 
 
 
@@ -34,7 +34,29 @@ class PDFCreator {
          $pdf->Image("server/logo_orion.png",150,10,50);
          $pdf->Ln(20);
          
-            $pdf->MultiCell( 0, 10, $holiday_request->getType() , 0, 'C', 0);	
+             //Titel
+            if(strcmp($holiday_request->getType(),"Urlaub") == 0)
+            {
+             $pdf->MultiCell( 0, 10, utf8_decode("Urlaubsbestätigung") , 0, 'C', 0); 
+
+            }
+            else if(strcmp($holiday_request->getType(),"Freizeit") == 0)
+            {
+             $pdf->MultiCell( 0, 10, utf8_decode("Freizeitbestätigung") , 0, 'C', 0); 
+
+            }
+            else if(strcmp($holiday_request->getType(),"Krankheit") == 0)
+            {
+             $pdf->MultiCell( 0, 10, utf8_decode("Krankheitsbestätigung") , 0, 'C', 0); 
+
+            }
+            else
+            {
+             $pdf->MultiCell( 0, 10, utf8_decode($holiday_request->getType()) , 0, 'C', 0); 
+              
+            }
+
+
          	
       
 
@@ -75,7 +97,7 @@ class PDFCreator {
 
           //Urlaub von-bis
          $pdf->SetFont("Helvetica","I",12);
-         $pdf->Write(5,"Urlaub von:                            ");
+         $pdf->Write(5,$holiday_request->getType()." von:                            ");
          $pdf->SetFont("Helvetica","BI",12);
          $pdf->Write(5,date("d.m.Y",$holiday_request->getStart())."                    ");
          $pdf->SetFont("Helvetica","I",12);
@@ -84,20 +106,29 @@ class PDFCreator {
          $pdf->Write(5,date("d.m.Y",$holiday_request->getEnd()));
          $pdf->Ln();
          $pdf->Ln();
+         $pdf->Ln(10);
+
+
+
+         //Vertretung
+         foreach ($holiday_request->getSubstitutes() as $i => $accepted)
+         {
+            if($accepted == 2)
+             {
+               $id = $i;
+         
+             }
+         }
          $pdf->SetFont("Helvetica","I",12);
-         $pdf->Write(5,"Dies entspricht ");
+         $pdf->Write(5,"Vertretung:                            ");
          $pdf->SetFont("Helvetica","BI",12);
+         $pdf->Write(5,Persons::getPerson($id)->getLastname()." ".Persons::getPerson($id)->getForename());
+         $pdf->Ln();
+         $pdf->Ln();
 
-         //Berechnung des Tages
-         $tag = HolidayCalculator::calculateHolidays($holiday_request->getStart(), $holiday_request->getEnd());
-      
 
-         $pdf->Write(5," ".$tag);
-         $pdf->SetFont("Helvetica","I",12);
-         $pdf->Write(5," Urlaubstagen.");
-         $pdf->Ln();
-         $pdf->Ln();
-         $pdf->Ln();
+
+         
          
          $pdf->Ln(10);
 

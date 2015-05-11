@@ -51,13 +51,11 @@
 			accepted = 2;
 		} else if ($("#sub_decline").prop("checked")){
 				accepted = 3;
-			} else if ($("#sub_change").prop("checked"))
-			{
+			} else if ($("#sub_change").prop("checked")){
 				var newSubID = $("#substitutes_Menu").val();
 				var newSubDic = request.substitutes;
 				delete newSubDic[user.id];
 				newSubDic[newSubID] = "1";
-				
 
 				editHolidayRequest(id, request.start, request.end, newSubDic, request.status, request.comment); 
 				var req = getHolidayRequest(id);
@@ -65,8 +63,6 @@
 				updateMySubstituteTable();
 				updateDepartmentTable();
 				updateManagementTable();
-				  $.post( "./server/model/EmailArt.php", {email_holidayrequest:id,type:1}).done(function(data){
-				  });
 				return;
 				}
 				
@@ -74,12 +70,6 @@
 		var request = getHolidayRequest(id);
 		var subs = request.substitutes;
 		subs[user.id] = accepted;
-		var email = "";
-		if(accepted == 2){
-			//email = "<form style='display: inline;' action='' method='POST' target='_blank' id='pdf_form'><a href='#' onclick='$(\"#pdf_form\").submit();'>PDF Bestätigung</a><input type='hidden' name='email_holidayrequest' value='"+request.id+"'></form><br>";
-		    $.post( "./server/model/EmailArt.php", {email_holidayrequest:id,type:2,sub:user.id}).done(function(data){
-				});
-		}
 		editHolidayRequest(id, request.start, request.end, subs,
 				request.status, request.comment);
 		updateMySubstituteTable();

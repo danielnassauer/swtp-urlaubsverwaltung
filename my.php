@@ -281,16 +281,6 @@
 		if(request.status == 1){
 			pdf = "<form style='display: inline;' action='PDFCreator.php' method='POST' target='_blank' id='pdf_form'><a href='#' onclick='$(\"#pdf_form\").submit();'>PDF Bestätigung</a><input type='hidden' name='pdf_holidayrequest' value='"+request.id+"'></form><br>";
 		}
-
-			var email = "";
-		if(request.status == 2){
-			email = "<form style='display: inline;' action='/server/model/EmailArt.php' method='POST' target='_blank' id='pdf_form'><a href='#' onclick='$(\"#pdf_form\").submit();'>PDF Bestätigung</a><input type='hidden' name='email_holidayrequest' value='"+request.id+"'></form><br>";
-			 //$.post( "./server/model/EmailArt.php", {email_holidayrequest:request.id,type:1}).done(function(data){
-
-				//});		
-		}
-
-          
 		
 		
 		var start = new Date(request.start * 1000);
